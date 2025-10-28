@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,17 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.perftests.example
+package uk.gov.hmrc.perftests.cis.requests
 
-import uk.gov.hmrc.performance.simulation.PerformanceTestRunner
-import uk.gov.hmrc.perftests.example.ExampleRequests._
+import uk.gov.hmrc.performance.conf.ServicesConfiguration
 
-class ExampleSimulation extends PerformanceTestRunner {
+trait CisPerformanceTestBase extends ServicesConfiguration {
 
-  setup("home-page", "Home Page") withRequests navigateToHomePage
 
-  setup("post-vat-return-period", "Post vat return period") withRequests postVatReturnPeriod
+  val baseUrlAuthLoginStub: String = baseUrlFor("auth-login-stub")
 
-  setup("get-turnover-page", "Get turnover page") withRequests getTurnoverPage
+  val cisHost: String = baseUrlFor("cis-frontend")
+  val cisFrontendUrl: String         = cisHost + s"/construction-industry-scheme"
 
-  runSimulation()
+
 }
