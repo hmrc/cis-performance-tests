@@ -16,17 +16,24 @@
 
 package uk.gov.hmrc.perftests.cis.simulations
 
+import io.gatling.core.scenario.Simulation
 import uk.gov.hmrc.performance.simulation.PerformanceTestRunner
+import uk.gov.hmrc.perftests.cis.mongo.DatabaseCleanup
 import uk.gov.hmrc.perftests.cis.requests.AuthRequests._
 import uk.gov.hmrc.perftests.cis.requests.CisRequests._
 
-class CisSimulation extends PerformanceTestRunner {
+class CisSimulation extends Simulation with PerformanceTestRunner {
+
+  before {
+    DatabaseCleanup.dropMongoCollection()
+    DatabaseCleanup.deleteOracleTableData()
+  }
 
   setup("nil-monthly-return", "Submit a monthly nil return").withRequests(
     getAuthPage, postAuthPage("Organisation"),
     getSession,
     getConstructionIndustryScheme,
-    getConfirmNilReturnPage, postConfirmNilReturnPage("08", "2007"),
+    getConfirmNilReturnPage, postConfirmNilReturnPage("10", "2007"),
     getDoYouWantToSubmitAnInactivityRequestPage, postDoYouWantToSubmitAnInactivityRequestPage("option1"),
     getConfirmEmailAddressPage, postConfirmEmailAddressPage("test@test.com"),
     getDeclarationPage, postDeclarationPage("confirmed"),
