@@ -52,14 +52,15 @@ object DatabaseCleanup {
 
   def deleteOracleTableData(): Unit = {
     var connection: Connection = null
-    var statement: Statement   = null
+    var statement: Statement = null
 
     try {
       connection = DriverManager.getConnection(oracleUrl, oracleUsername, oraclePassword)
       connection.setAutoCommit(false)
       statement = connection.createStatement()
 
-      val deleteChildQuery = """
+      val deleteChildQuery =
+        """
         DELETE FROM CIS_FILE_DATA.MONTHLY_RETURN_ITEM
         WHERE MONTHLY_RETURN_ID IN (
           SELECT MONTHLY_RETURN_ID FROM CIS_FILE_DATA.MONTHLY_RETURN
@@ -75,15 +76,43 @@ object DatabaseCleanup {
       connection.commit()
       println("Data deletion in Formp Proxy completed successfully.")
     } catch {
-      case e: Exception =>
+      case e: java.sql.SQLRecoverableException =>
+        println("A recoverable SQL error occurred: " + e.getMessage)
         e.printStackTrace()
         if (connection != null) {
-          println("Rolling back transaction due to an error.")
+          println("Rolling back transaction due to a recoverable SQL error.")
+          connection.rollback()
+        }
+      case e: java.io.IOException =>
+        println("An IO error occurred: " + e.getMessage)
+        e.printStackTrace()
+        if (connection != null) {
+          println("Rolling back transaction due to an IO error.")
+          connection.rollback()
+        }
+      case e: java.net.ConnectException =>
+        println("A network connection error occurred: " + e.getMessage)
+        e.printStackTrace()
+        if (connection != null) {
+          println("Rolling back transaction due to a network connection error.")
+          connection.rollback()
+        }
+      case e: Exception =>
+        println("An unexpected error occurred: " + e.getMessage)
+        e.printStackTrace()
+        if (connection != null) {
+          println("Rolling back transaction due to an unexpected error.")
           connection.rollback()
         }
     } finally {
-      if (statement != null) statement.close()
-      if (connection != null) connection.close()
+      try {
+        if (statement != null) statement.close()
+        if (connection != null) connection.close()
+      } catch {
+        case e: Exception =>
+          println("An error occurred while closing resources: " + e.getMessage)
+          e.printStackTrace()
+      }
     }
   }
 
