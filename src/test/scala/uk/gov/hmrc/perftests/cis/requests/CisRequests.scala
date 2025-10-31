@@ -106,4 +106,54 @@ object CisRequests extends ServicesConfiguration with CisPerformanceTestBase {
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
+  val getChangeConfirmNilReturnPage: HttpRequestBuilder =
+    http("[get] Change confirm nil return page")
+      .get(cisFrontendUrl + "/monthly-return/change-date-confirm-nil-payments")
+      .check(status.is(200))
+      .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
+
+  def postChangeConfirmNilReturnPage(month: String, year: String): HttpRequestBuilder =
+    http("[post] Change confirm nil return page")
+      .post(cisFrontendUrl + "/monthly-return/change-date-confirm-nil-payments")
+      .formParam("value.month", month)
+      .formParam("value.year", year)
+      .formParam("csrfToken", f"#{csrfToken}")
+      .check(status.is(303))
+
+  val getChangeDoYouWantToSubmitAnInactivityRequestPage: HttpRequestBuilder =
+    http("[get] Change Do You Want To Submit An Inactivity Request Page")
+      .get(cisFrontendUrl + "/monthly-return/change-submit-inactive-request")
+      .check(status.is(200))
+      .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
+
+  def postChangeDoYouWantToSubmitAnInactivityRequestPage(option: String): HttpRequestBuilder =
+    http("[post] Change Do You Want To Submit An Inactivity Request Page")
+      .post(cisFrontendUrl + "/monthly-return/change-submit-inactive-request")
+      .formParam("value", option)
+      .formParam("csrfToken", f"#{csrfToken}")
+      .check(status.is(303))
+
+  val getChangeConfirmEmailAddressPage: HttpRequestBuilder =
+    http("[get] Change Confirmation Email Address page")
+      .get(cisFrontendUrl + "/monthly-return/change-confirm-email-address")
+      .check(status.is(200))
+      .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
+
+  def postChangeConfirmEmailAddressPage(email: String): HttpRequestBuilder =
+    http("[post] Change Confirmation Email Address page")
+      .post(cisFrontendUrl + "/monthly-return/confirm-email-address")
+      .formParam("value", email)
+      .formParam("csrfToken", f"#{csrfToken}")
+      .check(status.is(303))
+
+  val getSendingSubmissionPage: HttpRequestBuilder =
+    http("[get] Get Submission Sending")
+      .get(cisFrontendUrl + "/monthly-return/submission-send/polling")
+      .check(status.is(303))
+
+  val postSendingSubmissionPage: HttpRequestBuilder =
+    http("[post] Post Submission Sending")
+      .post(cisFrontendUrl + "/monthly-return/submission-send/polling")
+      .formParam("csrfToken", f"#{csrfToken}")
+      .check(status.is(303))
 }

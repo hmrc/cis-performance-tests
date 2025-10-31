@@ -35,17 +35,28 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     getSession,
     getConstructionIndustryScheme,
     getConfirmNilReturnPage,
-    postConfirmNilReturnPage("10", "2007"),
+    postConfirmNilReturnPage("04", "2025"),
     getDoYouWantToSubmitAnInactivityRequestPage,
-    postDoYouWantToSubmitAnInactivityRequestPage("option1"),
+    postDoYouWantToSubmitAnInactivityRequestPage("option2"),
     getConfirmEmailAddressPage,
-    postConfirmEmailAddressPage("test@test.com"),
+    postConfirmEmailAddressPage("tester.test@test.com"),
     getDeclarationPage,
     postDeclarationPage("confirmed"),
+    getCheckYourAnswersPage,
+    getChangeConfirmNilReturnPage,
+    postChangeConfirmNilReturnPage("09", "2024"),
+    getCheckYourAnswersPage,
+    getChangeDoYouWantToSubmitAnInactivityRequestPage,
+    postChangeDoYouWantToSubmitAnInactivityRequestPage("option1"),
+    getCheckYourAnswersPage,
     getInactivityWarningPage,
     postInactivityWarningPage,
     getCheckYourAnswersPage,
-    postCheckYourAnswersPage
+    getChangeConfirmEmailAddressPage,
+    postChangeConfirmEmailAddressPage("Submissionsuccessful@test.com"),
+    getCheckYourAnswersPage,
+    postCheckYourAnswersPage,
+    getSendingSubmissionPage
   )
 
   runSimulation()
