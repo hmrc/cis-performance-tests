@@ -26,20 +26,26 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
 
   before {
     DatabaseCleanup.dropMongoCollection()
-    DatabaseCleanup.deleteOracleTableData()
+    DatabaseCleanup.cleanupDatabaseIfNotStub()
   }
 
   setup("nil-monthly-return", "Submit a monthly nil return").withRequests(
-    getAuthPage, postAuthPage("Organisation"),
+    getAuthPage,
+    postAuthPage("Organisation"),
     getSession,
     getConstructionIndustryScheme,
-    getConfirmNilReturnPage, postConfirmNilReturnPage("10", "2007"),
-    getDoYouWantToSubmitAnInactivityRequestPage, postDoYouWantToSubmitAnInactivityRequestPage("option1"),
-    getConfirmEmailAddressPage, postConfirmEmailAddressPage("test@test.com"),
-    getDeclarationPage, postDeclarationPage("confirmed"),
-    getInactivityWarningPage, postInactivityWarningPage,
-    getCheckYourAnswersPage, postCheckYourAnswersPage
-
+    getConfirmNilReturnPage,
+    postConfirmNilReturnPage("10", "2007"),
+    getDoYouWantToSubmitAnInactivityRequestPage,
+    postDoYouWantToSubmitAnInactivityRequestPage("option1"),
+    getConfirmEmailAddressPage,
+    postConfirmEmailAddressPage("test@test.com"),
+    getDeclarationPage,
+    postDeclarationPage("confirmed"),
+    getInactivityWarningPage,
+    postInactivityWarningPage,
+    getCheckYourAnswersPage,
+    postCheckYourAnswersPage
   )
 
   runSimulation()

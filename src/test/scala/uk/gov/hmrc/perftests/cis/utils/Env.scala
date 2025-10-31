@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.perftests.cis.requests
+package uk.gov.hmrc.perftests.cis.utils
 
-import uk.gov.hmrc.performance.conf.ServicesConfiguration
+object Env {
+  val USE_STUB: String = Option(System.getProperty("environment")) match {
+    case Some("local")   => "false"
+    case Some("staging") => "true"
+    case _               => "false"
 
-trait CisPerformanceTestBase extends ServicesConfiguration {
-
-  val baseUrlAuthLoginStub: String = baseUrlFor("auth-login-stub")
-
-  val cisHost: String        = baseUrlFor("cis-frontend")
-  val cisFrontendUrl: String = cisHost + s"/construction-industry-scheme"
-
+  }
 }

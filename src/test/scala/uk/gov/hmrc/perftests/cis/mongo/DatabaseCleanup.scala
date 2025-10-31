@@ -18,6 +18,8 @@ package uk.gov.hmrc.perftests.cis.mongo
 
 import java.sql.{Connection, DriverManager, Statement}
 import org.mongodb.scala.{Document, MongoClient, MongoCollection, MongoDatabase}
+import uk.gov.hmrc.perftests.cis.utils.Env
+
 import scala.concurrent.Await
 import scala.concurrent.duration.DurationInt
 
@@ -52,7 +54,7 @@ object DatabaseCleanup {
 
   def deleteOracleTableData(): Unit = {
     var connection: Connection = null
-    var statement: Statement = null
+    var statement: Statement   = null
 
     try {
       connection = DriverManager.getConnection(oracleUrl, oracleUsername, oraclePassword)
@@ -83,28 +85,21 @@ object DatabaseCleanup {
           println("Rolling back transaction due to a recoverable SQL error.")
           connection.rollback()
         }
-      case e: java.io.IOException =>
+      case e: java.io.IOException              =>
         println("An IO error occurred: " + e.getMessage)
         e.printStackTrace()
         if (connection != null) {
           println("Rolling back transaction due to an IO error.")
           connection.rollback()
         }
-      case e: java.net.ConnectException =>
-        println("A network connection error occurred: " + e.getMessage)
-        e.printStackTrace()
-        if (connection != null) {
-          println("Rolling back transaction due to a network connection error.")
-          connection.rollback()
-        }
-      case e: Exception =>
+      case e: Exception                        =>
         println("An unexpected error occurred: " + e.getMessage)
         e.printStackTrace()
         if (connection != null) {
           println("Rolling back transaction due to an unexpected error.")
           connection.rollback()
         }
-    } finally {
+    } finally
       try {
         if (statement != null) statement.close()
         if (connection != null) connection.close()
@@ -113,6 +108,17 @@ object DatabaseCleanup {
           println("An error occurred while closing resources: " + e.getMessage)
           e.printStackTrace()
       }
+  }
+
+  def cleanupDatabaseIfNotStub(): Unit = {
+//    val isStubEnvironment = Env.getOrElse("USE_STUB", "false").toBoolean
+    val isStubEnvironment = Env.USE_STUB.toBoolean
+    println("This environment is ...." + Env.USE_STUB)
+    if (!isStubEnvironment) {
+      println("Running Oracle database cleanup as this is not a stub environment.")
+      deleteOracleTableData()
+    } else {
+      println("Skipping Oracle database cleanup as this is a stub environment.")
     }
   }
 

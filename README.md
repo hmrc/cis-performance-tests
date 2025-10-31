@@ -2,7 +2,7 @@
 
 # cis-performance-tests
 
-Performance test suite for the `<digital service name>`, using [performance-test-runner](https://github.com/hmrc/performance-test-runner) under the hood.
+Performance test suite for the `CIS`, using [performance-test-runner](https://github.com/hmrc/performance-test-runner) under the hood.
 
 ## Pre-requisites
 
@@ -13,7 +13,7 @@ Start Mongo Docker container following instructions from the [MDTP Handbook](htt
 Start `PLATFORM_TEST_EXAMPLE_UI_TESTS` services as follows:
 
 ```bash
-sm2 --start PLATFORM_TEST_EXAMPLE_UI_TESTS
+sm2 --start CIS_ALL
 ```
 
 ### Logging
