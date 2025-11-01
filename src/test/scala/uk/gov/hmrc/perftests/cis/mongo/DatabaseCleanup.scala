@@ -111,9 +111,7 @@ object DatabaseCleanup {
   }
 
   def cleanupDatabaseIfNotStub(): Unit = {
-//    val isStubEnvironment = Env.getOrElse("USE_STUB", "false").toBoolean
     val isStubEnvironment = Env.USE_STUB.toBoolean
-    println("This environment is ...." + Env.USE_STUB)
     if (!isStubEnvironment) {
       println("Running Oracle database cleanup as this is not a stub environment.")
       deleteOracleTableData()

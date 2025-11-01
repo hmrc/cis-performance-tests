@@ -18,9 +18,15 @@ package uk.gov.hmrc.perftests.cis.utils
 
 object Env {
   val USE_STUB: String = Option(System.getProperty("environment")) match {
-    case Some("local")   => "false"
-    case Some("staging") => "true"
-    case _               => "false"
-
+    case Some(env) =>
+      println(s"Environment property found: $env")
+      env match {
+        case "local"   => "false"
+        case "staging" => "true"
+        case _         => "true"
+      }
+    case None      =>
+      println("Environment property not found. Defaulting to 'false'.")
+      "true"
   }
 }
