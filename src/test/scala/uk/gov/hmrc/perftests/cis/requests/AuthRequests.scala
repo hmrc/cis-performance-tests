@@ -35,23 +35,44 @@ object AuthRequests extends ServicesConfiguration with CisPerformanceTestBase {
     .check(css("[data-session-id=\"authToken\"] > code").saveAs("accessToken"))
     .check(css("[data-session-id=\"sessionId\"] > code").saveAs("sessionId"))
 
-  def postAuthPage(affinityGroup: String): HttpRequestBuilder = http("[post] gg-sign-in")
-    .post(baseUrlAuthLoginStub + "/auth-login-stub/gg-sign-in")
-    .disableFollowRedirect
-    .formParam("authorityId", "")
-    .formParam("redirectionUrl", cisFrontendUrl)
-    .formParam("credentialStrength", "strong")
-    .formParam("confidenceLevel", "50")
-    .formParam("affinityGroup", affinityGroup)
-    .formParam("enrolment[0].name", "HMRC-CIS-ORG")
-    .formParam("enrolment[0].taxIdentifier[0].name", "TaxOfficeNumber")
-    .formParam("enrolment[0].taxIdentifier[0].value", "754")
-    .formParam("enrolment[0].taxIdentifier[1].name", "TaxOfficeReference")
-    .formParam("enrolment[0].taxIdentifier[1].value", "EZ00100")
-    .formParam("enrolment[0].state", "Activated")
-    .formParam("csrfToken", "#{csrfToken}")
-    .check(status.is(303))
-//    .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
-    .check(header("Location").is(cisFrontendUrl))
+  def postAuthPage(affinityGroup: String): HttpRequestBuilder = {
+    val baseFormParams = Map(
+      "authorityId"        -> "",
+      "redirectionUrl"     -> (if (affinityGroup == "Organisation") cisFrontendUrl else cisManageFrontendUrl),
+      "credentialStrength" -> "strong",
+      "confidenceLevel"    -> "50",
+      "affinityGroup"      -> affinityGroup,
+      "csrfToken"          -> "#{csrfToken}"
+    )
+
+    val enrolmentParams = affinityGroup match {
+      case "Organisation" =>
+        Map(
+          "enrolment[0].name"                   -> "HMRC-CIS-ORG",
+          "enrolment[0].taxIdentifier[0].name"  -> "TaxOfficeNumber",
+          "enrolment[0].taxIdentifier[0].value" -> "754",
+          "enrolment[0].taxIdentifier[1].name"  -> "TaxOfficeReference",
+          "enrolment[0].taxIdentifier[1].value" -> "EZ00100",
+          "enrolment[0].state"                  -> "Activated"
+        )
+      case "Agent"        =>
+        Map(
+          "enrolment[0].name"                   -> "IR-PAYE-AGENT",
+          "enrolment[0].taxIdentifier[0].name"  -> "IRAgentReference",
+          "enrolment[0].taxIdentifier[0].value" -> "ABC123",
+          "enrolment[0].state"                  -> "Activated"
+        )
+      case _              => throw new IllegalArgumentException(s"Unsupported affinityGroup: $affinityGroup")
+    }
+
+    val expectedRedirectUrl = if (affinityGroup == "Organisation") cisFrontendUrl else cisManageFrontendUrl
+
+    http("[post] gg-sign-in")
+      .post(baseUrlAuthLoginStub + "/auth-login-stub/gg-sign-in")
+      .disableFollowRedirect
+      .formParamMap(baseFormParams ++ enrolmentParams)
+      .check(status.is(303))
+      .check(header("Location").is(expectedRedirectUrl))
+  }
 
 }
