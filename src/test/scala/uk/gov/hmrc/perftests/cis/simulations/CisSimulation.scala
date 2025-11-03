@@ -48,7 +48,6 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     getCheckYourAnswersPage,
     getChangeDoYouWantToSubmitAnInactivityRequestPage,
     postChangeDoYouWantToSubmitAnInactivityRequestPage("option1"),
-    getCheckYourAnswersPage,
     getInactivityWarningPage,
     postInactivityWarningPage,
     getCheckYourAnswersPage,
@@ -56,7 +55,9 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     postChangeConfirmEmailAddressPage("Submissionsuccessful@test.com"),
     getCheckYourAnswersPage,
     postCheckYourAnswersPage,
-    getSendingSubmissionPage
+    getSendingSubmissionPage,
+    getPollingPage,
+    getSuccessfulSubmissionPage
   )
 
   runSimulation()
