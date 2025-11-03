@@ -38,7 +38,7 @@ object AuthRequests extends ServicesConfiguration with CisPerformanceTestBase {
   def postAuthPage(affinityGroup: String): HttpRequestBuilder = {
     val baseFormParams = Map(
       "authorityId"        -> "",
-      "redirectionUrl"     -> (if (affinityGroup == "Organisation") cisFrontendUrl else cisManageFrontendUrl),
+      "redirectionUrl"     -> cisFrontendUrl,
       "credentialStrength" -> "strong",
       "confidenceLevel"    -> "50",
       "affinityGroup"      -> affinityGroup,
@@ -65,7 +65,7 @@ object AuthRequests extends ServicesConfiguration with CisPerformanceTestBase {
       case _              => throw new IllegalArgumentException(s"Unsupported affinityGroup: $affinityGroup")
     }
 
-    val expectedRedirectUrl = if (affinityGroup == "Organisation") cisFrontendUrl else cisManageFrontendUrl
+    val expectedRedirectUrl = cisFrontendUrl
 
     http("[post] gg-sign-in")
       .post(baseUrlAuthLoginStub + "/auth-login-stub/gg-sign-in")

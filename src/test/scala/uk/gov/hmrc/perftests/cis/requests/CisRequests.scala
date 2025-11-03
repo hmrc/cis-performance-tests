@@ -26,7 +26,6 @@ object CisRequests extends ServicesConfiguration with CisPerformanceTestBase {
   val getConstructionIndustryScheme: HttpRequestBuilder =
     http("[get] Construction Industry Scheme")
       .get(cisFrontendUrl)
-      .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
   val getConfirmNilReturnPage: HttpRequestBuilder =
