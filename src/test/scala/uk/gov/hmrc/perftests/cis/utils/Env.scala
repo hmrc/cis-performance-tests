@@ -17,16 +17,28 @@
 package uk.gov.hmrc.perftests.cis.utils
 
 object Env {
-  val USE_STUB: String = Option(System.getProperty("environment")) match {
-    case Some(env) =>
-      println(s"Environment property found: $env")
+  val USE_STUB: String = (Option(System.getProperty("environment")), Option(System.getenv("JENKINS_HOME"))) match {
+    case (Some(env), Some(jenkinsHome)) =>
+      println(s"Environment property found: $env, running in Jenkins environment: $jenkinsHome")
       env match {
         case "local"   => "false"
         case "staging" => "true"
         case _         => "true"
       }
-    case None      =>
-      println("Environment property not found. Defaulting to 'false'.")
+    case (Some(env), None)              =>
+      println(s"Environment property found: $env, not running in Jenkins.")
+      env match {
+        case "local"   => "false"
+        case "staging" => "true"
+        case _         => "true"
+      }
+    case (None, Some(jenkinsHome))      =>
+      println(
+        s"Environment property not found, but running in Jenkins environment: $jenkinsHome. Defaulting to 'staging'."
+      )
       "true"
+    case (None, None)                   =>
+      println("Environment property not found and not running in Jenkins. Defaulting to 'false'.")
+      "false"
   }
 }
