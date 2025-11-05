@@ -145,14 +145,19 @@ object CisRequests extends ServicesConfiguration with CisPerformanceTestBase {
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
-  val getSendingSubmissionPage: HttpRequestBuilder =
-    http("[get] Submission Sending page")
-      .get(cisFrontendUrl + "/monthly-return/submission-send/polling")
+  val postSubmissionSendPage: HttpRequestBuilder =
+    http("[post] Submission Sending page")
+      .get(cisFrontendUrl + "/monthly-return/submission-send")
       .check(status.is(303))
 
   val getPollingPage: HttpRequestBuilder =
     http("[get] Polling")
-      .get(cisFrontendUrl + "/monthly-return/submission-send")
+      .get(cisFrontendUrl + "/monthly-return/submission-send/polling")
+      .check(status.is(200))
+
+  val postPollingPage: HttpRequestBuilder =
+    http("[post] Polling")
+      .get(cisFrontendUrl + "/monthly-return/submission-send/polling")
       .check(status.is(303))
 
   val getSuccessfulSubmissionPage: HttpRequestBuilder =

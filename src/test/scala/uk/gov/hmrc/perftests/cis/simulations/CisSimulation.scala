@@ -55,8 +55,12 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     postChangeConfirmEmailAddressPage("Submissionsuccessful@test.com"),
     getCheckYourAnswersPage,
     postCheckYourAnswersPage,
-    getSendingSubmissionPage,
+    postSubmissionSendPage,
     getPollingPage,
+    getPollingPage,
+    getPollingPage,
+    getPollingPage,
+    postPollingPage,
     getSuccessfulSubmissionPage
   )
 
