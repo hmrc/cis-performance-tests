@@ -17,28 +17,33 @@
 package uk.gov.hmrc.perftests.cis.utils
 
 object Env {
-  val USE_STUB: String = (Option(System.getProperty("environment")), Option(System.getenv("JENKINS_HOME"))) match {
-    case (Some(env), Some(jenkinsHome)) =>
-      println(s"Environment property found: $env, running in Jenkins environment: $jenkinsHome")
-      env match {
-        case "local"   => "false"
-        case "staging" => "true"
-        case _         => "true"
-      }
-    case (Some(env), None)              =>
-      println(s"Environment property found: $env, not running in Jenkins.")
-      env match {
-        case "local"   => "false"
-        case "staging" => "true"
-        case _         => "true"
-      }
-    case (None, Some(jenkinsHome))      =>
-      println(
-        s"Environment property not found, but running in Jenkins environment: $jenkinsHome. Defaulting to 'staging'."
-      )
-      "true"
-    case (None, None)                   =>
-      println("Environment property not found and not running in Jenkins. Defaulting to 'false'.")
-      "false"
-  }
+  sealed trait Environment
+  case object Local extends Environment
+  case object Staging extends Environment
+  case object JenkinsStaging extends Environment
+
+  // Determine the current environment
+  val currentEnvironment: Environment =
+    (Option(System.getProperty("environment")), Option(System.getenv("JENKINS_HOME"))) match {
+      case (Some(env), Some(_)) =>
+        println(s"Environment property found: $env, running in Jenkins environment.")
+        env.toLowerCase match {
+          case "local"   => Local
+          case "staging" => JenkinsStaging
+          case _         => JenkinsStaging // Default to Jenkins Staging for unknown values in Jenkins
+        }
+      case (Some(env), None)    =>
+        println(s"Environment property found: $env, not running in Jenkins.")
+        env.toLowerCase match {
+          case "local"   => Local
+          case "staging" => Staging
+          case _         => Staging // Default to Staging for unknown values outside Jenkins
+        }
+      case (None, Some(_))      =>
+        println("Environment property not found, but running in Jenkins. Defaulting to Jenkins Staging.")
+        JenkinsStaging
+      case (None, None)         =>
+        println("Environment property not found and not running in Jenkins. Defaulting to Local.")
+        Local
+    }
 }

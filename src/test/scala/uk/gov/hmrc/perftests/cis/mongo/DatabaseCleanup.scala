@@ -19,32 +19,50 @@ package uk.gov.hmrc.perftests.cis.mongo
 import java.sql.{Connection, DriverManager, Statement}
 import org.mongodb.scala.{Document, MongoClient, MongoCollection, MongoDatabase}
 import uk.gov.hmrc.perftests.cis.utils.Env
+import uk.gov.hmrc.perftests.cis.utils.Env._
 
 import scala.concurrent.Await
 import scala.concurrent.duration.DurationInt
 
 object DatabaseCleanup {
 
-  // MongoDB Configuration
-  private val mongoUri            = "mongodb://localhost:27017"
+  // MongoDB URIs for different environments
+  private val localMongoUri       = "mongodb://localhost:27017"
+  private val jenkinsMongoUri     =
+    "mongodb://public-mongo-eu-west-2a-1:27017,public-mongo-eu-west-2b-1:27017,public-mongo-eu-west-2c-1:27017/cis-frontend?ssl=true"
   private val mongoDatabaseName   = "cis-frontend"
   private val mongoCollectionName = "user-answers"
 
+  // Determine the MongoDB URI based on the environment
+  private def getMongoUri: String =
+    Env.currentEnvironment match {
+      case Local | Staging =>
+        println("Using local MongoDB URI.")
+        localMongoUri
+      case JenkinsStaging  =>
+        println("Using Jenkins MongoDB URI.")
+        jenkinsMongoUri
+    }
+
   def dropMongoCollection(): Unit = {
+    val mongoUri                              = getMongoUri
     val mongoClient: MongoClient              = MongoClient(mongoUri)
     val database: MongoDatabase               = mongoClient.getDatabase(mongoDatabaseName)
     val collection: MongoCollection[Document] = database.getCollection(mongoCollectionName)
 
     try {
+      println(
+        s"Attempting to drop MongoDB collection '$mongoCollectionName' in database '$mongoDatabaseName' using URI: $mongoUri..."
+      )
       val dropFuture = collection.drop().toFuture()
       Await.result(dropFuture, 30.seconds)
-      println(
-        s"MongoDB collection '$mongoCollectionName' in database '$mongoDatabaseName' dropped successfully."
-      )
+      println(s"MongoDB collection '$mongoCollectionName' dropped successfully.")
     } catch {
       case e: Exception =>
         println(s"Failed to drop MongoDB collection '$mongoCollectionName': ${e.getMessage}")
-    } finally mongoClient.close()
+        e.printStackTrace()
+    } finally
+      mongoClient.close()
   }
 
   // Oracle Database Configuration
@@ -110,14 +128,13 @@ object DatabaseCleanup {
       }
   }
 
-  def cleanupDatabaseIfNotStub(): Unit = {
-    val isStubEnvironment = Env.USE_STUB.toBoolean
-    if (!isStubEnvironment) {
-      println("Running Oracle database cleanup as this is not a stub environment.")
-      deleteOracleTableData()
-    } else {
-      println("Skipping Oracle database cleanup as this is a stub environment.")
+  def cleanupDatabaseIfNotStub(): Unit =
+    Env.currentEnvironment match {
+      case Local                    =>
+        println("Running Oracle database cleanup as this is the local environment.")
+        deleteOracleTableData()
+      case Staging | JenkinsStaging =>
+        println("Skipping Oracle database cleanup as this is a stub environment.")
     }
-  }
 
 }
