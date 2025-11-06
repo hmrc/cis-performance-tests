@@ -37,7 +37,7 @@ object DatabaseCleanup {
 
     try {
       val dropFuture = collection.drop().toFuture()
-      Await.result(dropFuture, 10.seconds)
+      Await.result(dropFuture, 30.seconds)
       println(
         s"MongoDB collection '$mongoCollectionName' in database '$mongoDatabaseName' dropped successfully."
       )
