@@ -16,12 +16,12 @@
 
 package uk.gov.hmrc.perftests.cis.mongo
 
-import java.sql.{Connection, DriverManager, Statement}
 import org.mongodb.scala.{Document, MongoClient, MongoCollection, MongoDatabase}
 import uk.gov.hmrc.perftests.cis.utils.Env
 
+import java.sql.{Connection, DriverManager, Statement}
 import scala.concurrent.Await
-import scala.concurrent.duration.DurationInt
+import scala.concurrent.duration._
 
 object DatabaseCleanup {
 
@@ -31,20 +31,35 @@ object DatabaseCleanup {
   private val mongoCollectionName = "user-answers"
 
   def dropMongoCollection(): Unit = {
-    val mongoClient: MongoClient              = MongoClient(mongoUri)
-    val database: MongoDatabase               = mongoClient.getDatabase(mongoDatabaseName)
-    val collection: MongoCollection[Document] = database.getCollection(mongoCollectionName)
+    val maxRetries          = 3
+    val delayBetweenRetries = 5.seconds
 
-    try {
-      val dropFuture = collection.drop().toFuture()
-      Await.result(dropFuture, 30.seconds)
-      println(
-        s"MongoDB collection '$mongoCollectionName' in database '$mongoDatabaseName' dropped successfully."
-      )
-    } catch {
-      case e: Exception =>
-        println(s"Failed to drop MongoDB collection '$mongoCollectionName': ${e.getMessage}")
-    } finally mongoClient.close()
+    def attemptDrop(retriesLeft: Int): Unit = {
+      val mongoClient: MongoClient              = MongoClient(mongoUri)
+      val database: MongoDatabase               = mongoClient.getDatabase(mongoDatabaseName)
+      val collection: MongoCollection[Document] = database.getCollection(mongoCollectionName)
+
+      try {
+        println(s"Attempting to drop MongoDB collection '$mongoCollectionName' in database '$mongoDatabaseName'...")
+        val dropFuture = collection.drop().toFuture()
+        Await.result(dropFuture, 30.seconds)
+        println(s"MongoDB collection '$mongoCollectionName' dropped successfully.")
+      } catch {
+        case e: Exception =>
+          println(s"Failed to drop MongoDB collection '$mongoCollectionName': ${e.getMessage}")
+          if (retriesLeft > 0) {
+            println(s"Retrying in $delayBetweenRetries... (${retriesLeft - 1} retries left)")
+            Thread.sleep(delayBetweenRetries.toMillis)
+            attemptDrop(retriesLeft - 1)
+          } else {
+            println(s"Failed to drop MongoDB collection '$mongoCollectionName' after $maxRetries attempts.")
+            throw e
+          }
+      } finally
+        mongoClient.close()
+    }
+
+    attemptDrop(maxRetries)
   }
 
   // Oracle Database Configuration
