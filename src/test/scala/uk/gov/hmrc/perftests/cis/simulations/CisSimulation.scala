@@ -20,8 +20,8 @@ import io.gatling.core.scenario.Simulation
 import uk.gov.hmrc.performance.simulation.PerformanceTestRunner
 import uk.gov.hmrc.perftests.cis.mongo.DatabaseCleanup
 import uk.gov.hmrc.perftests.cis.requests.AuthRequests._
-import uk.gov.hmrc.perftests.cis.requests.LandingPagesRequests._
 import uk.gov.hmrc.perftests.cis.requests.NilMonthlyReturnRequests._
+import uk.gov.hmrc.perftests.cis.requests.LandingPagesRequests._
 
 class CisSimulation extends Simulation with PerformanceTestRunner {
 
@@ -30,7 +30,7 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     DatabaseCleanup.cleanupDatabaseIfNotStub()
   }
 
-  setup("nil-monthly-return", "Submit a monthly nil return").withRequests(
+  setup("nil-monthly-return", "Monthly nil return").withRequests(
     getAuthPage,
     postAuthPage,
     getSession,
@@ -65,7 +65,7 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     getSuccessfulSubmissionPage
   )
 
-  setup("agent-landing-pages", "Login to agent landing pages").withRequests(
+  setup("agent-landing-pages", "Agent landing pages").withRequests(
     getAuthPage,
     postManageAuthPage("Agent"),
     getSession,
@@ -79,7 +79,7 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     getAgentCisReturnDashboardPage
   )
 
-  setup("org-landing-pages", "Login to organisation landing pages").withRequests(
+  setup("org-landing-pages", "Organisation landing pages").withRequests(
     getAuthPage,
     postManageAuthPage("Organisation"),
     getSession,
