@@ -1,3 +1,3 @@
 #!/bin/bash
 
-sbt clean scalafmtAll compile Test/compile
+sbt scalafmtAll scalafmtSbt clean compile Test/compile

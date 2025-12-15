@@ -21,10 +21,10 @@ import io.gatling.http.Predef._
 import io.gatling.http.request.builder.HttpRequestBuilder
 import uk.gov.hmrc.performance.conf.ServicesConfiguration
 
-object CisRequests extends ServicesConfiguration with CisPerformanceTestBase {
+object NilMonthlyReturnRequests extends ServicesConfiguration with CisPerformanceTestBase {
 
   val getConstructionIndustryScheme: HttpRequestBuilder =
-    http("[get] Construction Industry Scheme")
+    http("[get] Construction Industry Scheme Frontend")
       .get(cisFrontendUrl)
       .check(status.is(303))
 
