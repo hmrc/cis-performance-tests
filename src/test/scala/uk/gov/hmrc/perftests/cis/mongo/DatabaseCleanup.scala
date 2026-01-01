@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.perftests.cis.mongo
 
-import java.sql.{Connection, DriverManager, Statement}
 import org.mongodb.scala.{Document, MongoClient, MongoCollection, MongoDatabase}
 import uk.gov.hmrc.perftests.cis.utils.Env
 import uk.gov.hmrc.perftests.cis.utils.Env._
@@ -64,77 +63,5 @@ object DatabaseCleanup {
     } finally
       mongoClient.close()
   }
-
-  // Oracle Database Configuration
-  private val oracleUrl      = "jdbc:oracle:thin:@//localhost:1521/XE"
-  private val oracleUsername = "sys as sysdba"
-  private val oraclePassword = "oracle"
-
-  def deleteOracleTableData(): Unit = {
-    var connection: Connection = null
-    var statement: Statement   = null
-
-    try {
-      connection = DriverManager.getConnection(oracleUrl, oracleUsername, oraclePassword)
-      connection.setAutoCommit(false)
-      statement = connection.createStatement()
-
-      val deleteChildQuery =
-        """
-        DELETE FROM CIS_FILE_DATA.MONTHLY_RETURN_ITEM
-        WHERE MONTHLY_RETURN_ID IN (
-          SELECT MONTHLY_RETURN_ID FROM CIS_FILE_DATA.MONTHLY_RETURN
-        )
-      """
-      val childRowsDeleted = statement.executeUpdate(deleteChildQuery)
-      println(s"Deleted $childRowsDeleted rows from MONTHLY_RETURN_ITEM.")
-
-      val deleteParentQuery = "DELETE FROM CIS_FILE_DATA.MONTHLY_RETURN"
-      val parentRowsDeleted = statement.executeUpdate(deleteParentQuery)
-      println(s"Deleted $parentRowsDeleted rows from MONTHLY_RETURN.")
-
-      connection.commit()
-      println("Data deletion in Formp Proxy completed successfully.")
-    } catch {
-      case e: java.sql.SQLRecoverableException =>
-        println("A recoverable SQL error occurred: " + e.getMessage)
-        e.printStackTrace()
-        if (connection != null) {
-          println("Rolling back transaction due to a recoverable SQL error.")
-          connection.rollback()
-        }
-      case e: java.io.IOException              =>
-        println("An IO error occurred: " + e.getMessage)
-        e.printStackTrace()
-        if (connection != null) {
-          println("Rolling back transaction due to an IO error.")
-          connection.rollback()
-        }
-      case e: Exception                        =>
-        println("An unexpected error occurred: " + e.getMessage)
-        e.printStackTrace()
-        if (connection != null) {
-          println("Rolling back transaction due to an unexpected error.")
-          connection.rollback()
-        }
-    } finally
-      try {
-        if (statement != null) statement.close()
-        if (connection != null) connection.close()
-      } catch {
-        case e: Exception =>
-          println("An error occurred while closing resources: " + e.getMessage)
-          e.printStackTrace()
-      }
-  }
-
-  def cleanupDatabaseIfNotStub(): Unit =
-    Env.currentEnvironment match {
-      case Local                    =>
-        println("Running Oracle database cleanup as this is the local environment.")
-        deleteOracleTableData()
-      case Staging | JenkinsStaging =>
-        println("Skipping Oracle database cleanup as this is a stub environment.")
-    }
 
 }
