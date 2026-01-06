@@ -76,6 +76,7 @@ object AuthRequests extends ServicesConfiguration with CisPerformanceTestBase {
     val enrolmentParams = affinityGroup match {
       case "Organisation" =>
         Map(
+          "authorityId"                         -> "",
           "enrolment[0].name"                   -> "HMRC-CIS-ORG",
           "enrolment[0].taxIdentifier[0].name"  -> "TaxOfficeNumber",
           "enrolment[0].taxIdentifier[0].value" -> "754",
