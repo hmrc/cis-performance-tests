@@ -59,8 +59,6 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     postSubmissionSendPage,
     getPollingPage,
     getPollingPage,
-    getPollingPage,
-    getPollingPage,
     postPollingPage,
     getSuccessfulSubmissionPage
   )
