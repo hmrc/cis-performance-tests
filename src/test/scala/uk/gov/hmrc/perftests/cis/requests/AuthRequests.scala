@@ -66,7 +66,6 @@ object AuthRequests extends ServicesConfiguration with CisPerformanceTestBase {
 
   def postManageAuthPage(affinityGroup: String): HttpRequestBuilder = {
     val baseFormParams = Map(
-      "authorityId"        -> "",
       "redirectionUrl"     -> cisManageFrontendUrl,
       "credentialStrength" -> "strong",
       "confidenceLevel"    -> "50",
@@ -77,6 +76,7 @@ object AuthRequests extends ServicesConfiguration with CisPerformanceTestBase {
     val enrolmentParams = affinityGroup match {
       case "Organisation" =>
         Map(
+          "authorityId"                         -> "",
           "enrolment[0].name"                   -> "HMRC-CIS-ORG",
           "enrolment[0].taxIdentifier[0].name"  -> "TaxOfficeNumber",
           "enrolment[0].taxIdentifier[0].value" -> "754",
@@ -86,6 +86,7 @@ object AuthRequests extends ServicesConfiguration with CisPerformanceTestBase {
         )
       case "Agent"        =>
         Map(
+          "authorityId"                         -> "CRED01",
           "enrolment[0].name"                   -> "IR-PAYE-AGENT",
           "enrolment[0].taxIdentifier[0].name"  -> "IRAgentReference",
           "enrolment[0].taxIdentifier[0].value" -> "123456",

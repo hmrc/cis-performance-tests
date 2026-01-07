@@ -21,6 +21,9 @@ import io.gatling.http.Predef._
 import io.gatling.http.request.builder.HttpRequestBuilder
 import uk.gov.hmrc.performance.conf.ServicesConfiguration
 
+import java.time.{LocalDate, YearMonth}
+import scala.util.Random
+
 object NilMonthlyReturnRequests extends ServicesConfiguration with CisPerformanceTestBase {
 
   val getConstructionIndustryScheme: HttpRequestBuilder =
@@ -34,13 +37,39 @@ object NilMonthlyReturnRequests extends ServicesConfiguration with CisPerformanc
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
-  def postConfirmNilReturnPage(month: String, year: String): HttpRequestBuilder =
+  private def randomValidMonthYear(): (String, String) = {
+    val earliest                          = YearMonth.of(2007, 5) // May 2007
+    val today                             = LocalDate.now()
+    val (currentTaxMonth, currentTaxYear) = {
+      val year  = today.getYear
+      val month = today.getMonthValue
+      if (today.getDayOfMonth >= 6) (month, year)
+      else if (month == 1) (12, year - 1)
+      else (month - 1, year)
+    }
+    val latest                            = YearMonth.of(currentTaxYear, currentTaxMonth).plusMonths(3)
+    val allMonths                         = Iterator.iterate(earliest)(_.plusMonths(1)).takeWhile(!_.isAfter(latest)).toList
+    val excluded                          = Set(
+      YearMonth.of(2025, 1),
+      YearMonth.of(2025, 2),
+      YearMonth.of(2025, 3)
+    )
+    val validMonths                       = allMonths.filterNot(excluded.contains)
+    val randomYM                          = validMonths(Random.nextInt(validMonths.length))
+    val monthStr                          = f"${randomYM.getMonthValue}%02d"
+    val yearStr                           = randomYM.getYear.toString
+    (monthStr, yearStr)
+  }
+
+  def postConfirmNilReturnPage: HttpRequestBuilder = {
+    val (month, year) = randomValidMonthYear()
     http("[post] Confirm nil return page")
       .post(cisFrontendUrl + "/monthly-return/date-confirm-nil-payments")
       .formParam("value.month", month)
       .formParam("value.year", year)
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
+  }
 
   val getDoYouWantToSubmitAnInactivityRequestPage: HttpRequestBuilder =
     http("[get] Do You Want To Submit An Inactivity Request page")
@@ -111,13 +140,15 @@ object NilMonthlyReturnRequests extends ServicesConfiguration with CisPerformanc
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
-  def postChangeConfirmNilReturnPage(month: String, year: String): HttpRequestBuilder =
+  def postChangeConfirmNilReturnPage: HttpRequestBuilder = {
+    val (month, year) = randomValidMonthYear()
     http("[post] Change confirm nil return page")
       .post(cisFrontendUrl + "/monthly-return/change-date-confirm-nil-payments")
       .formParam("value.month", month)
       .formParam("value.year", year)
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
+  }
 
   val getChangeDoYouWantToSubmitAnInactivityRequestPage: HttpRequestBuilder =
     http("[get] Change Do You Want To Submit An Inactivity Request page")
