@@ -22,6 +22,7 @@ import uk.gov.hmrc.perftests.cis.mongo.DatabaseCleanup
 import uk.gov.hmrc.perftests.cis.requests.AuthRequests._
 import uk.gov.hmrc.perftests.cis.requests.NilMonthlyReturnRequests._
 import uk.gov.hmrc.perftests.cis.requests.LandingPagesRequests._
+import uk.gov.hmrc.perftests.cis.requests.SubcontractorRequests.{getDoesTheSubcontractorUseATradingName, _}
 
 class CisSimulation extends Simulation with PerformanceTestRunner {
 
@@ -87,5 +88,20 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     getCisReturnDashboardPage
   )
 
+  setup("add-subcontractor-pages", "Add subcontractor pages").withRequests(
+    getAuthPage,
+    postManageAuthPage("Organisation"),
+    getSession,
+    getWhatTypeOfSubcontractorAreYouAdding,
+    postWhatTypeOfSubcontractorAreYouAdding("value_0"), // Individual or sole trader
+    getDoesTheSubcontractorUseATradingName,
+    postDoesTheSubcontractorUseATradingName("value"), // Yes
+    getWhatIsTheSubcontractorsTradingName,
+    postWhatIsTheSubcontractorsTradingName("Test Subcontractor Ltd"),
+    getDoYouWantToAddTheSubcontractorsAddress,
+    postDoYouWantToAddTheSubcontractorsAddress("value"), // Yes
+    getWhatIsTheSubcontractorsAddress,
+    postWhatIsTheSubcontractorsAddress("123 Test Ave", "", "Testing City", "United Kingdom", "AB1 2CD")
+  )
   runSimulation()
 }
