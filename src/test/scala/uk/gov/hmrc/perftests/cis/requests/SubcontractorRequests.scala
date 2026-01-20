@@ -97,4 +97,17 @@ object SubcontractorRequests extends ServicesConfiguration with CisPerformanceTe
       .formParam("value.postcode", postcode)
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
+
+  val getDoYouHaveANationalInsuranceNumber: HttpRequestBuilder =
+    http("[get] Do You Have A National Insurance Number page")
+      .get(cisContractorFrontendUrl + "/check-national-insurance-number")
+      .check(status.is(200))
+      .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
+
+  def postDoYouHaveANationalInsuranceNumber(option: String): HttpRequestBuilder =
+    http("[post] Do You Have A National Insurance page")
+      .post(cisContractorFrontendUrl + "/check-national-insurance-number")
+      .formParam("value", option)
+      .formParam("csrfToken", f"#{csrfToken}")
+      .check(status.is(303))
 }
