@@ -195,14 +195,165 @@ object SubcontractorRequests extends ServicesConfiguration with CisPerformanceTe
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
-  def postSubcontractorsContactDetails(
-                                          email: String,
-                                          phone: String,
-                                        ): HttpRequestBuilder =
+  def postSubcontractorsContactDetails(email: String, phone: String): HttpRequestBuilder =
     http("[post] Subcontractor's Contact Details page")
       .post(cisContractorFrontendUrl + "/contact-details")
       .formParam("value.email", email)
       .formParam("value.phone", phone)
+      .formParam("csrfToken", f"#{csrfToken}")
+      .check(status.is(303))
+
+  val getSubcontractorCheckYourAnswersPage: HttpRequestBuilder =
+    http("[get] Get Check your answers page")
+      .get(cisFrontendUrl + "/monthly-return/check-your-answers")
+      .check(status.is(200))
+      .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
+
+  val postSubcontractorCheckYourAnswersPage: HttpRequestBuilder =
+    http("[post] Post Check your answers")
+      .post(cisFrontendUrl + "/monthly-return/check-your-answers")
+      .formParam("csrfToken", f"#{csrfToken}")
+      .check(status.is(303))
+
+  val getChangeWhatTypeOfSubcontractorAreYouAdding: HttpRequestBuilder =
+    http("[get] Change What Type Of Subcontractor Are You Adding page")
+      .get(cisContractorFrontendUrl + "/change-type-of-subcontractor")
+      .check(status.is(200))
+      .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
+
+  def postChangeWhatTypeOfSubcontractorAreYouAdding(option: String): HttpRequestBuilder =
+    http("[post] Change What Type of Subcontractor Are You Adding page")
+      .post(cisContractorFrontendUrl + "/change-type-of-subcontractor")
+      .formParam("value", option)
+      .formParam("csrfToken", f"#{csrfToken}")
+      .check(status.is(303))
+
+  val getChangeWhatIsTheSubcontractorsTradingName: HttpRequestBuilder =
+    http("[get] Change What Is The Subcontractor's Trading Name page")
+      .get(cisContractorFrontendUrl + "/change-trading-name")
+      .check(status.is(200))
+      .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
+
+  def postChangeWhatIsTheSubcontractorsTradingName(name: String): HttpRequestBuilder =
+    http("[post] Change What Is The Subcontractor's Trading Name page")
+      .post(cisContractorFrontendUrl + "/change-trading-name")
+      .formParam("value", name)
+      .formParam("csrfToken", f"#{csrfToken}")
+      .check(status.is(303))
+
+  val getChangeDoesTheSubcontractorUseATradingName: HttpRequestBuilder =
+    http("[get] Change Does The Subcontractor Use A Trading Name page")
+      .get(cisContractorFrontendUrl + "/change-check-trading-name")
+      .check(status.is(200))
+      .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
+
+  def postChangeDoesTheSubcontractorUseATradingName(option: String): HttpRequestBuilder =
+    http("[post] Change Does The Subcontractor Use A Trading Name page")
+      .post(cisContractorFrontendUrl + "/change-check-trading-name")
+      .formParam("value", option)
+      .formParam("csrfToken", f"#{csrfToken}")
+      .check(status.is(303))
+
+  val getChangeWhatIsTheSubcontractorsName: HttpRequestBuilder =
+    http("[get] Change What Is The Subcontractor's Name page")
+      .get(cisContractorFrontendUrl + "/change-name")
+      .check(status.is(200))
+      .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
+
+  def postChangeWhatIsTheSubcontractorsName(first: String, middle: String, last: String): HttpRequestBuilder =
+    http("[post] Change What Is The Subcontractor's Name page")
+      .post(cisContractorFrontendUrl + "/change-name")
+      .formParam("value.first", first)
+      .formParam("value.middle", middle)
+      .formParam("value.last", last)
+      .formParam("csrfToken", f"#{csrfToken}")
+      .check(status.is(303))
+
+  val getChangeWhatIsTheSubcontractorsAddress: HttpRequestBuilder =
+    http("[get] Change What Is The Subcontractor's Address page")
+      .get(cisContractorFrontendUrl + "/change-address")
+      .check(status.is(200))
+      .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
+
+  def postChangeWhatIsTheSubcontractorsAddress(
+    line1: String,
+    line2: String,
+    town: String,
+    country: String,
+    postcode: String
+  ): HttpRequestBuilder =
+    http("[post] Change What Is The Subcontractor's Address page")
+      .post(cisContractorFrontendUrl + "/change-address")
+      .formParam("value.line1", line1)
+      .formParam("value.line2", line2)
+      .formParam("value.town", town)
+      .formParam("value.country", country)
+      .formParam("value.postcode", postcode)
+      .formParam("csrfToken", f"#{csrfToken}")
+      .check(status.is(303))
+
+  val getChangeDoYouWantToAddTheSubcontractorsAddress: HttpRequestBuilder =
+    http("[get] Change Do You Want To Add The Subcontractor's Address page")
+      .get(cisContractorFrontendUrl + "/change-check-address")
+      .check(status.is(200))
+      .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
+
+  def postChangeDoYouWantToAddTheSubcontractorsAddress(option: String): HttpRequestBuilder =
+    http("[post] Change Do You Want To Add The Subcontractor's Address page")
+      .post(cisContractorFrontendUrl + "/change-check-address")
+      .formParam("value", option)
+      .formParam("csrfToken", f"#{csrfToken}")
+      .check(status.is(303))
+
+  val getChangeWhatIsTheSubcontractorsNationalInsuranceNumber: HttpRequestBuilder =
+    http("[get] Change What Is The Subcontractor's National Insurance Number page")
+      .get(cisContractorFrontendUrl + "/change-national-insurance-number")
+      .check(status.is(200))
+      .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
+
+  def postChangeWhatIsTheSubcontractorsNationalInsuranceNumber(name: String): HttpRequestBuilder =
+    http("[post] Change What Is The Subcontractor's National Insurance Number page")
+      .post(cisContractorFrontendUrl + "/change-national-insurance-number")
+      .formParam("value", name)
+      .formParam("csrfToken", f"#{csrfToken}")
+      .check(status.is(303))
+
+  val getChangeDoYouHaveANationalInsuranceNumber: HttpRequestBuilder =
+    http("[get] Change Do You Have A National Insurance Number page")
+      .get(cisContractorFrontendUrl + "/change-check-national-insurance-number")
+      .check(status.is(200))
+      .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
+
+  def postChangeDoYouHaveANationalInsuranceNumber(option: String): HttpRequestBuilder =
+    http("[post] Change Do You Have A National Insurance page")
+      .post(cisContractorFrontendUrl + "/change-check-national-insurance-number")
+      .formParam("value", option)
+      .formParam("csrfToken", f"#{csrfToken}")
+      .check(status.is(303))
+
+  val getChangeWhatIsTheSubcontractorsUniqueTaxpayerReference: HttpRequestBuilder =
+    http("[get] Change What Is The Subcontractor's Unique Taxpayer Reference page")
+      .get(cisContractorFrontendUrl + "/change-unique-taxpayer-reference")
+      .check(status.is(200))
+      .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
+
+  def postChangeWhatIsTheSubcontractorsUniqueTaxpayerReference(name: String): HttpRequestBuilder =
+    http("[post] Change What Is The Subcontractor's Unique Taxpayer Reference page")
+      .post(cisContractorFrontendUrl + "/change-unique-taxpayer-reference")
+      .formParam("value", name)
+      .formParam("csrfToken", f"#{csrfToken}")
+      .check(status.is(303))
+
+  val getChangeDoYouHaveAUniqueTaxpayerReference: HttpRequestBuilder =
+    http("[get] Change Do You Have A Unique Taxpayer Reference page")
+      .get(cisContractorFrontendUrl + "/change-check-unique-taxpayer-reference")
+      .check(status.is(200))
+      .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
+
+  def postChangeDoYouHaveAUniqueTaxpayerReference(option: String): HttpRequestBuilder =
+    http("[post] Change Do You Have A Unique Taxpayer Reference page")
+      .post(cisContractorFrontendUrl + "/change-check-unique-taxpayer-reference")
+      .formParam("value", option)
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 }

@@ -93,13 +93,13 @@ object NilMonthlyReturnRequests extends ServicesConfiguration with CisPerformanc
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
-  val getCheckYourAnswersPage: HttpRequestBuilder =
+  val getMNRFCheckYourAnswersPage: HttpRequestBuilder =
     http("[get] Get Check your answers page")
       .get(cisFrontendUrl + "/monthly-return/check-your-answers")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
-  val postCheckYourAnswersPage: HttpRequestBuilder =
+  val postMNRFCheckYourAnswersPage: HttpRequestBuilder =
     http("[post] Post Check your answers")
       .post(cisFrontendUrl + "/monthly-return/check-your-answers")
       .formParam("csrfToken", f"#{csrfToken}")
