@@ -103,7 +103,20 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     getWhatIsTheSubcontractorsAddress,
     postWhatIsTheSubcontractorsAddress("123 Test Ave", "", "Testing City", "United Kingdom", "AB1 2CD"),
     getDoYouHaveANationalInsuranceNumber,
-    postDoYouHaveANationalInsuranceNumber("value") // Yes
+    postDoYouHaveANationalInsuranceNumber("value"), // Yes
+    getWhatIsTheSubcontractorsNationalInsuranceNumber,
+    postWhatIsTheSubcontractorsNationalInsuranceNumber("AA123456C"),
+    getDoYouHaveAUniqueTaxpayerReference,
+    postDoYouHaveAUniqueTaxpayerReference("value"), //Yes
+    getWhatIsTheSubcontractorsUniqueTaxpayerReference,
+    postWhatIsTheSubcontractorsUniqueTaxpayerReference("1234567890"),
+    getDoYouHaveAWorksReferenceNumber,
+    postDoYouHaveAWorksReferenceNumber("value"), // Yes
+    getWhatIsTheWorksReferenceNumber,
+    postWhatIsTheWorksReferenceNumber("12345678"),
+    getDoYouWantToAddTheSubcontractorsContactDetails,
+    postDoYouWantToAddTheSubcontractorsContactDetails("value"), // Yes
+    getSubcontractorsContactDetails
   )
   runSimulation()
 }
