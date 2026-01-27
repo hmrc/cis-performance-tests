@@ -28,7 +28,6 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
 
   before {
     DatabaseCleanup.dropMongoCollection()
-    DatabaseCleanup.cleanupDatabaseIfNotStub()
   }
 
   setup("nil-monthly-return", "NMRP").withRequests(
@@ -37,7 +36,7 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     getSession,
     getConstructionIndustryScheme,
     getConfirmNilReturnPage,
-    postConfirmNilReturnPage("04", "2025"),
+    postConfirmNilReturnPage,
     getDoYouWantToSubmitAnInactivityRequestPage,
     postDoYouWantToSubmitAnInactivityRequestPage("option2"),
     getConfirmEmailAddressPage,
@@ -46,7 +45,7 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     postDeclarationPage("confirmed"),
     getMNRFCheckYourAnswersPage,
     getChangeConfirmNilReturnPage,
-    postChangeConfirmNilReturnPage("09", "2024"),
+    postChangeConfirmNilReturnPage,
     getMNRFCheckYourAnswersPage,
     getChangeDoYouWantToSubmitAnInactivityRequestPage,
     postChangeDoYouWantToSubmitAnInactivityRequestPage("option1"),
