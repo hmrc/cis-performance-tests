@@ -22,6 +22,7 @@ import uk.gov.hmrc.perftests.cis.mongo.DatabaseCleanup
 import uk.gov.hmrc.perftests.cis.requests.AuthRequests._
 import uk.gov.hmrc.perftests.cis.requests.NilMonthlyReturnRequests._
 import uk.gov.hmrc.perftests.cis.requests.LandingPagesRequests._
+import uk.gov.hmrc.perftests.cis.requests.SubcontractorRequests._
 
 class CisSimulation extends Simulation with PerformanceTestRunner {
 
@@ -29,7 +30,7 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     DatabaseCleanup.dropMongoCollection()
   }
 
-  setup("nil-monthly-return", "Monthly nil return").withRequests(
+  setup("nil-monthly-return", "NMRP").withRequests(
     getAuthPage,
     postAuthPage,
     getSession,
@@ -42,19 +43,19 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     postConfirmEmailAddressPage("tester.test@test.com"),
     getDeclarationPage,
     postDeclarationPage("confirmed"),
-    getCheckYourAnswersPage,
+    getMNRFCheckYourAnswersPage,
     getChangeConfirmNilReturnPage,
     postChangeConfirmNilReturnPage,
-    getCheckYourAnswersPage,
+    getMNRFCheckYourAnswersPage,
     getChangeDoYouWantToSubmitAnInactivityRequestPage,
     postChangeDoYouWantToSubmitAnInactivityRequestPage("option1"),
     getInactivityWarningPage,
     postInactivityWarningPage,
-    getCheckYourAnswersPage,
+    getMNRFCheckYourAnswersPage,
     getChangeConfirmEmailAddressPage,
     postChangeConfirmEmailAddressPage("Submissionsuccessful@test.com"),
-    getCheckYourAnswersPage,
-    postCheckYourAnswersPage,
+    getMNRFCheckYourAnswersPage,
+    postMNRFCheckYourAnswersPage,
     postSubmissionSendPage,
     getPollingPage,
     getPollingPage,
@@ -62,7 +63,7 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     getSuccessfulSubmissionPage
   )
 
-  setup("agent-landing-pages", "Agent landing pages").withRequests(
+  setup("agent-landing-pages", "ALP ").withRequests(
     getAuthPage,
     postManageAuthPage("Agent"),
     getSession,
@@ -76,7 +77,7 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     getAgentCisReturnDashboardPage
   )
 
-  setup("org-landing-pages", "Organisation landing pages").withRequests(
+  setup("org-landing-pages", "OLP ").withRequests(
     getAuthPage,
     postManageAuthPage("Organisation"),
     getSession,
@@ -86,5 +87,82 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     getCisReturnDashboardPage
   )
 
+  setup("add-subcontractor-pages", "ASP ").withRequests(
+    getAuthPage,
+    postSubcontractorAuthPage,
+    getSession,
+    getAddSubcontractor,
+    getWhatTypeOfSubcontractorAreYouAdding,
+    postWhatTypeOfSubcontractorAreYouAdding("soletrader"),
+    getDoesTheSubcontractorUseATradingName,
+    postDoesTheSubcontractorUseATradingName("true"),
+    getWhatIsTheSubcontractorsTradingName,
+    postWhatIsTheSubcontractorsTradingName("Test Subcontractor Ltd"),
+    getDoYouWantToAddTheSubcontractorsAddress,
+    postDoYouWantToAddTheSubcontractorsAddress("true"),
+    getWhatIsTheSubcontractorsAddress,
+    postWhatIsTheSubcontractorsAddress("123 Test Ave", "", "Testing City", "United Kingdom", "AB1 2CD"),
+    getDoYouHaveANationalInsuranceNumber,
+    postDoYouHaveANationalInsuranceNumber("true"),
+    getWhatIsTheSubcontractorsNationalInsuranceNumber,
+    postWhatIsTheSubcontractorsNationalInsuranceNumber("AA123456C"),
+    getDoYouHaveAUniqueTaxpayerReference,
+    postDoYouHaveAUniqueTaxpayerReference("true"),
+    getWhatIsTheSubcontractorsUniqueTaxpayerReference,
+    postWhatIsTheSubcontractorsUniqueTaxpayerReference("1111111111"),
+    getDoYouHaveAWorksReferenceNumber,
+    postDoYouHaveAWorksReferenceNumber("true"),
+    getWhatIsTheWorksReferenceNumber,
+    postWhatIsTheWorksReferenceNumber("12345678"),
+    getDoYouWantToAddTheSubcontractorsContactDetails,
+    postDoYouWantToAddTheSubcontractorsContactDetails("true"),
+    getSubcontractorsContactDetails,
+    postSubcontractorsContactDetails("Test123@test.com", "01234567890"),
+    getSubcontractorCheckYourAnswersPage,
+    getChangeWhatTypeOfSubcontractorAreYouAdding,
+    postChangeWhatTypeOfSubcontractorAreYouAdding("soletrader"),
+    getSubcontractorCheckYourAnswersPage,
+    getChangeWhatIsTheSubcontractorsTradingName,
+    postChangeWhatIsTheSubcontractorsTradingName("New Test Subcontractor Ltd"),
+    getSubcontractorCheckYourAnswersPage,
+    getChangeDoesTheSubcontractorUseATradingName,
+    postChangeDoesTheSubcontractorUseATradingName("false"),
+    getChangeWhatIsTheSubcontractorsName,
+    postChangeWhatIsTheSubcontractorsName("John", "Test", "Doe"),
+    getSubcontractorCheckYourAnswersPage,
+    getChangeWhatIsTheSubcontractorsName,
+    postChangeWhatIsTheSubcontractorsName("Jane", "Tester", "Doe"),
+    getSubcontractorCheckYourAnswersPage,
+    getChangeWhatIsTheSubcontractorsAddress,
+    postChangeWhatIsTheSubcontractorsAddress("123 Test Ave", "Flat 456", "Testing City", "United Kingdom", "AB21 3DE"),
+    getSubcontractorCheckYourAnswersPage,
+    getChangeDoYouWantToAddTheSubcontractorsAddress,
+    postChangeDoYouWantToAddTheSubcontractorsAddress("false"),
+    getSubcontractorCheckYourAnswersPage,
+    getChangeWhatIsTheSubcontractorsNationalInsuranceNumber,
+    postChangeWhatIsTheSubcontractorsNationalInsuranceNumber("JJ123456A"),
+    getSubcontractorCheckYourAnswersPage,
+    getChangeDoYouHaveANationalInsuranceNumber,
+    postChangeDoYouHaveANationalInsuranceNumber("false"),
+    getSubcontractorCheckYourAnswersPage,
+    getChangeWhatIsTheSubcontractorsUniqueTaxpayerReference,
+    postChangeWhatIsTheSubcontractorsUniqueTaxpayerReference("2222222222"),
+    getSubcontractorCheckYourAnswersPage,
+    getChangeDoYouHaveAUniqueTaxpayerReference,
+    postChangeDoYouHaveAUniqueTaxpayerReference("false"),
+    getSubcontractorCheckYourAnswersPage,
+    getChangeWhatIsTheWorksReferenceNumber,
+    postChangeWhatIsTheWorksReferenceNumber("78789934"),
+    getSubcontractorCheckYourAnswersPage,
+    getChangeDoYouHaveAWorksReferenceNumber,
+    postChangeDoYouHaveAWorksReferenceNumber("false"),
+    getSubcontractorCheckYourAnswersPage,
+    getChangeSubcontractorsContactDetails,
+    postChangeSubcontractorsContactDetails("doe.test@testurl.com", "449876543210"),
+    getSubcontractorCheckYourAnswersPage,
+    getChangeDoYouWantToAddTheSubcontractorsContactDetails,
+    postChangeDoYouWantToAddTheSubcontractorsContactDetails("false"),
+    getSubcontractorCheckYourAnswersPage
+  )
   runSimulation()
 }

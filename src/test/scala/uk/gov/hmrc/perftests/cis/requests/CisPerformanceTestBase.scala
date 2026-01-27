@@ -29,6 +29,6 @@ trait CisPerformanceTestBase extends ServicesConfiguration {
   val cisManageFrontendUrl: String = cisManageHost + s"/construction-industry-scheme/management"
 
   val cisContractorHost: String        = baseUrlFor("cis-contractor-frontend")
-  val cisContractorFrontendUrl: String = cisContractorHost + s"/construction-industry-scheme"
+  val cisContractorFrontendUrl: String = cisContractorHost + s"/construction-industry-scheme/subcontractor"
 
 }

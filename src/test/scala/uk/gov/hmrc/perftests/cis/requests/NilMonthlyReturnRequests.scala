@@ -27,12 +27,12 @@ import scala.util.Random
 object NilMonthlyReturnRequests extends ServicesConfiguration with CisPerformanceTestBase {
 
   val getConstructionIndustryScheme: HttpRequestBuilder =
-    http("[get] Construction Industry Scheme Frontend")
+    http("[get ] Construction Industry Scheme Frontend")
       .get(cisFrontendUrl)
       .check(status.is(303))
 
   val getConfirmNilReturnPage: HttpRequestBuilder =
-    http("[get] Confirm nil return page")
+    http("[get ] Confirm nil return page")
       .get(cisFrontendUrl + "/monthly-return/date-confirm-nil-payments")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
@@ -72,7 +72,7 @@ object NilMonthlyReturnRequests extends ServicesConfiguration with CisPerformanc
   }
 
   val getDoYouWantToSubmitAnInactivityRequestPage: HttpRequestBuilder =
-    http("[get] Do You Want To Submit An Inactivity Request page")
+    http("[get ] Do You Want To Submit An Inactivity Request page")
       .get(cisFrontendUrl + "/monthly-return/submit-inactive-request")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
@@ -85,7 +85,7 @@ object NilMonthlyReturnRequests extends ServicesConfiguration with CisPerformanc
       .check(status.is(303))
 
   val getConfirmEmailAddressPage: HttpRequestBuilder =
-    http("[get] Confirmation Email Address page")
+    http("[get ] Confirmation Email Address page")
       .get(cisFrontendUrl + "/monthly-return/confirm-email-address")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
@@ -98,7 +98,7 @@ object NilMonthlyReturnRequests extends ServicesConfiguration with CisPerformanc
       .check(status.is(303))
 
   val getDeclarationPage: HttpRequestBuilder =
-    http("[get] Declaration page")
+    http("[get ] Declaration page")
       .get(cisFrontendUrl + "/monthly-return/declaration")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
@@ -111,7 +111,7 @@ object NilMonthlyReturnRequests extends ServicesConfiguration with CisPerformanc
       .check(status.is(303))
 
   val getInactivityWarningPage: HttpRequestBuilder =
-    http("[get] Inactivity Warning page")
+    http("[get ] Inactivity Warning page")
       .get(cisFrontendUrl + "/monthly-return/nil-month-return-inactive")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
@@ -122,20 +122,20 @@ object NilMonthlyReturnRequests extends ServicesConfiguration with CisPerformanc
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
-  val getCheckYourAnswersPage: HttpRequestBuilder =
-    http("[get] Get Check your answers page")
+  val getMNRFCheckYourAnswersPage: HttpRequestBuilder =
+    http("[get ] Get Check your answers page")
       .get(cisFrontendUrl + "/monthly-return/check-your-answers")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
-  val postCheckYourAnswersPage: HttpRequestBuilder =
+  val postMNRFCheckYourAnswersPage: HttpRequestBuilder =
     http("[post] Post Check your answers")
       .post(cisFrontendUrl + "/monthly-return/check-your-answers")
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
   val getChangeConfirmNilReturnPage: HttpRequestBuilder =
-    http("[get] Change confirm nil return page")
+    http("[get ] Change confirm nil return page")
       .get(cisFrontendUrl + "/monthly-return/change-date-confirm-nil-payments")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
@@ -151,7 +151,7 @@ object NilMonthlyReturnRequests extends ServicesConfiguration with CisPerformanc
   }
 
   val getChangeDoYouWantToSubmitAnInactivityRequestPage: HttpRequestBuilder =
-    http("[get] Change Do You Want To Submit An Inactivity Request page")
+    http("[get ] Change Do You Want To Submit An Inactivity Request page")
       .get(cisFrontendUrl + "/monthly-return/change-submit-inactive-request")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
@@ -164,7 +164,7 @@ object NilMonthlyReturnRequests extends ServicesConfiguration with CisPerformanc
       .check(status.is(303))
 
   val getChangeConfirmEmailAddressPage: HttpRequestBuilder =
-    http("[get] Change Confirmation Email Address page")
+    http("[get ] Change Confirmation Email Address page")
       .get(cisFrontendUrl + "/monthly-return/change-confirm-email-address")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
@@ -182,7 +182,7 @@ object NilMonthlyReturnRequests extends ServicesConfiguration with CisPerformanc
       .check(status.is(303))
 
   val getPollingPage: HttpRequestBuilder =
-    http("[get] Polling")
+    http("[get ] Polling")
       .get(cisFrontendUrl + "/monthly-return/submission-send/polling")
       .check(status.is(200))
 
@@ -192,7 +192,7 @@ object NilMonthlyReturnRequests extends ServicesConfiguration with CisPerformanc
       .check(status.is(303))
 
   val getSuccessfulSubmissionPage: HttpRequestBuilder =
-    http("[get] Successful Submission page")
+    http("[get ] Successful Submission page")
       .get(cisFrontendUrl + "/monthly-return/confirmation")
       .check(status.is(200))
 }
