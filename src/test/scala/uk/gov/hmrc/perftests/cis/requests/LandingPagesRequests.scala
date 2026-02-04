@@ -51,7 +51,6 @@ object LandingPagesRequests extends ServicesConfiguration with CisPerformanceTes
   val getStart: HttpRequestBuilder =
     http("[get ] Start Retrieve Client List")
       .get(cisManageFrontendUrl + "/agent/retrieve-client-list/start")
-      .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
   val getFileMonthlyCISReturnPage: HttpRequestBuilder =
@@ -68,7 +67,6 @@ object LandingPagesRequests extends ServicesConfiguration with CisPerformanceTes
   val getFilterFileMonthlyCISReturnPage: HttpRequestBuilder =
     http("[get ] Filter File monthly CIS returns page")
       .get(cisManageFrontendUrl + "/agent/file-monthly-cis-returns")
-      .formParam("value", "ABC")
       .check(status.is(200))
 
   val getAgentCisReturnDashboardPage: HttpRequestBuilder =
