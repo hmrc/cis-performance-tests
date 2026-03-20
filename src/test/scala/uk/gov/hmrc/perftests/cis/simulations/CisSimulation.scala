@@ -18,23 +18,42 @@ package uk.gov.hmrc.perftests.cis.simulations
 
 import io.gatling.core.scenario.Simulation
 import uk.gov.hmrc.performance.simulation.PerformanceTestRunner
-import uk.gov.hmrc.perftests.cis.mongo.DatabaseCleanup
 import uk.gov.hmrc.perftests.cis.requests.AuthRequests._
-import uk.gov.hmrc.perftests.cis.requests.NilMonthlyReturnRequests._
 import uk.gov.hmrc.perftests.cis.requests.LandingPagesRequests._
+import uk.gov.hmrc.perftests.cis.requests.NilMonthlyReturnRequests._
 import uk.gov.hmrc.perftests.cis.requests.SubcontractorRequests._
 
 class CisSimulation extends Simulation with PerformanceTestRunner {
 
-  before {
-    DatabaseCleanup.dropMongoCollection()
-  }
+  setup("org-landing-pages", "OLP ").withRequests(
+    getAuthPage,
+    postManageAuthPage("Organisation"),
+    getSession,
+    getManageFrontend,
+    getSignIntoCISPage,
+    getSignIntoCISRouting,
+    getCisReturnDashboardPage
+  )
+
+  setup("agent-landing-pages", "ALP ").withRequests(
+    getAuthPage,
+    postManageAuthPage("Agent"),
+    getSession,
+    getManageFrontend,
+    getSignIntoCISPage,
+    getSignIntoCISRouting,
+    getRetrieveClientList,
+    getStart,
+    getFileMonthlyCISReturnsUnfilteredListPage,
+    postFileMonthlyCISReturnsSearchPage("CN", "ABC"),
+    getClientFilteredViewFileMonthlyCISReturnPage,
+    getClientCisReturnDashboardPage,
+    postClientCisReturnDashboardPage,
+    getManageYourCISReturenPage
+  )
 
   setup("nil-monthly-return", "NMRP").withRequests(
-    getAuthPage,
-    postAuthPage,
-    getSession,
-    getConstructionIndustryScheme,
+    getFileYourNilReturnPage,
     getConfirmNilReturnPage,
     postConfirmNilReturnPage,
     getDoYouWantToSubmitAnInactivityRequestPage,
@@ -43,9 +62,6 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     postConfirmEmailAddressPage("tester.test@test.com"),
     getDeclarationPage,
     postDeclarationPage("confirmed"),
-    getMNRFCheckYourAnswersPage,
-    getChangeConfirmNilReturnPage,
-    postChangeConfirmNilReturnPage,
     getMNRFCheckYourAnswersPage,
     getChangeDoYouWantToSubmitAnInactivityRequestPage,
     postChangeDoYouWantToSubmitAnInactivityRequestPage("option1"),
@@ -63,31 +79,7 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     getSuccessfulSubmissionPage
   )
 
-  setup("agent-landing-pages", "ALP ").withRequests(
-    getAuthPage,
-    postManageAuthPage("Agent"),
-    getSession,
-    getManageFrontend,
-    getSignIntoCISPage,
-    getSignIntoCISRouting,
-    getRetrieveClientList,
-    getStart,
-    getFileMonthlyCISReturnPage,
-    getFilterFileMonthlyCISReturnPage,
-    getAgentCisReturnDashboardPage
-  )
-
-  setup("org-landing-pages", "OLP ").withRequests(
-    getAuthPage,
-    postManageAuthPage("Organisation"),
-    getSession,
-    getManageFrontend,
-    getSignIntoCISPage,
-    getSignIntoCISRouting,
-    getCisReturnDashboardPage
-  )
-
-  setup("add-subcontractor-pages", "ASP ").withRequests(
+  setup("add-sole-trader-subcontractor", "ASP ").withRequests(
     getAuthPage,
     postSubcontractorAuthPage,
     getSession,
