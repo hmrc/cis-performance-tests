@@ -53,25 +53,38 @@ object LandingPagesRequests extends ServicesConfiguration with CisPerformanceTes
       .get(cisManageFrontendUrl + "/agent/retrieve-client-list/start")
       .check(status.is(303))
 
-  val getFileMonthlyCISReturnPage: HttpRequestBuilder =
+  val getFileMonthlyCISReturnsUnfilteredListPage: HttpRequestBuilder =
     http("[get ] File monthly CIS returns page")
       .get(cisManageFrontendUrl + "/agent/file-monthly-cis-returns")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
-  val postFilterFileMonthlyCISReturnPage: HttpRequestBuilder =
-    http("[post] Filter File monthly CIS returns page")
+  def postFileMonthlyCISReturnsSearchPage(searchBy: String, searchFilter: String): HttpRequestBuilder =
+    http("[post] Search for client page")
       .post(cisManageFrontendUrl + "/agent/file-monthly-cis-returns")
+      .formParam("searchBy", searchBy)
+      .formParam("searchFilter", searchFilter)
+      .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
-  val getFilterFileMonthlyCISReturnPage: HttpRequestBuilder =
-    http("[get ] Filter File monthly CIS returns page")
+  val getClientFilteredViewFileMonthlyCISReturnPage: HttpRequestBuilder =
+    http("[get ] Client filtered view File monthly CIS returns page")
       .get(cisManageFrontendUrl + "/agent/file-monthly-cis-returns")
       .check(status.is(200))
 
-  val getAgentCisReturnDashboardPage: HttpRequestBuilder =
-    http("[get ] Agent CIS Return Dashboard page")
+  val getClientCisReturnDashboardPage: HttpRequestBuilder =
+    http("[get ] Client CIS Return Dashboard for ABC page")
       .get(cisManageFrontendUrl + "/agent/cis-return-dashboard/1")
+      .check(status.is(200))
+
+  val postClientCisReturnDashboardPage: HttpRequestBuilder =
+    http("[get ] Click Return due link on Client CIS Return Dashboard for ABC page")
+      .get(cisManageFrontendUrl + "/agent/cis-return-dashboard/1/target/returnDue")
+      .check(status.is(303))
+
+  val getManageYourCISReturenPage: HttpRequestBuilder =
+    http("[get ] Manage Your CIS Return Dashboard for ABC page")
+      .get(cisManageFrontendUrl + "/manage-cis-return/1")
       .check(status.is(200))
 
 }
