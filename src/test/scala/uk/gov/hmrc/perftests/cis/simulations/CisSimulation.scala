@@ -49,7 +49,7 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     postFileMonthlyCISReturnsSearchPage("CN", "ABC"),
     getClientFilteredViewFileMonthlyCISReturnPage,
     getClientCisReturnDashboardPage,
-    postClientCisReturnDashboardPage,
+    getClickReturnDueLink,
     getManageYourCISReturenPage
   )
 
@@ -81,7 +81,7 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
   )
 
   setup("add-sole-trader-subcontractor", "ASTP ").withRequests(
-    postClickSubcontractorsLink,
+    getClickSubcontractorsLink,
     getManageYourCISReturnSubcontractorPage,
     getAddSubcontractor,
     getWhatTypeOfSubcontractorAreYouAdding,
@@ -167,7 +167,7 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     getSignIntoCISPage,
     getSignIntoCISRouting,
     getCisReturnDashboardPage,
-    postClickSubcontractorsLink,
+    getClickSubcontractorsLink,
     getCheckSubcontractorRecordsPage("EZ10400"),
     postCheckSubcontractorRecordsPage("EZ10400"),
     getYourSubcontractors("EZ10400"),
@@ -188,7 +188,7 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     getSignIntoCISPage,
     getSignIntoCISRouting,
     getCisReturnDashboardPage,
-    postClickSubcontractorsLink,
+    getClickSubcontractorsLink,
     getCheckSubcontractorRecordsPage("EZ10450"),
     postCheckSubcontractorRecordsPage("EZ10450"),
     getYourSubcontractors("EZ10450"),
