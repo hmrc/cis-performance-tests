@@ -35,45 +35,15 @@ object AuthRequests extends ServicesConfiguration with CisPerformanceTestBase {
     .check(css("[data-session-id=\"authToken\"] > code").saveAs("accessToken"))
     .check(css("[data-session-id=\"sessionId\"] > code").saveAs("sessionId"))
 
-  def postAuthPage: HttpRequestBuilder = {
-    val baseFormParams = Map(
-      "authorityId"        -> "",
-      "redirectionUrl"     -> cisFrontendUrl,
-      "credentialStrength" -> "strong",
-      "confidenceLevel"    -> "50",
-      "affinityGroup"      -> "Organisation",
-      "csrfToken"          -> "#{csrfToken}"
-    )
-
-    val enrolmentParams = Map(
-      "enrolment[0].name"                   -> "HMRC-CIS-ORG",
-      "enrolment[0].taxIdentifier[0].name"  -> "TaxOfficeNumber",
-      "enrolment[0].taxIdentifier[0].value" -> "754",
-      "enrolment[0].taxIdentifier[1].name"  -> "TaxOfficeReference",
-      "enrolment[0].taxIdentifier[1].value" -> "EZ00100",
-      "enrolment[0].state"                  -> "Activated"
-    )
-
-    val expectedRedirectUrl = cisFrontendUrl
-
-    http("[post] gg-sign-in")
-      .post(baseUrlAuthLoginStub + "/auth-login-stub/gg-sign-in")
-      .disableFollowRedirect
-      .formParamMap(baseFormParams ++ enrolmentParams)
-      .check(status.is(303))
-      .check(header("Location").is(expectedRedirectUrl))
-  }
-
-  def postManageAuthPage(affinityGroup: String): HttpRequestBuilder = {
-    val baseFormParams = Map(
+  def postManageAuthPage(affinityGroup: String, taxOfficeReference: String): HttpRequestBuilder = {
+    val baseFormParams      = Map(
       "redirectionUrl"     -> cisManageFrontendUrl,
       "credentialStrength" -> "strong",
       "confidenceLevel"    -> "50",
       "affinityGroup"      -> affinityGroup,
       "csrfToken"          -> "#{csrfToken}"
     )
-
-    val enrolmentParams = affinityGroup match {
+    val enrolmentParams     = affinityGroup match {
       case "Organisation" =>
         Map(
           "authorityId"                         -> "",
@@ -81,7 +51,7 @@ object AuthRequests extends ServicesConfiguration with CisPerformanceTestBase {
           "enrolment[0].taxIdentifier[0].name"  -> "TaxOfficeNumber",
           "enrolment[0].taxIdentifier[0].value" -> "754",
           "enrolment[0].taxIdentifier[1].name"  -> "TaxOfficeReference",
-          "enrolment[0].taxIdentifier[1].value" -> "EZ00100",
+          "enrolment[0].taxIdentifier[1].value" -> taxOfficeReference,
           "enrolment[0].state"                  -> "Activated"
         )
       case "Agent"        =>
@@ -89,42 +59,11 @@ object AuthRequests extends ServicesConfiguration with CisPerformanceTestBase {
           "authorityId"                         -> "CRED01",
           "enrolment[0].name"                   -> "IR-PAYE-AGENT",
           "enrolment[0].taxIdentifier[0].name"  -> "IRAgentReference",
-          "enrolment[0].taxIdentifier[0].value" -> "123456",
+          "enrolment[0].taxIdentifier[0].value" -> taxOfficeReference,
           "enrolment[0].state"                  -> "Activated"
         )
     }
-
     val expectedRedirectUrl = cisManageFrontendUrl
-
-    http("[post] gg-sign-in")
-      .post(baseUrlAuthLoginStub + "/auth-login-stub/gg-sign-in")
-      .disableFollowRedirect
-      .formParamMap(baseFormParams ++ enrolmentParams)
-      .check(status.is(303))
-      .check(header("Location").is(expectedRedirectUrl))
-  }
-
-  def postSubcontractorAuthPage: HttpRequestBuilder = {
-    val baseFormParams = Map(
-      "authorityId"        -> "",
-      "redirectionUrl"     -> cisContractorFrontendUrl,
-      "credentialStrength" -> "strong",
-      "confidenceLevel"    -> "50",
-      "affinityGroup"      -> "Organisation",
-      "csrfToken"          -> "#{csrfToken}"
-    )
-
-    val enrolmentParams = Map(
-      "enrolment[0].name"                   -> "HMRC-CIS-ORG",
-      "enrolment[0].taxIdentifier[0].name"  -> "TaxOfficeNumber",
-      "enrolment[0].taxIdentifier[0].value" -> "754",
-      "enrolment[0].taxIdentifier[1].name"  -> "TaxOfficeReference",
-      "enrolment[0].taxIdentifier[1].value" -> "EZ00100",
-      "enrolment[0].state"                  -> "Activated"
-    )
-
-    val expectedRedirectUrl = cisContractorFrontendUrl
-
     http("[post] gg-sign-in")
       .post(baseUrlAuthLoginStub + "/auth-login-stub/gg-sign-in")
       .disableFollowRedirect
