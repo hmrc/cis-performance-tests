@@ -21,13 +21,14 @@ import uk.gov.hmrc.performance.simulation.PerformanceTestRunner
 import uk.gov.hmrc.perftests.cis.requests.AuthRequests._
 import uk.gov.hmrc.perftests.cis.requests.LandingPagesRequests._
 import uk.gov.hmrc.perftests.cis.requests.NilMonthlyReturnRequests._
+import uk.gov.hmrc.perftests.cis.requests.PrepopulationRequests._
 import uk.gov.hmrc.perftests.cis.requests.SubcontractorRequests._
 
 class CisSimulation extends Simulation with PerformanceTestRunner {
 
   setup("org-landing-pages", "OLP ").withRequests(
     getAuthPage,
-    postManageAuthPage("Organisation"),
+    postManageAuthPage("Organisation", "EZ00100"),
     getSession,
     getManageFrontend,
     getSignIntoCISPage,
@@ -37,18 +38,18 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
 
   setup("agent-landing-pages", "ALP ").withRequests(
     getAuthPage,
-    postManageAuthPage("Agent"),
+    postManageAuthPage("Agent", "123456"),
     getSession,
     getManageFrontend,
     getSignIntoCISPage,
     getSignIntoCISRouting,
     getRetrieveClientList,
-    getStart,
+    getStartRetrieveClientList,
     getFileMonthlyCISReturnsUnfilteredListPage,
     postFileMonthlyCISReturnsSearchPage("CN", "ABC"),
     getClientFilteredViewFileMonthlyCISReturnPage,
     getClientCisReturnDashboardPage,
-    postClientCisReturnDashboardPage,
+    getClickReturnDueLink,
     getManageYourCISReturenPage
   )
 
@@ -79,10 +80,9 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     getSuccessfulSubmissionPage
   )
 
-  setup("add-sole-trader-subcontractor", "ASP ").withRequests(
-    getAuthPage,
-    postSubcontractorAuthPage,
-    getSession,
+  setup("add-sole-trader-subcontractor", "ASTP ").withRequests(
+    getClickSubcontractorsLink,
+    getManageYourCISReturnSubcontractorPage,
     getAddSubcontractor,
     getWhatTypeOfSubcontractorAreYouAdding,
     postWhatTypeOfSubcontractorAreYouAdding("soletrader"),
@@ -156,5 +156,48 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     postChangeDoYouWantToAddTheSubcontractorsContactDetails("false"),
     getSubcontractorCheckYourAnswersPage
   )
+
+//  This scenario covers scenarios 1, 2, 6, 8 & 9 in the cis-ui-tests as the same pages are loaded ending at the Manage your CIS return subcontractor page.
+  // Mechanics and database interaction are irrelevant when dealing with a stub.
+  setup("successful-prepopulation", "SPR ").withRequests(
+    getAuthPage,
+    postManageAuthPage("Organisation", "EZ10400"),
+    getSession,
+    getManageFrontend,
+    getSignIntoCISPage,
+    getSignIntoCISRouting,
+    getCisReturnDashboardPage,
+    getClickSubcontractorsLink,
+    getCheckSubcontractorRecordsPage("EZ10400"),
+    postCheckSubcontractorRecordsPage("EZ10400"),
+    getYourSubcontractors("EZ10400"),
+    getStartPrepopulation("EZ10400"),
+    getSuccessfulAutomaticSubcontractorUpdatePage,
+    postSuccessfulAutomaticSubcontractorUpdatePage,
+    getManageYourCISReturnSubcontractorPage
+//    continue journey to add subcontractor, verify subcontractor or subcontractor list
+  )
+
+  //  This scenario covers scenarios 3, 4, 5 & 7 in the cis-ui-tests as the same pages are loaded ending at the Add subcontractor page.
+  //  Mechanics and database interaction are irrelevant when dealing with a stub.
+  setup("unsuccessful-prepopulation", "UPR ").withRequests(
+    getAuthPage,
+    postManageAuthPage("Organisation", "EZ10450"),
+    getSession,
+    getManageFrontend,
+    getSignIntoCISPage,
+    getSignIntoCISRouting,
+    getCisReturnDashboardPage,
+    getClickSubcontractorsLink,
+    getCheckSubcontractorRecordsPage("EZ10450"),
+    postCheckSubcontractorRecordsPage("EZ10450"),
+    getYourSubcontractors("EZ10450"),
+    getStartPrepopulation("EZ10450"),
+    getUnsuccessfulAutomaticSubcontractorUpdatePage,
+    postUnsuccessfulAutomaticSubcontractorUpdatePage,
+    getAddContractorDetailsPage
+    //    continue journey to add subcontractor which is a terminal page at the moment
+  )
+
   runSimulation()
 }
