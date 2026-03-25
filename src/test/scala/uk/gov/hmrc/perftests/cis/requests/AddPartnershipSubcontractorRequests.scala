@@ -280,39 +280,39 @@ object AddPartnershipSubcontractorRequests extends ServicesConfiguration with Ci
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
-  val getUpdatePartnershipNamePage: HttpRequestBuilder =
+  val getChangePartnershipNamePage: HttpRequestBuilder =
     http("[get ] What is the partnership name page")
       .get(cisContractorFrontendUrl + "/add/partnership/change-partnership-name")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
-  def postUpdatePartnershipNamePage(partnershipName: String): HttpRequestBuilder =
+  def postChangePartnershipNamePage(partnershipName: String): HttpRequestBuilder =
     http("[post] What is the partnership name page")
       .post(cisContractorFrontendUrl + "/add/partnership/change-partnership-name")
       .formParam("value", partnershipName)
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
-  val getUpdateAddPartnershipAddressPage: HttpRequestBuilder =
+  val getChangeAddPartnershipAddressPage: HttpRequestBuilder =
     http("[get ] Do you want to add an address for this subcontractor page")
       .get(cisContractorFrontendUrl + "/add/partnership/change-check-address")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
-  def postUpdateAddPartnershipAddressPage(option: String): HttpRequestBuilder =
+  def postChangeAddPartnershipAddressPage(option: String): HttpRequestBuilder =
     http("[post] Do you want to add an address for this subcontractor page")
       .post(cisContractorFrontendUrl + "/add/partnership/change-check-address")
       .formParam("value", option)
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
-  val getUpdatePartnershipAddressPage: HttpRequestBuilder =
+  val getChangePartnershipAddressPage: HttpRequestBuilder =
     http("[get ] What is the address for this partnership page")
       .get(cisContractorFrontendUrl + "/add/partnership/change-address")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
-  def postUpdatePartnershipAddressPage(addressLine1: String,
+  def postChangePartnershipAddressPage(addressLine1: String,
                                  addressLine2: String,
                                  town: String,
                                  county: String,
@@ -330,208 +330,208 @@ object AddPartnershipSubcontractorRequests extends ServicesConfiguration with Ci
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
-  val getUpdatePartnershipContactMethodPage: HttpRequestBuilder =
+  val getChangePartnershipContactMethodPage: HttpRequestBuilder =
     http("[get ] What is the contact method for this partnership page")
       .get(cisContractorFrontendUrl + "/add/partnership/change-choose-contact-details")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
-  def postUpdatePartnershipContactMethodPage(contactOption: String): HttpRequestBuilder =
+  def postChangePartnershipContactMethodPage(contactOption: String): HttpRequestBuilder =
     http("[post] What is the contact method for this partnership page")
       .post(cisContractorFrontendUrl + "/add/partnership/change-choose-contact-details")
       .formParam("value", contactOption)
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
-  val getUpdatePartnershipEmailAddressPage: HttpRequestBuilder =
+  val getChangePartnershipEmailAddressPage: HttpRequestBuilder =
     http("[get ] What is the partnership email address page")
       .get(cisContractorFrontendUrl + "/add/partnership/change-email-address")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
-  def postUpdatePartnershipEmailAddressPage(email: String): HttpRequestBuilder =
+  def postChangePartnershipEmailAddressPage(email: String): HttpRequestBuilder =
     http("[post] What is the partnership email address page")
       .post(cisContractorFrontendUrl + "/add/partnership/change-email-address")
       .formParam("value", email)
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
-  val getUpdatePartnershipPhoneNumberPage: HttpRequestBuilder =
+  val getChangePartnershipPhoneNumberPage: HttpRequestBuilder =
     http("[get ] What is the partnership phone number page")
       .get(cisContractorFrontendUrl + "/add/partnership/change-phone-number")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
-  def postUpdatePartnershipPhoneNumberPage(phoneNumber: String): HttpRequestBuilder =
+  def postChangePartnershipPhoneNumberPage(phoneNumber: String): HttpRequestBuilder =
     http("[post] What is the partnership phone number page")
       .post(cisContractorFrontendUrl + "/add/partnership/change-phone-number")
       .formParam("value", phoneNumber)
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
-  val getUpdatePartnershipMobileNumberPage: HttpRequestBuilder =
+  val getChangePartnershipMobileNumberPage: HttpRequestBuilder =
     http("[get ] What is the partnership mobile number page")
       .get(cisContractorFrontendUrl + "/add/partnership/change-mobile-number")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
-  def postUpdatePartnershipMobileNumberPage(mobileNumber: String): HttpRequestBuilder =
+  def postChangePartnershipMobileNumberPage(mobileNumber: String): HttpRequestBuilder =
     http("[post] What is the partnership mobile number page")
       .post(cisContractorFrontendUrl + "/add/partnership/change-mobile-number")
       .formParam("value", mobileNumber)
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
-  val getUpdateAddPartnershipUTRPage: HttpRequestBuilder =
+  val getChangeAddPartnershipUTRPage: HttpRequestBuilder =
     http("[get ] Does this partnership have a UTR page")
       .get(cisContractorFrontendUrl + "/add/partnership/change-partnership-has-utr")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
-  def postUpdateAddPartnershipUTRPage(option: String): HttpRequestBuilder =
+  def postChangeAddPartnershipUTRPage(option: String): HttpRequestBuilder =
     http("[post] Does this partnership have a UTR page")
       .post(cisContractorFrontendUrl + "/add/partnership/change-partnership-has-utr")
       .formParam("value", option)
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
-  val getUpdatePartnershipUTRPage: HttpRequestBuilder =
+  val getChangePartnershipUTRPage: HttpRequestBuilder =
     http("[get ] What is the UTR for this partnership page")
       .get(cisContractorFrontendUrl + "/add/partnership/change-partnership-utr")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
-  def postUpdatePartnershipUTRPage(utr: String): HttpRequestBuilder =
+  def postChangePartnershipUTRPage(utr: String): HttpRequestBuilder =
     http("[post] What is the UTR for this partnership page")
       .post(cisContractorFrontendUrl + "/add/partnership/change-partnership-utr")
       .formParam("value", utr)
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
-  val getUpdateNominatedPartnerName: HttpRequestBuilder =
+  val getChangeNominatedPartnerName: HttpRequestBuilder =
     http("[get ] Who is the nominated partner for this partnership")
       .get(cisContractorFrontendUrl + "/add/partnership/change-nominated-partner")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
-  def postUpdateNominatedPartnerName(nominatedPartnerName:String): HttpRequestBuilder =
+  def postChangeNominatedPartnerName(nominatedPartnerName:String): HttpRequestBuilder =
     http("[post] Who is the nominated partner for this partnership")
       .post(cisContractorFrontendUrl + "/add/partnership/change-nominated-partner")
       .formParam("value", nominatedPartnerName)
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
-  val getUpdateAddNominatedPartnerUTRPage: HttpRequestBuilder =
+  val getChangeAddNominatedPartnerUTRPage: HttpRequestBuilder =
     http("[get ] Do you know the UTR for the nominated partner page")
       .get(cisContractorFrontendUrl + "/add/partnership/change-nominated-partner-has-utr")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
-  def postUpdateAddNominatedPartnerUTRPage(option: String): HttpRequestBuilder =
+  def postChangeAddNominatedPartnerUTRPage(option: String): HttpRequestBuilder =
     http("[post] Do you know the UTR for the nominated partner page")
       .post(cisContractorFrontendUrl + "/add/partnership/change-nominated-partner-has-utr")
       .formParam("value", option)
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
-  val getUpdateNominatedPartnerUTRPage: HttpRequestBuilder =
+  val getChangeNominatedPartnerUTRPage: HttpRequestBuilder =
     http("[get ] What is the Self Assessment UTR for this nominated partner page")
       .get(cisContractorFrontendUrl + "/add/partnership/change-nominated-partner-utr")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
-  def postUpdateNominatedPartnerUTRPage(nominatedPartnerUtr: String): HttpRequestBuilder =
+  def postChangeNominatedPartnerUTRPage(nominatedPartnerUtr: String): HttpRequestBuilder =
     http("[post] What is the Self Assessment UTR for this nominated partner page")
       .post(cisContractorFrontendUrl + "/add/partnership/change-nominated-partner-utr")
       .formParam("value", nominatedPartnerUtr)
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
-  val getUpdateAddNominatedPartnerNinoPage: HttpRequestBuilder =
+  val getChangeAddNominatedPartnerNinoPage: HttpRequestBuilder =
     http("[get ] Do you know the National Insurance number for the nominated partner page")
       .get(cisContractorFrontendUrl + "/add/partnership/change-nominated-partner-has-national-insurance-number")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
-  def postUpdateAddNominatedPartnerNinoPage(option: String): HttpRequestBuilder =
+  def postChangeAddNominatedPartnerNinoPage(option: String): HttpRequestBuilder =
     http("[post] Do you know the National Insurance number for the nominated partner page")
       .post(cisContractorFrontendUrl + "/add/partnership/change-nominated-partner-has-national-insurance-number")
       .formParam("value", option)
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
-  val getUpdateNominatedPartnerNinoPage: HttpRequestBuilder =
+  val getChangeNominatedPartnerNinoPage: HttpRequestBuilder =
     http("[get ] What is the National Insurance number for this nominated partner page")
       .get(cisContractorFrontendUrl + "/add/partnership/change-nominated-partner-national-insurance-number")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
-  def postUpdateNominatedPartnerNinoPage(nominatedPartnerNino: String): HttpRequestBuilder =
+  def postChangeNominatedPartnerNinoPage(nominatedPartnerNino: String): HttpRequestBuilder =
     http("[post] What is the National Insurance number for this nominated partner page")
       .post(cisContractorFrontendUrl + "/add/partnership/change-nominated-partner-national-insurance-number")
       .formParam("value", nominatedPartnerNino)
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
-  val getUpdateAddNominatedPartnerCrnPage: HttpRequestBuilder =
+  val getChangeAddNominatedPartnerCrnPage: HttpRequestBuilder =
     http("[get ] Does nominated partner have a company registration number page")
       .get(cisContractorFrontendUrl + "/add/partnership/change-nominated-partner-has-company-registration-number")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
-  def postUpdateAddNominatedPartnerCrnPage(option: String): HttpRequestBuilder =
+  def postChangeAddNominatedPartnerCrnPage(option: String): HttpRequestBuilder =
     http("[post] Does nominated partner have a company registration number page")
       .post(cisContractorFrontendUrl + "/add/partnership/change-nominated-partner-has-company-registration-number")
       .formParam("value", option)
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
-  val getUpdateNominatedPartnerCrnPage: HttpRequestBuilder =
+  val getChangeNominatedPartnerCrnPage: HttpRequestBuilder =
     http("[get ] What is the company registration number for this nominated partner page")
       .get(cisContractorFrontendUrl + "/add/partnership/change-nominated-partner-company-registration-number")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
-  def postUpdateNominatedPartnerCrnPage(nominatedPartnerCrn: String): HttpRequestBuilder =
+  def postChangeNominatedPartnerCrnPage(nominatedPartnerCrn: String): HttpRequestBuilder =
     http("[post] What is the company registration number for this nominated partner page")
       .post(cisContractorFrontendUrl + "/add/partnership/change-nominated-partner-company-registration-number")
       .formParam("value", nominatedPartnerCrn)
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
-  val getUpdateAddPartnershipWrnPage: HttpRequestBuilder =
+  val getChangeAddPartnershipWrnPage: HttpRequestBuilder =
     http("[get ] Does this partnership have a works reference number page")
       .get(cisContractorFrontendUrl + "/add/partnership/change-partnership-has-works-reference")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
-  def postUpdateAddPartnershipWrnPage(option: String): HttpRequestBuilder =
+  def postChangeAddPartnershipWrnPage(option: String): HttpRequestBuilder =
     http("[post] Does this partnership have a works reference number page")
       .post(cisContractorFrontendUrl + "/add/partnership/change-partnership-has-works-reference")
       .formParam("value", option)
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
-  val getUpdatePartnershipWrnPage: HttpRequestBuilder =
+  val getChangePartnershipWrnPage: HttpRequestBuilder =
     http("[get ] What is the works reference number for this partnership page")
       .get(cisContractorFrontendUrl + "/add/partnership/change-partnership-works-reference")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
-  def postUpdatePartnershipWrnPage(worksRefNumber: String): HttpRequestBuilder =
+  def postChangePartnershipWrnPage(worksRefNumber: String): HttpRequestBuilder =
     http("[post] What is the works reference number for this partnership page")
       .post(cisContractorFrontendUrl + "/add/partnership/change-partnership-works-reference")
       .formParam("value", worksRefNumber)
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
-  val getUpdatePartnershipCheckYourAnswersPage: HttpRequestBuilder =
+  val getChangePartnershipCheckYourAnswersPage: HttpRequestBuilder =
     http("[get ] Check your answers before adding this partnership page")
       .get(cisContractorFrontendUrl + "/add/partnership/check-your-answers")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
-  val postUpdatePartnershipCheckYourAnswersPage: HttpRequestBuilder =
+  val postChangePartnershipCheckYourAnswersPage: HttpRequestBuilder =
     http("[post] Check your answers before adding this partnership page")
       .post(cisContractorFrontendUrl + "/add/partnership/check-your-answers")
       .formParam("csrfToken", f"#{csrfToken}")
