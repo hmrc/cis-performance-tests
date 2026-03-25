@@ -23,6 +23,7 @@ import uk.gov.hmrc.perftests.cis.requests.LandingPagesRequests._
 import uk.gov.hmrc.perftests.cis.requests.NilMonthlyReturnRequests._
 import uk.gov.hmrc.perftests.cis.requests.PrepopulationRequests._
 import uk.gov.hmrc.perftests.cis.requests.SubcontractorRequests._
+import uk.gov.hmrc.perftests.cis.requests.AddPartnershipSubcontractorRequests._
 
 class CisSimulation extends Simulation with PerformanceTestRunner {
 
@@ -199,5 +200,54 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     //    continue journey to add subcontractor which is a terminal page at the moment
   )
 
+
+  setup("add-partnership-subcontractor", "APSP").withRequests(
+    getClickSubcontractorsLink,
+    getManageYourCISReturnSubcontractorPage,
+    getAddSubcontractor,
+    getWhatTypeOfSubcontractorAreYouAdding,
+    postWhatTypeOfSubcontractorAreYouAdding("partnership"),
+    getPartnershipNamePage,
+    postPartnershipNamePage("CIS Test Partnership"),
+    getAddPartnershipAddressPage,
+    postAddPartnershipAddressPage("true"),
+    getPartnershipAddressPage,
+    postPartnershipAddressPage(
+      "123 Test Drive",
+      "Flat 456",
+      "Manchester city",
+      "Greater Manchester",
+      "AB1 2CD",
+      "United Kingdom"
+    ),
+    getPartnershipContactMethodPage,
+    postPartnershipContactMethodPage("email"),
+    getPartnershipEmailAddressPage,
+    postPartnershipEmailAddressPage("john.doe@domainurl.com"),
+    getAddPartnershipUTRPage,
+    postAddPartnershipUTRPage("true"),
+    getPartnershipUTRPage,
+    postPartnershipUTRPage("1234567895"),
+    getNominatedPartnerName,
+    postNominatedPartnerName("Test Nominated Partner"),
+    getAddNominatedPartnerUTRPage,
+    postAddNominatedPartnerUTRPage("true"),
+    getNominatedPartnerUTRPage,
+    postNominatedPartnerUTRPage("9999999999"),
+    getAddNominatedPartnerNinoPage,
+    postAddNominatedPartnerNinoPage("true"),
+    getNominatedPartnerNinoPage,
+    postNominatedPartnerNinoPage("AA123456C"),
+    getAddNominatedPartnerCrnPage,
+    postAddNominatedPartnerCrnPage("true"),
+    getNominatedPartnerCrnPage,
+    postNominatedPartnerCrnPage("12345678"),
+    getAddPartnershipWrnPage,
+    postAddPartnershipWrnPage("true"),
+    getPartnershipWrnPage,
+    postPartnershipWrnPage("ref12345"),
+    getPartnershipCheckYourAnswersPage,
+    postPartnershipCheckYourAnswersPage
+  )
   runSimulation()
 }
