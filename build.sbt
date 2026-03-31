@@ -1,3 +1,5 @@
+onLoad in Global ~= (_ andThen ("git config core.hooksPath hooks" :: _))
+
 lazy val root = (project in file("."))
   .enablePlugins(GatlingPlugin)
   .settings(
