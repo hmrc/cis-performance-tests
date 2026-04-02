@@ -22,6 +22,7 @@ import uk.gov.hmrc.perftests.cis.requests.AuthRequests._
 import uk.gov.hmrc.perftests.cis.requests.LandingPagesRequests._
 import uk.gov.hmrc.perftests.cis.requests.NilMonthlyReturnRequests._
 import uk.gov.hmrc.perftests.cis.requests.PrepopulationRequests._
+import uk.gov.hmrc.perftests.cis.requests.StandardMonthlyReturnRequests._
 import uk.gov.hmrc.perftests.cis.requests.SubcontractorRequests._
 
 class CisSimulation extends Simulation with PerformanceTestRunner {
@@ -51,6 +52,33 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     getClientCisReturnDashboardPage,
     getClickReturnDueLink,
     getManageYourCISReturenPage
+  )
+
+  setup("standard-monthly-return", "SMRP").withRequests(
+    getFileYourMonthlyCISReturnPage,
+    getWhichTaxMonthAndYearAreYouFilingAReturnForPage,
+    postWhichTaxMonthAndYearAreYouFilingAReturnForPage,
+    getSelectSubcontractorsPage,
+    postSelectSubcontractorsPage,
+    getYouHaveUnverifiedSubcontractorsPage,
+    postYouHaveUnverifiedSubcontractorsPage("false"),
+    getHowMuchDidYouPayToFirstSubcontractorInTotalPage,
+    postHowMuchDidYouPayToFirstSubcontractorInTotalPage("1000"),
+    getHowMuchDidFirstSubcontractorPayInMaterialCosts,
+    postHowMuchDidFirstSubcontractorPayInMaterialCosts("200"),
+    getHowMuchTaxInTotalDidYouDeductFromFirstSubcontractor,
+    postHowMuchTaxInTotalDidYouDeductFromFirstSubcontractor("25"),
+    getCheckYourAnswersForFirstSubcontractor,
+    getChangeHowMuchDidYouPayToFirstSubcontractorInTotalPage,
+    postChangeHowMuchDidYouPayToFirstSubcontractorInTotalPage("2000"),
+    getCheckYourAnswersForFirstSubcontractor,
+    getChangeHowMuchDidFirstSubcontractorPayInMaterialCosts,
+    postChangeHowMuchDidFirstSubcontractorPayInMaterialCosts("500"),
+    getCheckYourAnswersForFirstSubcontractor,
+    getChangeHowMuchTaxInTotalDidYouDeductFromFirstSubcontractor,
+    postChangeHowMuchTaxInTotalDidYouDeductFromFirstSubcontractor("125"),
+    getCheckYourAnswersForFirstSubcontractor,
+    postCheckYourAnswersForFirstSubcontractor
   )
 
   setup("nil-monthly-return", "NMRP").withRequests(
