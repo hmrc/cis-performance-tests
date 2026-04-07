@@ -50,18 +50,19 @@ object AddPartnershipSubcontractorRequests extends ServicesConfiguration with Ci
       .check(status.is(303))
 
   val getPartnershipAddressPage: HttpRequestBuilder =
-      http("[get ] What is the address for this partnership page")
+    http("[get ] What is the address for this partnership page")
       .get(cisContractorFrontendUrl + "/add/partnership/address")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
-  def postPartnershipAddressPage(addressLine1: String,
-                                             addressLine2: String,
-                                             town: String,
-                                             county: String,
-                                             postalCode: String,
-                                             country: String
-                                            ): HttpRequestBuilder =
+  def postPartnershipAddressPage(
+    addressLine1: String,
+    addressLine2: String,
+    town: String,
+    county: String,
+    postalCode: String,
+    country: String
+  ): HttpRequestBuilder =
     http("[post] What is the address for this partnership page")
       .post(cisContractorFrontendUrl + "/add/partnership/address")
       .formParam("addressLine1", addressLine1)
@@ -157,7 +158,7 @@ object AddPartnershipSubcontractorRequests extends ServicesConfiguration with Ci
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
-  def postNominatedPartnerName(nominatedPartnerName:String): HttpRequestBuilder =
+  def postNominatedPartnerName(nominatedPartnerName: String): HttpRequestBuilder =
     http("[post] Who is the nominated partner for this partnership")
       .post(cisContractorFrontendUrl + "/add/partnership/nominated-partner")
       .formParam("value", nominatedPartnerName)
@@ -312,13 +313,14 @@ object AddPartnershipSubcontractorRequests extends ServicesConfiguration with Ci
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
-  def postChangePartnershipAddressPage(addressLine1: String,
-                                 addressLine2: String,
-                                 town: String,
-                                 county: String,
-                                 postalCode: String,
-                                 country: String
-                                ): HttpRequestBuilder =
+  def postChangePartnershipAddressPage(
+    addressLine1: String,
+    addressLine2: String,
+    town: String,
+    county: String,
+    postalCode: String,
+    country: String
+  ): HttpRequestBuilder =
     http("[post] What is the address for this partnership page")
       .post(cisContractorFrontendUrl + "/add/partnership/change-address")
       .formParam("addressLine1", addressLine1)
@@ -414,7 +416,7 @@ object AddPartnershipSubcontractorRequests extends ServicesConfiguration with Ci
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
-  def postChangeNominatedPartnerName(nominatedPartnerName:String): HttpRequestBuilder =
+  def postChangeNominatedPartnerName(nominatedPartnerName: String): HttpRequestBuilder =
     http("[post] Who is the nominated partner for this partnership")
       .post(cisContractorFrontendUrl + "/add/partnership/change-nominated-partner")
       .formParam("value", nominatedPartnerName)

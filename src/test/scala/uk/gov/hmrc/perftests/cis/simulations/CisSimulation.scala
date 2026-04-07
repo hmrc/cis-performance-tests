@@ -200,7 +200,6 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     //    continue journey to add subcontractor which is a terminal page at the moment
   )
 
-
   setup("add-partnership-subcontractor", "APSP").withRequests(
     getClickSubcontractorsLink,
     getManageYourCISReturnSubcontractorPage,
