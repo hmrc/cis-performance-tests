@@ -23,7 +23,7 @@ import uk.gov.hmrc.perftests.cis.requests.LandingPagesRequests._
 import uk.gov.hmrc.perftests.cis.requests.NilMonthlyReturnRequests._
 import uk.gov.hmrc.perftests.cis.requests.PrepopulationRequests._
 import uk.gov.hmrc.perftests.cis.requests.SubcontractorRequests._
-import uk.gov.hmrc.perftests.cis.requests.AddPartnershipSubcontractorRequests.{getPartnershipContactMethodPage, _}
+import uk.gov.hmrc.perftests.cis.requests.AddPartnershipSubcontractorRequests._
 
 class CisSimulation extends Simulation with PerformanceTestRunner {
 
@@ -270,10 +270,10 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     getPartnershipCheckYourAnswersPage,
     getChangePartnershipContactMethodPage,
     postChangePartnershipContactMethodPage("mobile"),
-    postChangePartnershipPhoneNumberPage("+447543445421"),
+    postChangePartnershipMobileNumberPage("+447543445421"),
     getPartnershipCheckYourAnswersPage,
     getChangePartnershipContactMethodPage,
-    postChangePartnershipContactMethodPage("none"),
+    postChangePartnershipContactMethodPage("noDetails"),
     getPartnershipCheckYourAnswersPage,
     getChangePartnershipUTRPage,
     postChangePartnershipUTRPage("1234567896"),
@@ -282,7 +282,7 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     postChangeNominatedPartnerName("Test Nominated Partner Change"),
     getPartnershipCheckYourAnswersPage,
     getChangeNominatedPartnerUTRPage,
-    postChangeNominatedPartnerUTRPage("9999999990"),
+    postChangeNominatedPartnerUTRPage("9999999999"),
     getPartnershipCheckYourAnswersPage,
     getChangeNominatedPartnerNinoPage,
     postChangeNominatedPartnerNinoPage("AB123456D"),
@@ -307,7 +307,9 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     getPartnershipCheckYourAnswersPage,
     getChangeAddPartnershipWrnPage,
     postChangeAddPartnershipWrnPage("false"),
-    getPartnershipCheckYourAnswersPage
+    getPartnershipCheckYourAnswersPage,
+    postPartnershipCheckYourAnswersPage,
+    getPartnershipSubcontractorAddedPage
   )
   runSimulation()
 }

@@ -527,15 +527,8 @@ object AddPartnershipSubcontractorRequests extends ServicesConfiguration with Ci
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
-  val getChangePartnershipCheckYourAnswersPage: HttpRequestBuilder =
-    http("[get ] Check your answers before adding this partnership page")
-      .get(cisContractorFrontendUrl + "/add/partnership/check-your-answers")
+  val getPartnershipSubcontractorAddedPage: HttpRequestBuilder =
+    http("[get ] Partnership subcontractor added")
+      .get(cisContractorFrontendUrl + "/add/partnership/subcontractor-added")
       .check(status.is(200))
-      .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
-
-  val postChangePartnershipCheckYourAnswersPage: HttpRequestBuilder =
-    http("[post] Check your answers before adding this partnership page")
-      .post(cisContractorFrontendUrl + "/add/partnership/check-your-answers")
-      .formParam("csrfToken", f"#{csrfToken}")
-      .check(status.is(303))
 }
