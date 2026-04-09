@@ -46,7 +46,7 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     getRetrieveClientList,
     getStartRetrieveClientList,
     getFileMonthlyCISReturnsUnfilteredListPage,
-    postFileMonthlyCISReturnsSearchPage("CN", "ABC"),
+    postFileMonthlyCISReturnsSearchPage("CN", "UHD Contractor Control Group"),
     getClientFilteredViewFileMonthlyCISReturnPage,
     getClientCisReturnDashboardPage,
     getClickReturnDueLink,
