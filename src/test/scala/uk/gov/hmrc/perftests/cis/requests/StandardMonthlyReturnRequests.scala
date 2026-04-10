@@ -26,12 +26,12 @@ import scala.util.Random
 
 object StandardMonthlyReturnRequests extends ServicesConfiguration with CisPerformanceTestBase {
 
-  val getFileYourMonthlyCISReturnPage: HttpRequestBuilder =
+  val getFileYourMonthlyCISReturn: HttpRequestBuilder =
     http("[get ] File your monthly CIS return page")
       .get(cisFrontendUrl + "/monthly-return/file-your-monthly-return")
       .check(status.is(200))
 
-  val getWhichTaxMonthAndYearAreYouFilingAReturnForPage: HttpRequestBuilder =
+  val getWhichTaxMonthAndYearAreYouFilingAReturnFor: HttpRequestBuilder =
     http("[get ] Which tax month and year are you filing a return for page")
       .get(cisFrontendUrl + "/monthly-return/date-confirm-payments")
       .check(status.is(200))
@@ -61,7 +61,7 @@ object StandardMonthlyReturnRequests extends ServicesConfiguration with CisPerfo
     (monthStr, yearStr)
   }
 
-  def postWhichTaxMonthAndYearAreYouFilingAReturnForPage: HttpRequestBuilder = {
+  def postWhichTaxMonthAndYearAreYouFilingAReturnFor: HttpRequestBuilder = {
     val (month, year) = randomValidMonthYear()
     http("[post] Which tax month and year are you filing a return for page")
       .post(cisFrontendUrl + "/monthly-return/date-confirm-payments")
@@ -71,39 +71,51 @@ object StandardMonthlyReturnRequests extends ServicesConfiguration with CisPerfo
       .check(status.is(303))
   }
 
-  val getSelectSubcontractorsPage: HttpRequestBuilder =
+  val getSelectSubcontractors: HttpRequestBuilder =
     http("[get ] Select Subcontractors page")
       .get(cisFrontendUrl + "/monthly-return/select-subcontractors")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
-  def postSelectSubcontractorsPage(option: String): HttpRequestBuilder =
+  val getSelectAllSelectSubcontractors: HttpRequestBuilder =
+    http("[get ] Select Subcontractors page")
+      .get(cisFrontendUrl + "/monthly-return/select-subcontractors")
+      .check(status.is(200))
+      .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
+
+  val getDeselectAllSelectSubcontractors: HttpRequestBuilder =
+    http("[get ] Select Subcontractors page")
+      .get(cisFrontendUrl + "/monthly-return/select-subcontractors")
+      .check(status.is(200))
+      .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
+
+  def postSelectSubcontractors(option: String*): HttpRequestBuilder =
     http("[post] Select Subcontractors page")
       .post(cisFrontendUrl + "/monthly-return/select-subcontractors")
-      .formParam("value", option)
+      .formParam("value", option.map("value" -> _))
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
-  val getYouHaveUnverifiedSubcontractorsPage: HttpRequestBuilder =
+  val getYouHaveUnverifiedSubcontractors: HttpRequestBuilder =
     http("[get ] Unverified Subcontractors page")
       .get(cisFrontendUrl + "/monthly-return/unverified-subcontractors")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
-  def postYouHaveUnverifiedSubcontractorsPage(option: String): HttpRequestBuilder =
+  def postYouHaveUnverifiedSubcontractors(option: String): HttpRequestBuilder =
     http("[post] Unverified Subcontractors page")
       .post(cisFrontendUrl + "/monthly-return/unverified-subcontractors")
       .formParam("value", option)
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
-  val getHowMuchDidYouPayToFirstSubcontractorInTotalPage: HttpRequestBuilder =
+  val getHowMuchDidYouPayToFirstSubcontractorInTotal: HttpRequestBuilder =
     http("[get ] How much did you pay to One Subcontractor in total?")
       .get(cisFrontendUrl + "/monthly-return/payment-details/1")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
-  def postHowMuchDidYouPayToFirstSubcontractorInTotalPage(amount: String): HttpRequestBuilder =
+  def postHowMuchDidYouPayToFirstSubcontractorInTotal(amount: String): HttpRequestBuilder =
     http("[post] How much did you pay to One Subcontractor in total?")
       .post(cisFrontendUrl + "/monthly-return/payment-details/1")
       .formParam("value", amount)
@@ -148,13 +160,13 @@ object StandardMonthlyReturnRequests extends ServicesConfiguration with CisPerfo
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
-  val getChangeHowMuchDidYouPayToFirstSubcontractorInTotalPage: HttpRequestBuilder =
+  val getChangeHowMuchDidYouPayToFirstSubcontractorInTotal: HttpRequestBuilder =
     http("[get ] Change How much did you pay to One Subcontractor in total?")
       .get(cisFrontendUrl + "/monthly-return/change-payment-details/1")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
-  def postChangeHowMuchDidYouPayToFirstSubcontractorInTotalPage(amount: String): HttpRequestBuilder =
+  def postChangeHowMuchDidYouPayToFirstSubcontractorInTotal(amount: String): HttpRequestBuilder =
     http("[post] Change How much did you pay to One Subcontractor in total?")
       .post(cisFrontendUrl + "/monthly-return/change-payment-details/1")
       .formParam("value", amount)
@@ -200,6 +212,57 @@ object StandardMonthlyReturnRequests extends ServicesConfiguration with CisPerfo
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
+  val getChangeFirstSubcontractorsDetails: HttpRequestBuilder =
+    http("[get ] Change One Subcontractor’s details page")
+      .get(cisFrontendUrl + "/monthly-return/change-subcontractor/1")
+      .check(status.is(200))
+      .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
+
+  val postChangeFirstSubcontractorsDetails: HttpRequestBuilder =
+    http("[post] Change One Subcontractor’s details page")
+      .post(cisFrontendUrl + "/monthly-return/check-answers-total-payments/1")
+      .formParam("csrfToken", f"#{csrfToken}")
+      .check(status.is(303))
+
+  val getChangeHowMuchDidYouPayToFirstSubcontractorInTotalDetails: HttpRequestBuilder =
+    http("[get ] Change How much did you pay to One Subcontractor in total?")
+      .get(cisFrontendUrl + "/monthly-return/change-payment-details/1")
+      .check(status.is(200))
+      .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
+
+  def postChangeHowMuchDidYouPayToFirstSubcontractorInTotalDetails(amount: String): HttpRequestBuilder =
+    http("[post] Change How much did you pay to One Subcontractor in total?")
+      .post(cisFrontendUrl + "/monthly-return/change-payment-details/1")
+      .formParam("value", amount)
+      .formParam("csrfToken", f"#{csrfToken}")
+      .check(status.is(303))
+
+  val getChangeHowMuchDidFirstSubcontractorPayInMaterialCostsDetails: HttpRequestBuilder =
+    http("[get ] Change How much did One Subcontractor pay in material costs?")
+      .get(cisFrontendUrl + "/monthly-return/change-materials-cost/1")
+      .check(status.is(200))
+      .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
+
+  def postChangeHowMuchDidFirstSubcontractorPayInMaterialCostsDetails(amount: String): HttpRequestBuilder =
+    http("[post] Change How much did One Subcontractor pay in material costs?")
+      .post(cisFrontendUrl + "/monthly-return/change-materials-cost/1")
+      .formParam("value", amount)
+      .formParam("csrfToken", f"#{csrfToken}")
+      .check(status.is(303))
+
+  val getChangeHowMuchTaxInTotalDidYouDeductFromFirstSubcontractorDetails: HttpRequestBuilder =
+    http("[get ] Change How much tax in total did you deduct from One Subcontractor?")
+      .get(cisFrontendUrl + "/monthly-return/change-tax-deducted/1")
+      .check(status.is(200))
+      .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
+
+  def postChangeHowMuchTaxInTotalDidYouDeductFromFirstSubcontractorDetails(amount: String): HttpRequestBuilder =
+    http("[post] Change How much tax in total did you deduct from One Subcontractor?")
+      .post(cisFrontendUrl + "/monthly-return/change-tax-deducted/1")
+      .formParam("value", amount)
+      .formParam("csrfToken", f"#{csrfToken}")
+      .check(status.is(303))
+
   val getWhichSubcontractorDoYouNeedToAddPaymentDetailsFor: HttpRequestBuilder =
     http("[get ] Which subcontractor do you need to add payment details for page")
       .get(cisFrontendUrl + "/monthly-return/subcontractor-details-added")
@@ -213,13 +276,13 @@ object StandardMonthlyReturnRequests extends ServicesConfiguration with CisPerfo
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
-  val getHowMuchDidYouPayToSecondSubcontractorInTotalPage: HttpRequestBuilder =
+  val getHowMuchDidYouPayToSecondSubcontractorInTotal: HttpRequestBuilder =
     http("[get ] How much did you pay to Two Subcontractor in total?")
       .get(cisFrontendUrl + "/monthly-return/payment-details/2")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
-  def postHowMuchDidYouPayToSecondSubcontractorInTotalPage(amount: String): HttpRequestBuilder =
+  def postHowMuchDidYouPayToSecondSubcontractorInTotal(amount: String): HttpRequestBuilder =
     http("[post] How much did you pay to Two Subcontractor in total?")
       .post(cisFrontendUrl + "/monthly-return/payment-details/2")
       .formParam("value", amount)
@@ -269,13 +332,6 @@ object StandardMonthlyReturnRequests extends ServicesConfiguration with CisPerfo
       .get(cisFrontendUrl + "/monthly-return/subcontractor-details-added")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
-
-  def postYouHaveAddedDetailsFor2Subcontractors(option: String): HttpRequestBuilder =
-    http("[post] You have added details for 2 subcontractors page")
-      .post(cisFrontendUrl + "/monthly-return/subcontractor-details-added")
-      .formParam("value", option)
-      .formParam("csrfToken", f"#{csrfToken}")
-      .check(status.is(303))
 
   val getAreYouSureYouWantToRemoveFirstSubcontractor: HttpRequestBuilder =
     http("[get ] Are you sure you want to remove One Subcontractor page")
