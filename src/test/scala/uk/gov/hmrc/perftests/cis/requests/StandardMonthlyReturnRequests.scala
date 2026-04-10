@@ -436,7 +436,9 @@ object StandardMonthlyReturnRequests extends ServicesConfiguration with CisPerfo
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
-  def postChangeDoYouWantConfirmationByEmailThatThisReturnHasBeenSuccessfullySubmitted(option: String): HttpRequestBuilder =
+  def postChangeDoYouWantConfirmationByEmailThatThisReturnHasBeenSuccessfullySubmitted(
+    option: String
+  ): HttpRequestBuilder =
     http("[post] Change do you want confirmation by email that this return has been successfully submitted page")
       .post(cisFrontendUrl + "/monthly-return/change-do-you-want-email-confirmation")
       .formParam("value", option)
