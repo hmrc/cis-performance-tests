@@ -89,11 +89,12 @@ object StandardMonthlyReturnRequests extends ServicesConfiguration with CisPerfo
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
-  def postSelectSubcontractors(option: String*): HttpRequestBuilder =
+  def postSelectSubcontractors(options: String*): HttpRequestBuilder =
     http("[post] Select Subcontractors page")
       .post(cisFrontendUrl + "/monthly-return/select-subcontractors")
-      .formParam("value", option.map("value" -> _))
-      .formParam("csrfToken", f"#{csrfToken}")
+      .formParamSeq(options.zipWithIndex.map { case (value, index) =>
+        s"subcontractorsToInclude.$index" -> value
+      } :+ ("csrfToken" -> f"#{csrfToken}"))
       .check(status.is(303))
 
   val getYouHaveUnverifiedSubcontractors: HttpRequestBuilder =
@@ -265,13 +266,13 @@ object StandardMonthlyReturnRequests extends ServicesConfiguration with CisPerfo
 
   val getWhichSubcontractorDoYouNeedToAddPaymentDetailsFor: HttpRequestBuilder =
     http("[get ] Which subcontractor do you need to add payment details for page")
-      .get(cisFrontendUrl + "/monthly-return/subcontractor-details-added")
+      .get(cisFrontendUrl + "/monthly-return/add-subcontractor-details")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
   def postWhichSubcontractorDoYouNeedToAddPaymentDetailsFor(option: String): HttpRequestBuilder =
     http("[post] Which subcontractor do you need to add payment details for page")
-      .post(cisFrontendUrl + "/monthly-return/subcontractor-details-added")
+      .post(cisFrontendUrl + "/monthly-return/add-subcontractor-details")
       .formParam("value", option)
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
@@ -350,13 +351,6 @@ object StandardMonthlyReturnRequests extends ServicesConfiguration with CisPerfo
     http("[get ] Summary of payments made page")
       .get(cisFrontendUrl + "/monthly-return/summary-subcontractor-payments")
       .check(status.is(200))
-      .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
-
-  val postSummaryOfPaymentsMade: HttpRequestBuilder =
-    http("[post] Summary of payments made page")
-      .post(cisFrontendUrl + "/monthly-return/summary-subcontractor-payments")
-      .formParam("csrfToken", f"#{csrfToken}")
-      .check(status.is(303))
 
   val getDoYouConfirmTheInformationInThisReturnIsCorrect: HttpRequestBuilder =
     http("[get ] Do you confirm the information in this return is correct page")
@@ -478,13 +472,6 @@ object StandardMonthlyReturnRequests extends ServicesConfiguration with CisPerfo
     http("[get ] Inactivity request page")
       .get(cisFrontendUrl + "/monthly-return/change-inactivity-request-warning")
       .check(status.is(200))
-      .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
-
-  val postInactivityRequest: HttpRequestBuilder =
-    http("[post] Inactivity request page")
-      .post(cisFrontendUrl + "/monthly-return/change-inactivity-request-warning")
-      .formParam("csrfToken", f"#{csrfToken}")
-      .check(status.is(303))
 
   val getChangeDoYouWantConfirmationByEmailThatThisReturnHasBeenSuccessfullySubmitted: HttpRequestBuilder =
     http("[get ] Change do you want confirmation by email that this return has been successfully submitted page")
@@ -503,13 +490,13 @@ object StandardMonthlyReturnRequests extends ServicesConfiguration with CisPerfo
 
   val getEnterYourEmailAddress: HttpRequestBuilder =
     http("[get ] Enter your email address page")
-      .get(cisFrontendUrl + "/monthly-return/change-enter-your-email-address")
+      .get(cisFrontendUrl + "/monthly-return/change-enter-email-address")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
   def postEnterYourEmailAddress(email: String): HttpRequestBuilder =
     http("[post] Enter your email address page")
-      .post(cisFrontendUrl + "/monthly-return/enter-your-email-address")
+      .post(cisFrontendUrl + "/monthly-return/enter-email-address")
       .formParam("value", email)
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
