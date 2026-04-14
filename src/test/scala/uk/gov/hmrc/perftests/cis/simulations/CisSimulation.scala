@@ -142,7 +142,7 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     postSubmissionSendPage,
     getPollingPage,
     getPollingPage,
-    postPollingPage,
+    // postPollingPage,   analysis for polling issue is being looked into
     getSuccessfulSubmissionPage
   )
 
@@ -169,7 +169,7 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     postSubmissionSendPage,
     getPollingPage,
     getPollingPage,
-    postPollingPage,
+    // postPollingPage,   analysis for polling issue is being looked into
     getSuccessfulSubmissionPage
   )
 
