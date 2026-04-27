@@ -56,13 +56,13 @@ object AddCompanySubcontractorRequests extends ServicesConfiguration with CisPer
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
   def postCompanyAddressPage(
-                                  addressLine1: String,
-                                  addressLine2: String,
-                                  town: String,
-                                  county: String,
-                                  postalCode: String,
-                                  country: String
-                                ): HttpRequestBuilder =
+    addressLine1: String,
+    addressLine2: String,
+    town: String,
+    county: String,
+    postalCode: String,
+    country: String
+  ): HttpRequestBuilder =
     http("[post] What is the address for this company page")
       .post(cisContractorFrontendUrl + "/add/company/address")
       .formParam("addressLine1", addressLine1)
@@ -249,13 +249,13 @@ object AddCompanySubcontractorRequests extends ServicesConfiguration with CisPer
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
   def postChangeCompanyAddressPage(
-                                        addressLine1: String,
-                                        addressLine2: String,
-                                        town: String,
-                                        county: String,
-                                        postalCode: String,
-                                        country: String
-                                      ): HttpRequestBuilder =
+    addressLine1: String,
+    addressLine2: String,
+    town: String,
+    county: String,
+    postalCode: String,
+    country: String
+  ): HttpRequestBuilder =
     http("[post] What is the address for this company page")
       .post(cisContractorFrontendUrl + "/add/company/change-address")
       .formParam("addressLine1", addressLine1)
