@@ -73,13 +73,13 @@ object NilMonthlyReturnRequests extends ServicesConfiguration with CisPerformanc
 
   val getDoYouWantToSubmitAnInactivityRequestPage: HttpRequestBuilder =
     http("[get ] Do You Want To Submit An Inactivity Request page")
-      .get(cisFrontendUrl + "/monthly-return/submit-inactive-request")
+      .get(cisFrontendUrl + "/monthly-return/submit-inactivity-request")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
   def postDoYouWantToSubmitAnInactivityRequestPage(option: String): HttpRequestBuilder =
     http("[post] Do You Want To Submit An Inactivity Request page")
-      .post(cisFrontendUrl + "/monthly-return/submit-inactive-request")
+      .post(cisFrontendUrl + "/monthly-return/submit-inactivity-request")
       .formParam("value", option)
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
@@ -99,15 +99,12 @@ object NilMonthlyReturnRequests extends ServicesConfiguration with CisPerformanc
 
   val getDeclarationPage: HttpRequestBuilder =
     http("[get ] Declaration page")
-      .get(cisFrontendUrl + "/monthly-return/declaration")
+      .get(cisFrontendUrl + "/monthly-return/declaration-no-payments-made")
       .check(status.is(200))
-      .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
-  def postDeclarationPage(option: String): HttpRequestBuilder =
+  val postDeclarationPage: HttpRequestBuilder =
     http("[post] Declaration page")
-      .post(cisFrontendUrl + "/monthly-return/declaration")
-      .formParam("value", option)
-      .formParam("csrfToken", f"#{csrfToken}")
+      .get(cisFrontendUrl + "/monthly-return/declaration-no-payments-made/continue")
       .check(status.is(303))
 
   val getInactivityWarningPage: HttpRequestBuilder =
@@ -136,13 +133,13 @@ object NilMonthlyReturnRequests extends ServicesConfiguration with CisPerformanc
 
   val getChangeDoYouWantToSubmitAnInactivityRequestPage: HttpRequestBuilder =
     http("[get ] Change Do You Want To Submit An Inactivity Request page")
-      .get(cisFrontendUrl + "/monthly-return/change-submit-inactive-request")
+      .get(cisFrontendUrl + "/monthly-return/change-submit-inactivity-request")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
   def postChangeDoYouWantToSubmitAnInactivityRequestPage(option: String): HttpRequestBuilder =
     http("[post] Change Do You Want To Submit An Inactivity Request page")
-      .post(cisFrontendUrl + "/monthly-return/change-submit-inactive-request")
+      .post(cisFrontendUrl + "/monthly-return/change-submit-inactivity-request")
       .formParam("value", option)
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
