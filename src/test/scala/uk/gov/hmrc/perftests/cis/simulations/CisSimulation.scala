@@ -25,6 +25,7 @@ import uk.gov.hmrc.perftests.cis.requests.PrepopulationRequests._
 import uk.gov.hmrc.perftests.cis.requests.StandardMonthlyReturnRequests._
 import uk.gov.hmrc.perftests.cis.requests.AddIndividualSubcontractorRequests._
 import uk.gov.hmrc.perftests.cis.requests.AddPartnershipSubcontractorRequests._
+import uk.gov.hmrc.perftests.cis.requests.AddCompanySubcontractorRequests._
 
 class CisSimulation extends Simulation with PerformanceTestRunner {
 
@@ -413,6 +414,64 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     getPartnershipCheckYourAnswersPage,
     postPartnershipCheckYourAnswersPage,
     getPartnershipSubcontractorAddedPage
+  )
+
+  setup("add-company-subcontractor", "ACSP").withRequests(
+    getClickSubcontractorsLink,
+    getManageYourCISReturnSubcontractorPage,
+    getAddSubcontractor,
+    getWhatTypeOfSubcontractorAreYouAdding,
+    postWhatTypeOfSubcontractorAreYouAdding("company"),
+    getCompanyNamePage,
+    postCompanyNamePage("CIS Test Company"),
+    getAddCompanyAddressPage,
+    postAddCompanyAddressPage("false"),
+    getCompanyContactMethodPage,
+    postCompanyContactMethodPage("noDetails"),
+    getAddCompanyUTRPage,
+    postAddCompanyUTRPage("false"),
+    getAddCompanyCrnPage,
+    postAddCompanyCrnPage("false"),
+    getAddCompanyWrnPage,
+    postAddCompanyWrnPage("false"),
+    getCompanyCheckYourAnswersPage,
+    getChangeCompanyNamePage,
+    postChangeCompanyNamePage("New CIS Test Company"),
+    getCompanyCheckYourAnswersPage,
+    getChangeAddCompanyAddressPage,
+    postChangeAddCompanyAddressPage("true"),
+    getChangeCompanyAddressPage,
+    postChangeCompanyAddressPage(
+      "125 Hill Street",
+      "Flat 96",
+      "Test City",
+      "Countyshire",
+      "AB21 3QA",
+      "United Kingdom"
+    ),
+    getCompanyCheckYourAnswersPage,
+    getChangeCompanyContactMethodPage,
+    postChangeCompanyContactMethodPage("mobile"),
+    getChangeCompanyMobileNumberPage,
+    postChangeCompanyMobileNumberPage("0987654321"),
+    getCompanyCheckYourAnswersPage,
+    getChangeAddCompanyUTRPage,
+    postChangeAddCompanyUTRPage("true"),
+    getChangeCompanyUTRPage,
+    postChangeCompanyUTRPage("1234567895"),
+    getCompanyCheckYourAnswersPage,
+    getChangeAddCompanyCrnPage,
+    postChangeAddCompanyCrnPage("true"),
+    getChangeCompanyCrnPage,
+    postChangeCompanyCrnPage("10000008"),
+    getCompanyCheckYourAnswersPage,
+    getChangeAddCompanyWrnPage,
+    postChangeAddCompanyWrnPage("true"),
+    getChangeCompanyWrnPage,
+    postChangeCompanyWrnPage("123456780"),
+    getCompanyCheckYourAnswersPage,
+    postCompanyCheckYourAnswersPage,
+    getCompanySubcontractorAddedPage
   )
   runSimulation()
 }
