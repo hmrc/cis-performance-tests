@@ -23,8 +23,9 @@ import uk.gov.hmrc.perftests.cis.requests.LandingPagesRequests._
 import uk.gov.hmrc.perftests.cis.requests.NilMonthlyReturnRequests._
 import uk.gov.hmrc.perftests.cis.requests.PrepopulationRequests._
 import uk.gov.hmrc.perftests.cis.requests.StandardMonthlyReturnRequests._
-import uk.gov.hmrc.perftests.cis.requests.SubcontractorRequests._
+import uk.gov.hmrc.perftests.cis.requests.AddSoleTraderSubcontractorRequests._
 import uk.gov.hmrc.perftests.cis.requests.AddPartnershipSubcontractorRequests._
+import uk.gov.hmrc.perftests.cis.requests.AddTrustSubcontractorRequests._
 
 class CisSimulation extends Simulation with PerformanceTestRunner {
 
@@ -402,6 +403,92 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     getPartnershipCheckYourAnswersPage,
     postPartnershipCheckYourAnswersPage,
     getPartnershipSubcontractorAddedPage
+  )
+
+  setup("add-trust-subcontractor", "APSP").withRequests(
+    getClickSubcontractorsLink,
+    getManageYourCISReturnSubcontractorPage,
+    getAddSubcontractor,
+    getWhatTypeOfSubcontractorAreYouAdding,
+    postWhatTypeOfSubcontractorAreYouAdding("trust"),
+    getTrustNamePage,
+    postTrustNamePage("CIS Test Trust"),
+    getAddTrustAddressPage,
+    postAddTrustAddressPage("true"),
+    getTrustAddressPage,
+    postTrustAddressPage(
+      "123 Test Drive",
+      "Flat 456",
+      "Manchester city",
+      "Greater Manchester",
+      "AB1 2CD",
+      "United Kingdom"
+    ),
+    getTrustContactMethodPage,
+    postTrustContactMethodPage("email"),
+    getTrustEmailAddressPage,
+    postTrustEmailAddressPage("john.doe@domainurl.com"),
+    getAddTrustUTRPage,
+    postAddTrustUTRPage("true"),
+    getTrustUTRPage,
+    postTrustUTRPage("1234567895"),
+    getAddTrustWrnPage,
+    postAddTrustWrnPage("true"),
+    getTrustWrnPage,
+    postTrustWrnPage("ref12345"),
+    getTrustCheckYourAnswersPage,
+    postTrustCheckYourAnswersPage,
+    getChangeTrustNamePage,
+    postChangeTrustNamePage("CIS Test Trust Change"),
+    getTrustCheckYourAnswersPage,
+    getChangeTrustAddressPage,
+    postChangeTrustAddressPage(
+      "123 Test Drive Change",
+      "Flat 456 Change",
+      "Dublin city Change",
+      "Dublin Change",
+      "AB1 2CE",
+      "Ireland"
+    ),
+    getTrustCheckYourAnswersPage,
+    getChangeTrustEmailAddressPage,
+    postChangeTrustEmailAddressPage("john.doe.update@domainurl.com"),
+    getTrustCheckYourAnswersPage,
+    getChangeTrustContactMethodPage,
+    postChangeTrustContactMethodPage("phone"),
+    getChangeTrustPhoneNumberPage,
+    postChangeTrustPhoneNumberPage("01415008500"),
+    getTrustCheckYourAnswersPage,
+    getChangeTrustContactMethodPage,
+    postChangeTrustContactMethodPage("mobile"),
+    postChangeTrustMobileNumberPage("+447543445421"),
+    getTrustCheckYourAnswersPage,
+    getChangeTrustContactMethodPage,
+    postChangeTrustContactMethodPage("noDetails"),
+    getTrustCheckYourAnswersPage,
+    getChangeTrustUTRPage,
+    postChangeTrustUTRPage("1234567896"),
+    getTrustCheckYourAnswersPage,
+    getChangeTrustWrnPage,
+    postChangeTrustWrnPage("ref54321"),
+    getTrustCheckYourAnswersPage,
+    getChangeAddTrustUTRPage,
+    postChangeAddTrustUTRPage("false"),
+    getTrustCheckYourAnswersPage,
+    getChangeAddNominatedPartnerUTRPage,
+    postChangeAddNominatedPartnerUTRPage("false"),
+    getTrustCheckYourAnswersPage,
+    getChangeAddNominatedPartnerNinoPage,
+    postChangeAddNominatedPartnerNinoPage("false"),
+    getTrustCheckYourAnswersPage,
+    getChangeAddNominatedPartnerCrnPage,
+    postChangeAddNominatedPartnerCrnPage("false"),
+    getTrustCheckYourAnswersPage,
+    getChangeAddTrustWrnPage,
+    postChangeAddTrustWrnPage("false"),
+    getTrustCheckYourAnswersPage,
+    postTrustCheckYourAnswersPage,
+    getTrustSubcontractorAddedPage
   )
   runSimulation()
 }

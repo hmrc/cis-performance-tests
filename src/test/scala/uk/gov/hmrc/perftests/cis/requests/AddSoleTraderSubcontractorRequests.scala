@@ -21,7 +21,7 @@ import io.gatling.http.Predef._
 import io.gatling.http.request.builder.HttpRequestBuilder
 import uk.gov.hmrc.performance.conf.ServicesConfiguration
 
-object SubcontractorRequests extends ServicesConfiguration with CisPerformanceTestBase {
+object AddSoleTraderSubcontractorRequests extends ServicesConfiguration with CisPerformanceTestBase {
 
   val getAddSubcontractor: HttpRequestBuilder =
     http("[get ] Contractor Frontend")
