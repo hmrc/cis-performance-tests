@@ -24,7 +24,6 @@ import uk.gov.hmrc.perftests.cis.requests.NilMonthlyReturnRequests._
 import uk.gov.hmrc.perftests.cis.requests.PrepopulationRequests._
 import uk.gov.hmrc.perftests.cis.requests.StandardMonthlyReturnRequests._
 import uk.gov.hmrc.perftests.cis.requests.AddIndividualSubcontractorRequests._
-import uk.gov.hmrc.perftests.cis.requests.AddSoleTraderSubcontractorRequests._
 import uk.gov.hmrc.perftests.cis.requests.AddPartnershipSubcontractorRequests._
 import uk.gov.hmrc.perftests.cis.requests.AddCompanySubcontractorRequests._
 import uk.gov.hmrc.perftests.cis.requests.AddTrustSubcontractorRequests._
