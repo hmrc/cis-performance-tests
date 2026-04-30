@@ -476,7 +476,7 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     getCompanySubcontractorAddedPage
   )
 
-  setup("add-trust-subcontractor", "APSP").withRequests(
+  setup("add-trust-subcontractor", "ATSP").withRequests(
     getClickSubcontractorsLink,
     getManageYourCISReturnSubcontractorPage,
     getAddSubcontractor,
@@ -523,6 +523,7 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     getChangeTrustUTRPage,
     postChangeTrustUTRPage("1234567895"),
     getTrustCheckYourAnswersPage,
+    postTrustCheckYourAnswersPage,
     getTrustSubcontractorAddedPage
   )
   runSimulation()

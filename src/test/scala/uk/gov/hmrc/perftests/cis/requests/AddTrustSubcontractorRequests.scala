@@ -295,26 +295,26 @@ object AddTrustSubcontractorRequests extends ServicesConfiguration with CisPerfo
 
   val getChangeAddTrustUTRPage: HttpRequestBuilder =
     http("[get ] Do you know the Unique Taxpayer Reference for this trust page")
-      .get(cisContractorFrontendUrl + "/add/trust/change-partnership-has-utr")
+      .get(cisContractorFrontendUrl + "/add/trust/change-trust-has-utr")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
   def postChangeAddTrustUTRPage(option: String): HttpRequestBuilder =
     http("[post] Do you know the Unique Taxpayer Reference for this trust page")
-      .post(cisContractorFrontendUrl + "/add/trust/change-partnership-has-utr")
+      .post(cisContractorFrontendUrl + "/add/trust/change-trust-has-utr")
       .formParam("value", option)
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
   val getChangeTrustUTRPage: HttpRequestBuilder =
     http("[get ] Trust Unique Taxpayer Reference (UTR) page")
-      .get(cisContractorFrontendUrl + "/add/trust/change-partnership-utr")
+      .get(cisContractorFrontendUrl + "/add/trust/change-trust-utr")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
   def postChangeTrustUTRPage(utr: String): HttpRequestBuilder =
     http("[post] Trust Unique Taxpayer Reference (UTR) page")
-      .post(cisContractorFrontendUrl + "/add/trust/change-partnership-utr")
+      .post(cisContractorFrontendUrl + "/add/trust/change-trust-utr")
       .formParam("value", utr)
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
