@@ -188,4 +188,9 @@ object NilMonthlyReturnRequests extends ServicesConfiguration with CisPerformanc
     http("[get ] Successful Submission page")
       .get(cisFrontendUrl + "/monthly-return/confirmation")
       .check(status.is(200))
+
+  val getSignOutPage: HttpRequestBuilder =
+    http("[get ] Sign out page")
+      .get(cisFrontendUrl + "/account/sign-out-survey")
+      .check(status.is(303))
 }

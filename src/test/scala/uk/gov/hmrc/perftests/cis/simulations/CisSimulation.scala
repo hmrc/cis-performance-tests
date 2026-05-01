@@ -18,6 +18,7 @@ package uk.gov.hmrc.perftests.cis.simulations
 
 import io.gatling.core.scenario.Simulation
 import uk.gov.hmrc.performance.simulation.PerformanceTestRunner
+import uk.gov.hmrc.perftests.cis.mongo.DatabaseCleanup
 import uk.gov.hmrc.perftests.cis.requests.AuthRequests._
 import uk.gov.hmrc.perftests.cis.requests.LandingPagesRequests._
 import uk.gov.hmrc.perftests.cis.requests.NilMonthlyReturnRequests._
@@ -29,6 +30,10 @@ import uk.gov.hmrc.perftests.cis.requests.AddCompanySubcontractorRequests._
 import uk.gov.hmrc.perftests.cis.requests.AddTrustSubcontractorRequests._
 
 class CisSimulation extends Simulation with PerformanceTestRunner {
+
+  before {
+    DatabaseCleanup.dropMongoCollection()
+  }
 
   setup("org-landing-pages", "OLP ").withRequests(
     getAuthPage,
@@ -148,33 +153,34 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
 //    getSuccessfulSubmissionPage
 //  )
 
-//  setup("nil-monthly-return", "NMRP").withRequests(
-//    getFileYourNilReturnPage,
-//    getConfirmNilReturnPage,
-//    postConfirmNilReturnPage,
-//    getDoYouWantToSubmitAnInactivityRequestPage,
-//    postDoYouWantToSubmitAnInactivityRequestPage("false"),
-//    getDoYouWantEmailConfirmation,
-//    postDoYouWantEmailConfirmation("true"),
-//    getConfirmEmailAddressPage,
-//    postConfirmEmailAddressPage("tester.test@test.com"),
-//    getDeclarationPage,
-//    postDeclarationPage,
-//    getMNRFCheckYourAnswersPage,
-//    getChangeDoYouWantToSubmitAnInactivityRequestPage,
-//    postChangeDoYouWantToSubmitAnInactivityRequestPage("true"),
-//    getChangeInactivityWarningPage,
-//    getMNRFCheckYourAnswersPage,
-//    getChangeEnterEmailAddressPage,
-//    postChangeEnterEmailAddressPage("Submissionsuccessful@test.com"),
-//    getMNRFCheckYourAnswersPage,
-//    postMNRFCheckYourAnswersPage,
-//    postSubmissionSendPage,
-//    getPollingPage,
-//    getPollingPage,
-//    // postPollingPage,   analysis for polling issue is being looked into
-//    getSuccessfulSubmissionPage
-//  )
+  setup("nil-monthly-return", "NMRP").withRequests(
+    getFileYourNilReturnPage,
+    getConfirmNilReturnPage,
+    postConfirmNilReturnPage,
+    getDoYouWantToSubmitAnInactivityRequestPage,
+    postDoYouWantToSubmitAnInactivityRequestPage("false"),
+    getDoYouWantEmailConfirmation,
+    postDoYouWantEmailConfirmation("true"),
+    getConfirmEmailAddressPage,
+    postConfirmEmailAddressPage("tester.test@test.com"),
+    getDeclarationPage,
+    postDeclarationPage,
+    getMNRFCheckYourAnswersPage,
+    getChangeDoYouWantToSubmitAnInactivityRequestPage,
+    postChangeDoYouWantToSubmitAnInactivityRequestPage("true"),
+    getChangeInactivityWarningPage,
+    getMNRFCheckYourAnswersPage,
+    getChangeEnterEmailAddressPage,
+    postChangeEnterEmailAddressPage("Submissionsuccessful@test.com"),
+    getMNRFCheckYourAnswersPage,
+    postMNRFCheckYourAnswersPage,
+    postSubmissionSendPage,
+    getPollingPage,
+    getPollingPage,
+    // postPollingPage,   analysis for polling issue is being looked into
+    getSuccessfulSubmissionPage,
+    getSignOutPage
+  )
 
 //  This scenario covers scenarios 1, 2, 6, 8 & 9 in the cis-ui-tests as the same pages are loaded ending at the Manage your CIS return subcontractor page.
   // Mechanics and database interaction are irrelevant when dealing with a stub.
@@ -526,5 +532,10 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     postTrustCheckYourAnswersPage,
     getTrustSubcontractorAddedPage
   )
+
+  after {
+    DatabaseCleanup.dropMongoCollection()
+  }
+
   runSimulation()
 }
