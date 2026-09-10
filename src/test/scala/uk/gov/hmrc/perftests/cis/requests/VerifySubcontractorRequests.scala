@@ -25,19 +25,19 @@ object VerifySubcontractorRequests extends ServicesConfiguration with CisPerform
 
   val getVerifySubcontractor: HttpRequestBuilder =
     http("[get ] Verify Subcontractors")
-      .get(cisContractorFrontendUrl + "/add/verify/newest")
+      .get(cisContractorFrontendUrl + "/verify/newest")
       .check(status.is(303))
 
   val getVerifyWhichSubcontractorPage: HttpRequestBuilder =
     http("[get ] Which subcontractors to Verify page")
-      .get(cisContractorFrontendUrl + "/add/verify/select-subcontractors-to-verify")
+      .get(cisContractorFrontendUrl + "/verify/select-subcontractors-to-verify")
       .check(status.is(200))
       .check(css("input.govuk-checkboxes__input", "value").findAll.saveAs("checkboxValues"))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
   def postVerifyWhichSubcontractorPage(companyName: String): HttpRequestBuilder =
     http("[post] Which subcontractors to Verify page")
-      .post(cisContractorFrontendUrl + "/add/verify/select-subcontractors-to-verify")
+      .post(cisContractorFrontendUrl + "/verify/select-subcontractors-to-verify")
       .formParam("csrfToken", f"#{csrfToken}")
       .formParam("value[0]", "#{checkboxValues(0)}")
       .formParam("value[1]", "#{checkboxValues(1)}")
@@ -49,27 +49,27 @@ object VerifySubcontractorRequests extends ServicesConfiguration with CisPerform
 
   val getReverifyExistingSubcontractorPage: HttpRequestBuilder =
     http("[get ] Reverify existing subcontractors")
-      .get(cisContractorFrontendUrl + "/add/verify/reverify-existing-subcontractors")
+      .get(cisContractorFrontendUrl + "/verify/reverify-existing-subcontractors")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
   def postReverifyExistingSubcontractorPage(companyName: String): HttpRequestBuilder =
     http("[post] Reverify existing subcontractors")
-      .post(cisContractorFrontendUrl + "/add/verify/reverify-existing-subcontractors")
+      .post(cisContractorFrontendUrl + "/verify/reverify-existing-subcontractors")
       .formParam("csrfToken", f"#{csrfToken}")
       .formParam("value", "true")
       .check(status.is(303))
 
   val getReverifySelectSubcontractorPage: HttpRequestBuilder =
     http("[get ] Which subcontractors to ReVerify page")
-      .get(cisContractorFrontendUrl + "/add/verify/select-subcontractors-to-reverify")
+      .get(cisContractorFrontendUrl + "/verify/select-subcontractors-to-reverify")
       .check(status.is(200))
       .check(css("input.govuk-checkboxes__input", "value").findAll.saveAs("checkboxValues"))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
   def postReverifySelectSubcontractorPage(companyName: String): HttpRequestBuilder =
     http("[post] Which subcontractors to ReVerify page")
-      .post(cisContractorFrontendUrl + "/add/verify/select-subcontractors-to-reverify")
+      .post(cisContractorFrontendUrl + "/verify/select-subcontractors-to-reverify")
       .formParam("csrfToken", f"#{csrfToken}")
       .formParam("value[0]", "#{checkboxValues(0)}")
       .formParam("value[1]", "#{checkboxValues(1)}")
@@ -80,9 +80,14 @@ object VerifySubcontractorRequests extends ServicesConfiguration with CisPerform
       .get(cisContractorFrontendUrl + "/verify/current")
       .check(status.is(303))
 
-  val getModifySubcontractorsToVerify: HttpRequestBuilder =
-    http("[get ] Modify subcontractors batch to verify request")
+  val getModifyVerificationBatch: HttpRequestBuilder =
+    http("[get ] Modify verification batch for subcontractors")
       .get(cisContractorFrontendUrl + "/verify/verification-batch/modify")
+      .check(status.is(303))
+
+  val getCreateVerificationBatch: HttpRequestBuilder =
+    http("[get ] Create verification batch for subcontractors")
+      .get(cisContractorFrontendUrl + "/verify/verification-batch-create")
       .check(status.is(303))
 
   val getCheckVerificationBatchReadiness: HttpRequestBuilder =

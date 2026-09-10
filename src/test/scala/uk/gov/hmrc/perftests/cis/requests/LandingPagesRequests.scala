@@ -94,7 +94,7 @@ object LandingPagesRequests extends ServicesConfiguration with CisPerformanceTes
       .get(cisManageFrontendUrl + "/agent/cis-return-dashboard/1/target/returnDue")
       .check(status.is(303))
 
-  val getManageYourCISReturenPage: HttpRequestBuilder =
+  val getManageYourCISReturnPage: HttpRequestBuilder =
     http("[get ] Manage Your CIS Return Dashboard for UHD Contractor Control Group page")
       .get(cisManageFrontendUrl + "/manage-cis-return/1")
       .check(status.is(200))
