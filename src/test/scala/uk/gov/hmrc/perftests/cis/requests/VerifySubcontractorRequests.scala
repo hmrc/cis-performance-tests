@@ -35,7 +35,7 @@ object VerifySubcontractorRequests extends ServicesConfiguration with CisPerform
       .check(css("input.govuk-checkboxes__input", "value").findAll.saveAs("checkboxValues"))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
-  def postVerifyWhichSubcontractorPage(companyName: String): HttpRequestBuilder =
+  def postVerifyWhichSubcontractorPage(): HttpRequestBuilder =
     http("[post] Which subcontractors to Verify page")
       .post(cisContractorFrontendUrl + "/verify/select-subcontractors-to-verify")
       .formParam("csrfToken", f"#{csrfToken}")
@@ -53,7 +53,7 @@ object VerifySubcontractorRequests extends ServicesConfiguration with CisPerform
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
-  def postReverifyExistingSubcontractorPage(companyName: String): HttpRequestBuilder =
+  def postReverifyExistingSubcontractorPage(): HttpRequestBuilder =
     http("[post] Reverify existing subcontractors")
       .post(cisContractorFrontendUrl + "/verify/reverify-existing-subcontractors")
       .formParam("csrfToken", f"#{csrfToken}")
@@ -67,7 +67,7 @@ object VerifySubcontractorRequests extends ServicesConfiguration with CisPerform
       .check(css("input.govuk-checkboxes__input", "value").findAll.saveAs("checkboxValues"))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
-  def postReverifySelectSubcontractorPage(companyName: String): HttpRequestBuilder =
+  def postReverifySelectSubcontractorPage(): HttpRequestBuilder =
     http("[post] Which subcontractors to ReVerify page")
       .post(cisContractorFrontendUrl + "/verify/select-subcontractors-to-reverify")
       .formParam("csrfToken", f"#{csrfToken}")
@@ -96,39 +96,40 @@ object VerifySubcontractorRequests extends ServicesConfiguration with CisPerform
       .check(status.is(303))
 
   val getVerifyEmailConfirmationPage: HttpRequestBuilder =
-    http("[get ] Want email confirmation of this verification request")
+    http("[get ] Want email confirmation of this verification request page")
       .get(cisContractorFrontendUrl + "/verify/confirmation-email-stored")
       .check(status.is(200))
+      .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
-  def postVerifyEmailConfirmationPage(companyName: String): HttpRequestBuilder =
-    http("[post] Which subcontractors to ReVerify page")
+  def postVerifyEmailConfirmationPage(option: String): HttpRequestBuilder =
+    http("[post] Want email confirmation of this verification request page")
       .post(cisContractorFrontendUrl + "/verify/confirmation-email-stored")
+      .formParam("value", option)
       .formParam("csrfToken", f"#{csrfToken}")
-      .formParam("value", "differentEmail")
       .check(status.is(303))
 
   val getVerifyEnterEmailConfirmationPage: HttpRequestBuilder =
     http("[get ] What email address for confirmation for verification request")
-      .get(cisFrontendUrl + "/verify/enter-confirmation-email")
+      .get(cisContractorFrontendUrl + "/verify/enter-confirmation-email")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
   def postVerifyEnterEmailConfirmationPage(email: String): HttpRequestBuilder =
     http("[post] What email address for confirmation for verification request")
-      .post(cisFrontendUrl + "/verify/enter-confirmation-email")
+      .post(cisContractorFrontendUrl + "/verify/enter-confirmation-email")
       .formParam("value", email)
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
   val getVerificationCheckYourAnswersPage: HttpRequestBuilder =
     http("[get ] Get Verification Check your answers page")
-      .get(cisFrontendUrl + "/verify/check-your-answers")
+      .get(cisContractorFrontendUrl + "/verify/check-your-answers")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
   val postVerificationCheckYourAnswersPage: HttpRequestBuilder =
     http("[post] Post Verification Check your answers")
-      .post(cisFrontendUrl + "/verify/check-your-answers")
+      .post(cisContractorFrontendUrl + "/verify/check-your-answers")
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 }
