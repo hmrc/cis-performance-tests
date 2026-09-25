@@ -22,6 +22,7 @@ import uk.gov.hmrc.perftests.cis.requests.AuthRequests._
 import uk.gov.hmrc.perftests.cis.requests.LandingPagesRequests._
 import uk.gov.hmrc.perftests.cis.requests.NilMonthlyReturnRequests._
 import uk.gov.hmrc.perftests.cis.requests.PrepopulationRequests._
+import uk.gov.hmrc.perftests.cis.requests.VerifySubcontractorRequests._
 import uk.gov.hmrc.perftests.cis.requests.StandardMonthlyReturnRequests._
 import uk.gov.hmrc.perftests.cis.requests.AddIndividualSubcontractorRequests._
 import uk.gov.hmrc.perftests.cis.requests.AddPartnershipSubcontractorRequests._
@@ -53,8 +54,8 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     postFileMonthlyCISReturnsSearchPage("CN", "UHD Contractor Control Group"),
     getClientFilteredViewFileMonthlyCISReturnPage,
     getClientCisReturnDashboardPage,
-    getClickReturnDueLink,
-    getManageYourCISReturenPage
+    getRedirectManageCISReturnPage,
+    getManageYourCISReturnPage
   )
 
 //  setup("standard-monthly-return", "SMRP").withRequests(
@@ -213,9 +214,10 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     getYourSubcontractors("EZ10450"),
     getStartPrepopulation("EZ10450"),
     getUnsuccessfulAutomaticSubcontractorUpdatePage,
-    postUnsuccessfulAutomaticSubcontractorUpdatePage,
-    getAddContractorDetailsPage
-    //    continue journey to add subcontractor which is a terminal page at the moment
+    postUnsuccessfulAutomaticSubcontractorUpdatePage
+    // getAddContractorDetailsPage
+    // TODO commented out above as no information on the URL change etc available
+    //  continue journey to add subcontractor which is a terminal page at the moment
   )
 
   setup("add-individual-subcontractor", "AISP ").withRequests(
@@ -525,6 +527,27 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     getTrustCheckYourAnswersPage,
     postTrustCheckYourAnswersPage,
     getTrustSubcontractorAddedPage
+  )
+
+  setup("verify-subcontractor", "xxxx").withRequests(
+    getVerifySubcontractor,
+    getVerifyWhichSubcontractorPage,
+    postVerifyWhichSubcontractorPage(),
+    getReverifyExistingSubcontractorPage,
+    postReverifyExistingSubcontractorPage(),
+    getReverifySelectSubcontractorPage,
+    postReverifySelectSubcontractorPage(),
+    getCurrentSubcontractorsToVerify,
+    getModifyVerificationBatch,
+    getCreateVerificationBatch,
+    getCheckVerificationBatchReadiness,
+    getVerifyEmailConfirmationPage,
+    postVerifyEmailConfirmationPage("differentEmail"),
+    getVerifyEnterEmailConfirmationPage,
+    postVerifyEnterEmailConfirmationPage("test@test.com"),
+    getVerificationCheckYourAnswersPage,
+    postVerificationCheckYourAnswersPage
+    // TODO getPollingPage no info found. cannot continue after submit
   )
   runSimulation()
 }

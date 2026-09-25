@@ -40,13 +40,13 @@ object LandingPagesRequests extends ServicesConfiguration with CisPerformanceTes
 
   val getCisReturnDashboardPage: HttpRequestBuilder =
     http("[get ] CIS return dashboard page")
-      .get(cisManageFrontendUrl + "/org/cis-return-dashboard")
+      .get(cisManageFrontendUrl + "/org/manage-construction-industry-scheme-account")
       .check(status.is(200))
 
   val getClickSubcontractorsLink: HttpRequestBuilder =
     http("[get ] Click subcontractors link")
 //      note that this 'get' 303 works
-      .get(cisManageFrontendUrl + "/org/cis-return-dashboard/target/subcontractors")
+      .get(cisManageFrontendUrl + "/org/manage-construction-industry-scheme-account/target/subcontractors")
       .check(status.is(303))
 
   val getManageYourCISReturnSubcontractorPage: HttpRequestBuilder =
@@ -85,16 +85,16 @@ object LandingPagesRequests extends ServicesConfiguration with CisPerformanceTes
 
   val getClientCisReturnDashboardPage: HttpRequestBuilder =
     http("[get ] Client CIS Return Dashboard for UHD Contractor Control Group page")
-      .get(cisManageFrontendUrl + "/agent/cis-return-dashboard/1")
+      .get(cisManageFrontendUrl + "/agent/manage-construction-industry-scheme-account/1")
       .check(status.is(200))
 
-  val getClickReturnDueLink: HttpRequestBuilder =
-    http("[get ] Click Return due link on Client CIS Return Dashboard for UHD Contractor Control Group page")
+  val getRedirectManageCISReturnPage: HttpRequestBuilder =
+    http("[get ] Click Manage CIS Return link on Client CIS Return Dashboard for UHD Contractor Control Group page")
 //      note that this 'get' 303 works
-      .get(cisManageFrontendUrl + "/agent/cis-return-dashboard/1/target/returnDue")
+      .get(cisManageFrontendUrl + "/agent/manage-construction-industry-scheme-account/1/target/manageYourCisReturn")
       .check(status.is(303))
 
-  val getManageYourCISReturenPage: HttpRequestBuilder =
+  val getManageYourCISReturnPage: HttpRequestBuilder =
     http("[get ] Manage Your CIS Return Dashboard for UHD Contractor Control Group page")
       .get(cisManageFrontendUrl + "/manage-cis-return/1")
       .check(status.is(200))
