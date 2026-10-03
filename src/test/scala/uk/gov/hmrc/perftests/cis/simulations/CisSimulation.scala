@@ -601,8 +601,8 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     postVerifyEnterEmailConfirmationPage("test@test.com"),
     getVerificationCheckYourAnswersPage,
     postVerificationCheckYourAnswersPage,
-//    getSubmittingVerificationRequestPage,
-//    getVerificationPollingPage,
+    getSubmittingVerificationRequestPage,
+    getVerificationPollingPage,
     getVerificationRequestSubmittedPage
   )
   runSimulation()
