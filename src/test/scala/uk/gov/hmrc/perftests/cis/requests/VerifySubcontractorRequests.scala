@@ -39,12 +39,7 @@ object VerifySubcontractorRequests extends ServicesConfiguration with CisPerform
     http("[post] Which subcontractors to Verify page")
       .post(cisContractorFrontendUrl + "/verify/select-subcontractors-to-verify")
       .formParam("csrfToken", f"#{csrfToken}")
-      .formParam("value[0]", "#{checkboxValues(0)}")
-      .formParam("value[1]", "#{checkboxValues(1)}")
-      .formParam("value[2]", "#{checkboxValues(2)}")
-      .formParam("value[3]", "#{checkboxValues(3)}")
       .formParam("value[4]", "#{checkboxValues(4)}")
-      .formParam("value[5]", "#{checkboxValues(5)}")
       .check(status.is(303))
 
   val getReverifyExistingSubcontractorPage: HttpRequestBuilder =
@@ -71,8 +66,7 @@ object VerifySubcontractorRequests extends ServicesConfiguration with CisPerform
     http("[post] Which subcontractors to ReVerify page")
       .post(cisContractorFrontendUrl + "/verify/select-subcontractors-to-reverify")
       .formParam("csrfToken", f"#{csrfToken}")
-      .formParam("value[0]", "#{checkboxValues(0)}")
-      .formParam("value[1]", "#{checkboxValues(1)}")
+      .formParam("value[]", "#{checkboxValues(1)}")
       .check(status.is(303))
 
   val getCurrentSubcontractorsToVerify: HttpRequestBuilder =
@@ -132,4 +126,21 @@ object VerifySubcontractorRequests extends ServicesConfiguration with CisPerform
       .post(cisContractorFrontendUrl + "/verify/check-your-answers")
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
+
+  val getSubmittingVerificationRequestPage: HttpRequestBuilder =
+    http("[get ] Get submitting verification page")
+      .post(cisContractorFrontendUrl + "/verify/submitting-verification-request")
+      .formParam("csrfToken", f"#{csrfToken}")
+      .check(status.is(303))
+
+  val getVerificationPollingPage: HttpRequestBuilder =
+    http("[get ] Get Polling verification page")
+      .post(cisContractorFrontendUrl + "/verify/polling")
+      .formParam("csrfToken", f"#{csrfToken}")
+      .check(status.is(303))
+
+  val getVerificationRequestSubmittedPage: HttpRequestBuilder =
+    http("[get ] Get Verification request submitted page")
+      .get(cisContractorFrontendUrl + "/verify/verification-request-submitted")
+      .check(status.is(200))
 }

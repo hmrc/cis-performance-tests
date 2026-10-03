@@ -29,39 +29,39 @@ object AddIndividualSubcontractorRequests extends ServicesConfiguration with Cis
       .check(status.is(303))
 
   val getWhatTypeOfSubcontractorAreYouAdding: HttpRequestBuilder =
-    http("[get ] What Type Of Subcontractor Are You Adding page")
+    http("[get ] What type of subcontractor are you adding page")
       .get(cisContractorFrontendUrl + "/add/type-of-subcontractor")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
   def postWhatTypeOfSubcontractorAreYouAdding(option: String): HttpRequestBuilder =
-    http("[post] What Type of Subcontractor Are You Adding page")
+    http("[post] What type of subcontractor are you adding page")
       .post(cisContractorFrontendUrl + "/add/type-of-subcontractor")
       .formParam("value", option)
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
-  val getAddTradingName: HttpRequestBuilder =
-    http("[get ] Does The Individual Use A Trading Name page")
-      .get(cisContractorFrontendUrl + "/add/check-trading-name")
+  val getAddName: HttpRequestBuilder =
+    http("[get ] Which names do you want to add for this subcontractor page")
+      .get(cisContractorFrontendUrl + "/add/names")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
-  def postAddTradingName(option: String): HttpRequestBuilder =
-    http("[post] Does The Individual Use A Trading Name page")
-      .post(cisContractorFrontendUrl + "/add/check-trading-name")
-      .formParam("value", option)
+  def postAddName(option: String): HttpRequestBuilder =
+    http("[post] Which names do you want to add for this subcontractor page")
+      .post(cisContractorFrontendUrl + "/add/names")
+      .formParam("value[1]", option)
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
   val getTradingName: HttpRequestBuilder =
-    http("[get ] What Is The Individual's Trading Name page")
+    http("[get ] What is the subcontractor's trading name page")
       .get(cisContractorFrontendUrl + "/add/trading-name")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
   def postTradingName(name: String): HttpRequestBuilder =
-    http("[post] What Is The Individual's Trading Name page")
+    http("[post] What is the subcontractor's trading name page")
       .post(cisContractorFrontendUrl + "/add/trading-name")
       .formParam("value", name)
       .formParam("csrfToken", f"#{csrfToken}")
@@ -80,29 +80,17 @@ object AddIndividualSubcontractorRequests extends ServicesConfiguration with Cis
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
-  val getIndividualAddressPage: HttpRequestBuilder =
-    http("[get ] What Is The Individual's Address page")
-      .get(cisContractorFrontendUrl + "/add/address")
-      .check(status.is(200))
-      .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
+  val setIndividualAddressLookupNormalMode: HttpRequestBuilder =
+    http("[get ] Set individual address lookup normal mode")
+      .get(cisContractorFrontendUrl + "/individual-address-lookup")
+      .disableFollowRedirect
+      .check(status.is(303))
+      .check(headerRegex("Location", "(/lookup-address/[^/]+)/").saveAs("addressLookupBase"))
 
-  def postIndividualAddressPage(
-    line1: String,
-    line2: String,
-    town: String,
-    county: String,
-    postcode: String,
-    country: String
-  ): HttpRequestBuilder =
-    http("[post] What Is The Individual's Address page")
-      .post(cisContractorFrontendUrl + "/add/address")
-      .formParam("addressLine1", line1)
-      .formParam("addressLine2", line2)
-      .formParam("addressLine3", town)
-      .formParam("addressLine4", county)
-      .formParam("postalCode", postcode)
-      .formParam("country", country)
-      .formParam("csrfToken", f"#{csrfToken}")
+  val getReturnToIndividualNormalModeFrontendService: HttpRequestBuilder =
+    http("[get ] Redirect to individual frontend service")
+      .get(cisContractorFrontendUrl + "/individual-address-return")
+      .queryParam("id", "#{id}")
       .check(status.is(303))
 
   val getAddIndividualNinoPage: HttpRequestBuilder =
@@ -183,16 +171,16 @@ object AddIndividualSubcontractorRequests extends ServicesConfiguration with Cis
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
-  val getIndividualContactMethodPage: HttpRequestBuilder =
-    http("[get ] What is the contact method for this individual page")
-      .get(cisContractorFrontendUrl + "/add/check-contact-details")
+  val getAddIndividualContactDetailsPage: HttpRequestBuilder =
+    http("[get ] Do you want to add contact details for this individual page")
+      .get(cisContractorFrontendUrl + "/add/add-contact-details")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
-  def postIndividualContactMethodPage(contactOption: String): HttpRequestBuilder =
-    http("[post] What is the contact method for this individual page")
-      .post(cisContractorFrontendUrl + "/add/check-contact-details")
-      .formParam("value", contactOption)
+  def postAddIndividualContactDetailsPage(option: String): HttpRequestBuilder =
+    http("[post] Do you want to add contact details for this individual page")
+      .post(cisContractorFrontendUrl + "/add/add-contact-details")
+      .formParam("value", option)
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
@@ -260,16 +248,16 @@ object AddIndividualSubcontractorRequests extends ServicesConfiguration with Cis
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
-  val getChangeAddTradingNamePage: HttpRequestBuilder =
-    http("[get ] Change Does The Individual Use A Trading Name page")
-      .get(cisContractorFrontendUrl + "/add/change-check-trading-name")
+  val getChangeAddNamesPage: HttpRequestBuilder =
+    http("[get ] ChangeWhich names do you want to add for this subcontractor page")
+      .get(cisContractorFrontendUrl + "/add/change-names")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
-  def postChangeAddTradingNamePage(option: String): HttpRequestBuilder =
-    http("[post] Change Does The Individual Use A Trading Name page")
-      .post(cisContractorFrontendUrl + "/add/change-check-trading-name")
-      .formParam("value", option)
+  def postChangeAddNamesPage(option: String): HttpRequestBuilder =
+    http("[post] Change Which names do you want to add for this subcontractor page")
+      .post(cisContractorFrontendUrl + "/add/change-names")
+      .formParam("value[0]", option)
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
@@ -288,29 +276,18 @@ object AddIndividualSubcontractorRequests extends ServicesConfiguration with Cis
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
-  val getChangeIndividualAddressPage: HttpRequestBuilder =
-    http("[get ] Change What Is The Individual's Address page")
-      .get(cisContractorFrontendUrl + "/add/change-address")
-      .check(status.is(200))
-      .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
+  val setIndividualAddressLookupCheckMode: HttpRequestBuilder =
+    http("[get ] Set individual address lookup check mode")
+      .get(cisContractorFrontendUrl + "/individual-address-lookup")
+      .queryParam("changeRoute", "change")
+      .disableFollowRedirect
+      .check(status.is(303))
+      .check(headerRegex("Location", "(/lookup-address/[^/]+)/").saveAs("addressLookupBase"))
 
-  def postChangeIndividualAddressPage(
-    line1: String,
-    line2: String,
-    town: String,
-    county: String,
-    postcode: String,
-    country: String
-  ): HttpRequestBuilder =
-    http("[post] Change What Is The Individual's Address page")
-      .post(cisContractorFrontendUrl + "/add/change-address")
-      .formParam("addressLine1", line1)
-      .formParam("addressLine2", line2)
-      .formParam("addressLine3", town)
-      .formParam("addressLine4", county)
-      .formParam("postalCode", postcode)
-      .formParam("country", country)
-      .formParam("csrfToken", f"#{csrfToken}")
+  val getReturnToIndividualCheckModeFrontendService: HttpRequestBuilder =
+    http("[get ] Redirect to individual frontend service in check mode")
+      .get(cisContractorFrontendUrl + "/individual-address-return/change")
+      .queryParam("id", "#{id}")
       .check(status.is(303))
 
   val getChangeAddIndividualAddressPage: HttpRequestBuilder =
@@ -326,16 +303,29 @@ object AddIndividualSubcontractorRequests extends ServicesConfiguration with Cis
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
+  val getChangeAddIndividualContactDetailsPage: HttpRequestBuilder =
+    http("[get ] Change do you want to add contact details for this individual page")
+      .get(cisContractorFrontendUrl + "/add/change-add-contact-details")
+      .check(status.is(200))
+      .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
+
+  def postChangeAddIndividualContactDetailsPage(option: String): HttpRequestBuilder =
+    http("[post] Change do you want to add contact details for this individual page")
+      .post(cisContractorFrontendUrl + "/add/change-add-contact-details")
+      .formParam("value", option)
+      .formParam("csrfToken", f"#{csrfToken}")
+      .check(status.is(303))
+
   val getChangeIndividualContactMethodPage: HttpRequestBuilder =
-    http("[get ] What is the contact method for this individual page")
-      .get(cisContractorFrontendUrl + "/add/change-check-contact-details")
+    http("[get ] Change which contact details do you want to add for this individual page")
+      .get(cisContractorFrontendUrl + "/add/change-select-contact-details")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
   def postChangeIndividualContactMethodPage(contactOption: String): HttpRequestBuilder =
-    http("[post] What is the contact method for this individual page")
-      .post(cisContractorFrontendUrl + "/add/change-check-contact-details")
-      .formParam("value", contactOption)
+    http("[post] Change which contact details do you want to add for this individual page")
+      .post(cisContractorFrontendUrl + "/add/change-select-contact-details")
+      .formParam("value[2]", contactOption)
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
