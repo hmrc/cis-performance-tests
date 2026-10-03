@@ -99,8 +99,6 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     postChangeHowMuchTaxInTotalDidYouDeductFromFirstSubcontractorDetails("250"),
     getChangeFirstSubcontractorsDetails,
     postChangeFirstSubcontractorsDetails,
-    getYouHaveAddedDetailsForTwoSubcontractors,
-    postWhichSubcontractorDoYouNeedToAddPaymentDetailsFor("2"),
     getHowMuchDidYouPayToSecondSubcontractorInTotal,
     postHowMuchDidYouPayToSecondSubcontractorInTotal("5000"),
     getHowMuchDidSecondSubcontractorPayInMaterialCosts,

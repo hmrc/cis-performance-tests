@@ -45,7 +45,7 @@ object NilMonthlyReturnRequests extends ServicesConfiguration with CisPerformanc
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
   private def randomValidMonthYear(): (String, String) = {
-    val earliest                          = YearMonth.of(2007, 5) // May 2007
+    val earliest                          = YearMonth.of(2017, 1) // January 2017
     val today                             = LocalDate.now()
     val (currentTaxMonth, currentTaxYear) = {
       val year  = today.getYear
