@@ -49,40 +49,28 @@ object AddTrustSubcontractorRequests extends ServicesConfiguration with CisPerfo
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
-  val getTrustAddressPage: HttpRequestBuilder =
-    http("[get ] What is the address for this trust page")
-      .get(cisContractorFrontendUrl + "/add/trust/address")
+  val getTrustContactDetailsPage: HttpRequestBuilder =
+    http("[get ] What is the contact method for this company page")
+      .get(cisContractorFrontendUrl + "/add/trust/add-contact-details")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
-  def postTrustAddressPage(
-    addressLine1: String,
-    addressLine2: String,
-    town: String,
-    county: String,
-    postalCode: String,
-    country: String
-  ): HttpRequestBuilder =
-    http("[post] What is the address for this trust page")
-      .post(cisContractorFrontendUrl + "/add/trust/address")
-      .formParam("addressLine1", addressLine1)
-      .formParam("addressLine2", addressLine2)
-      .formParam("addressLine3", town)
-      .formParam("addressLine4", county)
-      .formParam("postalCode", postalCode)
-      .formParam("country", country)
+  def postTrustContactDetailsPage(option: String): HttpRequestBuilder =
+    http("[post] What is the contact method for this company page")
+      .post(cisContractorFrontendUrl + "/add/trust/add-contact-details")
+      .formParam("value", option)
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
   val getTrustContactMethodPage: HttpRequestBuilder =
     http("[get ] What are the contact details for this trust page")
-      .get(cisContractorFrontendUrl + "/add/trust/choose-contact-details")
+      .get(cisContractorFrontendUrl + "/add/trust/select-contact-details")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
   def postTrustContactMethodPage(contactOption: String): HttpRequestBuilder =
     http("[post] What are the contact details for this trust page")
-      .post(cisContractorFrontendUrl + "/add/trust/choose-contact-details")
+      .post(cisContractorFrontendUrl + "/add/trust/select-contact-details")
       .formParam("value", contactOption)
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
@@ -216,41 +204,43 @@ object AddTrustSubcontractorRequests extends ServicesConfiguration with CisPerfo
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
-  val getChangeTrustAddressPage: HttpRequestBuilder =
-    http("[get ] What is the address for this trust page")
-      .get(cisContractorFrontendUrl + "/add/trust/change-address")
+  val setTrustAddressLookupCheckMode: HttpRequestBuilder =
+    http("[get ] Set company address lookup check mode")
+      .get(cisContractorFrontendUrl + "/add/trust/address")
+      .queryParam("changeRoute", "CheckMode")
+      .disableFollowRedirect
+      .check(status.is(303))
+      .check(headerRegex("Location", "(/lookup-address/[^/]+)/").saveAs("addressLookupBase"))
+
+  val getReturnToTrustCheckModeFrontendService: HttpRequestBuilder =
+    http("[get ] Redirect to trust frontend service in check mode")
+      .get(cisContractorFrontendUrl + "/add/trust/address-return/change")
+      .queryParam("id", "#{id}")
+      .check(status.is(303))
+
+  val getChangeAddTrustContactDetailsPage: HttpRequestBuilder =
+    http("[get ] Do you want to add contact details for this trust page")
+      .get(cisContractorFrontendUrl + "/add/trust/change-add-contact-details")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
-  def postChangeTrustAddressPage(
-    addressLine1: String,
-    addressLine2: String,
-    town: String,
-    county: String,
-    postalCode: String,
-    country: String
-  ): HttpRequestBuilder =
-    http("[post] What is the address for this trust page")
-      .post(cisContractorFrontendUrl + "/add/trust/change-address")
-      .formParam("addressLine1", addressLine1)
-      .formParam("addressLine2", addressLine2)
-      .formParam("addressLine3", town)
-      .formParam("addressLine4", county)
-      .formParam("postalCode", postalCode)
-      .formParam("country", country)
+  def postChangeAddTrustContactDetailsPage(option: String): HttpRequestBuilder =
+    http("[post] Do you want to add contact details for this trust page")
+      .post(cisContractorFrontendUrl + "/add/trust/change-add-contact-details")
+      .formParam("value", option)
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
   val getChangeTrustContactMethodPage: HttpRequestBuilder =
     http("[get ] What are the contact details for this trust page")
-      .get(cisContractorFrontendUrl + "/add/trust/change-choose-contact-details")
+      .get(cisContractorFrontendUrl + "/add/trust/change-select-contact-details")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
   def postChangeTrustContactMethodPage(contactOption: String): HttpRequestBuilder =
     http("[post] What are the contact details for this trust page")
-      .post(cisContractorFrontendUrl + "/add/trust/change-choose-contact-details")
-      .formParam("value", contactOption)
+      .post(cisContractorFrontendUrl + "/add/trust/change-select-contact-details")
+      .formParam("value[0]", contactOption)
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 

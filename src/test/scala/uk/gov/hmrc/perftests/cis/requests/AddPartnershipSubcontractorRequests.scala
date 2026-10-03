@@ -37,7 +37,7 @@ object AddPartnershipSubcontractorRequests extends ServicesConfiguration with Ci
       .check(status.is(303))
 
   val getAddPartnershipAddressPage: HttpRequestBuilder =
-    http("[get ] Do you want to add an address for this subcontractor page")
+    http("[get ] Do you want to add an address for this partnership page")
       .get(cisContractorFrontendUrl + "/add/partnership/check-address")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
@@ -49,41 +49,42 @@ object AddPartnershipSubcontractorRequests extends ServicesConfiguration with Ci
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
-  val getPartnershipAddressPage: HttpRequestBuilder =
-    http("[get ] What is the address for this partnership page")
+  val setPartnershipAddressLookupNormalMode: HttpRequestBuilder =
+    http("[get ] Set partnership address lookup normal mode")
       .get(cisContractorFrontendUrl + "/add/partnership/address")
+      .disableFollowRedirect
+      .check(status.is(303))
+      .check(headerRegex("Location", "(/lookup-address/[^/]+)/").saveAs("addressLookupBase"))
+
+  val getReturnToPartnershipNormalModeFrontendService: HttpRequestBuilder =
+    http("[get ] Redirect to partnership frontend service in normal mode")
+      .get(cisContractorFrontendUrl + "/add/partnership/address-return")
+      .queryParam("id", "#{id}")
+      .check(status.is(303))
+
+  val getAddPartnershipContactDetailsPage: HttpRequestBuilder =
+    http("[get ] Do you want to add contact details for this partnership page")
+      .get(cisContractorFrontendUrl + "/add/partnership/add-contact-details")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
-  def postPartnershipAddressPage(
-    addressLine1: String,
-    addressLine2: String,
-    town: String,
-    county: String,
-    postalCode: String,
-    country: String
-  ): HttpRequestBuilder =
-    http("[post] What is the address for this partnership page")
-      .post(cisContractorFrontendUrl + "/add/partnership/address")
-      .formParam("addressLine1", addressLine1)
-      .formParam("addressLine2", addressLine2)
-      .formParam("addressLine3", town)
-      .formParam("addressLine4", county)
-      .formParam("postalCode", postalCode)
-      .formParam("country", country)
+  def postAddPartnershipContactDetailsPage(option: Boolean): HttpRequestBuilder =
+    http("[post] Do you want to add contact details for this partnership page")
+      .post(cisContractorFrontendUrl + "/add/partnership/add-contact-details")
+      .formParam("value", option)
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
   val getPartnershipContactMethodPage: HttpRequestBuilder =
     http("[get ] What is the contact method for this partnership page")
-      .get(cisContractorFrontendUrl + "/add/partnership/choose-contact-details")
+      .get(cisContractorFrontendUrl + "/add/partnership/select-contact-details")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
   def postPartnershipContactMethodPage(contactOption: String): HttpRequestBuilder =
     http("[post] What is the contact method for this partnership page")
-      .post(cisContractorFrontendUrl + "/add/partnership/choose-contact-details")
-      .formParam("value", contactOption)
+      .post(cisContractorFrontendUrl + "/add/partnership/select-contact-details")
+      .formParam("value[0]", contactOption)
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
@@ -307,41 +308,31 @@ object AddPartnershipSubcontractorRequests extends ServicesConfiguration with Ci
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
-  val getChangePartnershipAddressPage: HttpRequestBuilder =
-    http("[get ] What is the address for this partnership page")
-      .get(cisContractorFrontendUrl + "/add/partnership/change-address")
-      .check(status.is(200))
-      .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
+  val setPartnershipAddressLookupCheckMode: HttpRequestBuilder =
+    http("[get ] Set partnership address lookup check mode")
+      .get(cisContractorFrontendUrl + "/add/partnership/address")
+      .queryParam("changeRoute", "change")
+      .disableFollowRedirect
+      .check(status.is(303))
+      .check(headerRegex("Location", "(/lookup-address/[^/]+)/").saveAs("addressLookupBase"))
 
-  def postChangePartnershipAddressPage(
-    addressLine1: String,
-    addressLine2: String,
-    town: String,
-    county: String,
-    postalCode: String,
-    country: String
-  ): HttpRequestBuilder =
-    http("[post] What is the address for this partnership page")
-      .post(cisContractorFrontendUrl + "/add/partnership/change-address")
-      .formParam("addressLine1", addressLine1)
-      .formParam("addressLine2", addressLine2)
-      .formParam("addressLine3", town)
-      .formParam("addressLine4", county)
-      .formParam("postalCode", postalCode)
-      .formParam("country", country)
-      .formParam("csrfToken", f"#{csrfToken}")
+  val getReturnToPartnershipCheckModeFrontendService: HttpRequestBuilder =
+    http("[get ] Redirect to partnership frontend service in check mode")
+      .get(cisContractorFrontendUrl + "/add/partnership/address-return/change")
+      .queryParam("id", "#{id}")
       .check(status.is(303))
 
   val getChangePartnershipContactMethodPage: HttpRequestBuilder =
     http("[get ] What is the contact method for this partnership page")
-      .get(cisContractorFrontendUrl + "/add/partnership/change-choose-contact-details")
+      .get(cisContractorFrontendUrl + "/add/partnership/change-select-contact-details")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
-  def postChangePartnershipContactMethodPage(contactOption: String): HttpRequestBuilder =
+  def postChangePartnershipContactMethodPage(contactOption: String, contactOption2: String): HttpRequestBuilder =
     http("[post] What is the contact method for this partnership page")
-      .post(cisContractorFrontendUrl + "/add/partnership/change-choose-contact-details")
-      .formParam("value", contactOption)
+      .post(cisContractorFrontendUrl + "/add/partnership/change-select-contact-details")
+      .formParam("value[1]", contactOption)
+      .formParam("value[2]", contactOption2)
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 

@@ -88,7 +88,7 @@ object AddIndividualSubcontractorRequests extends ServicesConfiguration with Cis
       .check(headerRegex("Location", "(/lookup-address/[^/]+)/").saveAs("addressLookupBase"))
 
   val getReturnToIndividualNormalModeFrontendService: HttpRequestBuilder =
-    http("[get ] Redirect to individual frontend service")
+    http("[get ] Redirect to individual frontend service in normal mode")
       .get(cisContractorFrontendUrl + "/individual-address-return")
       .queryParam("id", "#{id}")
       .check(status.is(303))
