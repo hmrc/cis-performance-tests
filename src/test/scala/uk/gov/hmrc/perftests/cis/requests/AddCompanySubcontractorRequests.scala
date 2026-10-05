@@ -49,41 +49,16 @@ object AddCompanySubcontractorRequests extends ServicesConfiguration with CisPer
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
-  val getCompanyAddressPage: HttpRequestBuilder =
-    http("[get ] What is the address for this company page")
-      .get(cisContractorFrontendUrl + "/add/company/address")
-      .check(status.is(200))
-      .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
-
-  def postCompanyAddressPage(
-    addressLine1: String,
-    addressLine2: String,
-    town: String,
-    county: String,
-    postalCode: String,
-    country: String
-  ): HttpRequestBuilder =
-    http("[post] What is the address for this company page")
-      .post(cisContractorFrontendUrl + "/add/company/address")
-      .formParam("addressLine1", addressLine1)
-      .formParam("addressLine2", addressLine2)
-      .formParam("addressLine3", town)
-      .formParam("addressLine4", county)
-      .formParam("postalCode", postalCode)
-      .formParam("country", country)
-      .formParam("csrfToken", f"#{csrfToken}")
-      .check(status.is(303))
-
-  val getCompanyContactMethodPage: HttpRequestBuilder =
+  val getCompanyContactDetailsPage: HttpRequestBuilder =
     http("[get ] What is the contact method for this company page")
-      .get(cisContractorFrontendUrl + "/add/company/choose-contact-details")
+      .get(cisContractorFrontendUrl + "/add/company/add-contact-details")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
-  def postCompanyContactMethodPage(contactOption: String): HttpRequestBuilder =
+  def postCompanyContactDetailsPage(option: String): HttpRequestBuilder =
     http("[post] What is the contact method for this company page")
-      .post(cisContractorFrontendUrl + "/add/company/choose-contact-details")
-      .formParam("value", contactOption)
+      .post(cisContractorFrontendUrl + "/add/company/add-contact-details")
+      .formParam("value", option)
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
@@ -242,41 +217,122 @@ object AddCompanySubcontractorRequests extends ServicesConfiguration with CisPer
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
-  val getChangeCompanyAddressPage: HttpRequestBuilder =
-    http("[get ] What is the address for this company page")
-      .get(cisContractorFrontendUrl + "/add/company/change-address")
+  val setCompanyAddressLookupCheckMode: HttpRequestBuilder =
+    http("[get ] Set company address lookup check mode")
+      .get(cisContractorFrontendUrl + "/add/company/address")
+      .queryParam("changeRoute", "CheckMode")
+      .disableFollowRedirect
+      .check(status.is(303))
+      .check(headerRegex("Location", "(/lookup-address/[^/]+)/").saveAs("addressLookupBase"))
+
+  val getAddressLookupBegin: HttpRequestBuilder =
+    http("[get ] Address lookup begin")
+      .get(addressLookupHost + "/#{addressLookupBase}/begin")
+      .disableFollowRedirect
+      .check(status.is(303))
+
+  val getAddressLookupCountryPicker: HttpRequestBuilder =
+    http("[get ] Which country or territory appears in the address for this subcontractor")
+      .get(addressLookupHost + "/#{addressLookupBase}/country-picker")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
-  def postChangeCompanyAddressPage(
+  def postAddressLookupCountryPicker(country: String): HttpRequestBuilder =
+    http("[post] Which country or territory appears in the address for this subcontractor")
+      .post(addressLookupHost + "/#{addressLookupBase}/country-picker")
+      .formParam("countryCode", country)
+      .formParam("csrfToken", f"#{csrfToken}")
+      .check(status.is(303))
+
+  val getFindAddressWithPostcode: HttpRequestBuilder =
+    http("[get ] Find the address for this subcontractor")
+      .get(addressLookupHost + "/#{addressLookupBase}/lookup")
+      .check(status.is(200))
+      .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
+
+  def postFindAddressWithPostcode(postcode: String, propertyNumber: String): HttpRequestBuilder =
+    http("[post] Find the address for this subcontractor")
+      .post(addressLookupHost + "/#{addressLookupBase}/lookup")
+      .formParam("postcode", postcode)
+      .formParam("filter", propertyNumber)
+      .formParam("csrfToken", f"#{csrfToken}")
+      .check(status.is(303))
+
+  val getCannotFindAddress: HttpRequestBuilder =
+    http("[get ] We cannot find any addresses for postcode")
+      .get(addressLookupHost + "/#{addressLookupBase}/select")
+      .queryParam("postcode", "SW1 1SW")
+      .queryParam("filter", "5")
+      .check(status.is(200))
+
+  val getManuallyEnterAddressPage: HttpRequestBuilder =
+    http("[get ] What is the address for this subcontractor page")
+      .get(addressLookupHost + "/#{addressLookupBase}/edit")
+      .check(status.is(200))
+      .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
+
+  def postManuallyEnterAddressPage(
     addressLine1: String,
     addressLine2: String,
+    addressLine3: String,
     town: String,
-    county: String,
     postalCode: String,
     country: String
   ): HttpRequestBuilder =
     http("[post] What is the address for this company page")
-      .post(cisContractorFrontendUrl + "/add/company/change-address")
-      .formParam("addressLine1", addressLine1)
-      .formParam("addressLine2", addressLine2)
-      .formParam("addressLine3", town)
-      .formParam("addressLine4", county)
-      .formParam("postalCode", postalCode)
-      .formParam("country", country)
+      .post(addressLookupHost + "/#{addressLookupBase}/edit")
+      .formParam("line1", addressLine1)
+      .formParam("line2", addressLine2)
+      .formParam("line3", addressLine3)
+      .formParam("town", town)
+      .formParam("postcode", postalCode)
+      .formParam("countryCode", country)
+      .formParam("csrfToken", f"#{csrfToken}")
+      .check(status.is(303))
+
+  val getReviewAddress: HttpRequestBuilder =
+    http("[get ] Review the address for this subcontractor")
+      .get(addressLookupHost + "/#{addressLookupBase}/confirm")
+      .check(status.is(200))
+      .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
+
+  val postReviewAddress: HttpRequestBuilder =
+    http("[post] Review the address for this subcontractor")
+      .post(addressLookupHost + "/#{addressLookupBase}/confirm")
+      .disableFollowRedirect
+      .formParam("csrfToken", f"#{csrfToken}")
+      .check(status.is(303))
+      .check(headerRegex("Location", "[?&]id=([^&]+)").saveAs("id"))
+
+  val getReturnToCompanyCheckModeFrontendService: HttpRequestBuilder =
+    http("[get ] Redirect to company frontend service in check mode")
+      .get(cisContractorFrontendUrl + "/add/company/address-return/change")
+      .queryParam("id", "#{id}")
+      .check(status.is(303))
+
+  val getChangeAddCompanyContactDetailsPage: HttpRequestBuilder =
+    http("[get ] Do you want to add contact details for this company page")
+      .get(cisContractorFrontendUrl + "/add/company/change-add-contact-details")
+      .check(status.is(200))
+      .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
+
+  def postChangeAddCompanyContactDetailsPage(option: String): HttpRequestBuilder =
+    http("[post] Do you want to add contact details for this company page")
+      .post(cisContractorFrontendUrl + "/add/company/change-add-contact-details")
+      .formParam("value", option)
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
   val getChangeCompanyContactMethodPage: HttpRequestBuilder =
-    http("[get ] What is the contact method for this company page")
-      .get(cisContractorFrontendUrl + "/add/company/change-choose-contact-details")
+    http("[get ] Which contact method do you want to add for this company page")
+      .get(cisContractorFrontendUrl + "/add/company/change-select-contact-details")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
   def postChangeCompanyContactMethodPage(contactOption: String): HttpRequestBuilder =
-    http("[post] What is the contact method for this company page")
-      .post(cisContractorFrontendUrl + "/add/company/change-choose-contact-details")
-      .formParam("value", contactOption)
+    http("[post] Which contact method do you want to add for this company page")
+      .post(cisContractorFrontendUrl + "/add/company/change-select-contact-details")
+      .formParam("value[2]", contactOption)
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
