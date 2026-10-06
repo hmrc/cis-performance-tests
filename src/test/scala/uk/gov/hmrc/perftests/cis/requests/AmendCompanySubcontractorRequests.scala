@@ -23,7 +23,6 @@ import uk.gov.hmrc.performance.conf.ServicesConfiguration
 
 object AmendCompanySubcontractorRequests extends ServicesConfiguration with CisPerformanceTestBase {
 
-
   def getCompanySubcontractorInformationPage(subbieRef: String): HttpRequestBuilder =
     http("[get ] Company subcontractor Information")
       .get(cisContractorFrontendUrl + "/amend/company/subcontractor-information")
