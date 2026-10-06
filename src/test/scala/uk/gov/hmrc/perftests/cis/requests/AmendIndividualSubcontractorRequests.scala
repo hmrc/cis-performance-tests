@@ -238,4 +238,15 @@ object AmendIndividualSubcontractorRequests extends ServicesConfiguration with C
       .formParam("value", worksRef)
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
+
+  val postIndividualSubcontractorInformationPage: HttpRequestBuilder =
+    http("[post] Individual subcontractor information")
+      .post(cisContractorFrontendUrl + "/amend/subcontractor-information")
+      .formParam("csrfToken", f"#{csrfToken}")
+      .check(status.is(303))
+
+  val getIndividualSubcontractorUpdated: HttpRequestBuilder =
+    http("[get ] Individual subcontractor details updated")
+      .get(cisContractorFrontendUrl + "/amend/individual/subcontractor-details-updated")
+      .check(status.is(200))
 }

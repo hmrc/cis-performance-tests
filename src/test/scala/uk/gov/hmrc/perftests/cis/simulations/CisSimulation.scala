@@ -28,6 +28,7 @@ import uk.gov.hmrc.perftests.cis.requests.AddIndividualSubcontractorRequests._
 import uk.gov.hmrc.perftests.cis.requests.AddPartnershipSubcontractorRequests._
 import uk.gov.hmrc.perftests.cis.requests.AddCompanySubcontractorRequests._
 import uk.gov.hmrc.perftests.cis.requests.AddTrustSubcontractorRequests._
+import uk.gov.hmrc.perftests.cis.requests.AmendCompanySubcontractorRequests._
 import uk.gov.hmrc.perftests.cis.requests.AmendIndividualSubcontractorRequests._
 import uk.gov.hmrc.perftests.cis.requests.DeleteSubcontractorRequests._
 import uk.gov.hmrc.perftests.cis.requests.ManageClientDetailsRequests._
@@ -696,7 +697,60 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     getSubcontractorInformationPageNoSubbieRef,
     getEnterWorksRefNumber,
     postEnterWorksRefNumber("INDIVIDUAL-REF-123"),
-    getSubcontractorInformationPageNoSubbieRef
+    postIndividualSubcontractorInformationPage,
+    getIndividualSubcontractorUpdated
+  )
+
+  setup("amend-company-subcontractor", "AmCS").withRequests(
+    getClickSubcontractorsLink,
+    getManageYourCISReturnSubcontractorPage,
+    getRetrieveSubcontractorList,
+    getYourSubcontractorListPage,
+    getSubcontractorInformationRedirect("4"),
+    getCompanySubcontractorInformationPage("4"),
+    postCompanySubcontractorInformationPage,
+    getYourSubcontractorListPage,
+    getSubcontractorInformationRedirect("4"),
+    getCompanySubcontractorInformationPage("4"),
+    getCancelChanges,
+    getYourSubcontractorListPage,
+    getSubcontractorInformationRedirect("4"),
+    getCompanySubcontractorInformationPage("4"),
+    getAmendCompanyName,
+    postAmendCompanyName("New organisation Company Name"),
+    getCompanySubcontractorInformationPageNoSubbieRef,
+    getCompanyAddressChangeRedirect,
+    getCompanyAddressLookupAmendMode,
+    getAddressLookupBegin,
+    getAddressLookupCountryPicker,
+    postAddressLookupCountryPicker("GB-United_Kingdom"),
+    getFindAddressWithPostcode,
+    postFindAddressWithPostcode("SW1 1SW", "123"),
+    getCannotFindAddress,
+    getManuallyEnterAddressPage,
+    postManuallyEnterAddressPage(
+      "125 Hill Street",
+      "Flat 96",
+      "Floor 7",
+      "Test City",
+      "SW1 1SW",
+      "GB"
+    ),
+    getReviewAddress,
+    postReviewAddress,
+    getReturnToCompanyAmendModeFrontendService,
+    getCompanySubcontractorInformationPageNoSubbieRef,
+    getAmendCompanyEmailAddress,
+    postAmendCompanyEmailAddress("cis_company_email@domain.com"),
+    getCompanySubcontractorInformationPageNoSubbieRef,
+    getEnterCompanyUTR,
+    postEnterCompanyUTR("1111122222"),
+    getEnterCompanyRegNumber,
+    postEnterCompanyRegNumber("PE000000"),
+    getEnterCompanyWorksRefNumber,
+    postEnterCompanyWorksRefNumber("COMP-789"),
+    postCompanySubcontractorInformationPage,
+    getCompanySubcontractorUpdated
   )
 
   setup("delete-subcontractor", "DSP").withRequests(
