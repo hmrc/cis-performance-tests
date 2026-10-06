@@ -22,10 +22,10 @@ import io.gatling.http.request.builder.HttpRequestBuilder
 import uk.gov.hmrc.performance.conf.ServicesConfiguration
 
 object ManageClientDetailsRequests extends ServicesConfiguration with CisPerformanceTestBase {
-   val getClientDetails: HttpRequestBuilder =
-     http("[get ] Client details")
-       .get(cisManageFrontendUrl + "/client-details/manage-client-details")
-       .check(status.is(200))
+  val getClientDetails: HttpRequestBuilder =
+    http("[get ] Client details")
+      .get(cisManageFrontendUrl + "/client-details/manage-client-details")
+      .check(status.is(200))
 
   val getWhatIsYourClientReference: HttpRequestBuilder =
     http("[get ] What is your client reference?")

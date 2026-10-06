@@ -52,6 +52,4 @@ object ViewReturnsHistoryRequests extends ServicesConfiguration with CisPerforma
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
-
-
 }

@@ -75,12 +75,14 @@ object AmendIndividualSubcontractorRequests extends ServicesConfiguration with C
   def postAmendSubcontractorName(fName: String, mName: String, lName: String): HttpRequestBuilder =
     http("[post] What is the subcontractor’s name?")
       .post(cisContractorFrontendUrl + "/amend/name")
-      .formParamMap(Map(
-        "firstName"  -> fName,
-        "middleName" -> mName,
-        "lastName"   -> lName,
-        "csrfToken"  -> f"#{csrfToken}"
-      ))
+      .formParamMap(
+        Map(
+          "firstName"  -> fName,
+          "middleName" -> mName,
+          "lastName"   -> lName,
+          "csrfToken"  -> f"#{csrfToken}"
+        )
+      )
       .check(status.is(303))
 
   val getAmendTradingName: HttpRequestBuilder =
@@ -102,7 +104,7 @@ object AmendIndividualSubcontractorRequests extends ServicesConfiguration with C
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
-  def  postRemoveAddress(option: String): HttpRequestBuilder =
+  def postRemoveAddress(option: String): HttpRequestBuilder =
     http("[post] Are you sure you want to remove the address for subcontractor")
       .post(cisContractorFrontendUrl + "/amend/remove/information/address")
       .formParam("value", option)
@@ -135,11 +137,11 @@ object AmendIndividualSubcontractorRequests extends ServicesConfiguration with C
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
   def postRemoveContactDetails(option: String): HttpRequestBuilder =
-  http("[post] Are you sure you want to remove the contact details for subcontractor")
-    .post(cisContractorFrontendUrl + "/amend/remove/information/contact-details")
-    .formParam("value", option)
-    .formParam("csrfToken", f"#{csrfToken}")
-    .check(status.is(303))
+    http("[post] Are you sure you want to remove the contact details for subcontractor")
+      .post(cisContractorFrontendUrl + "/amend/remove/information/contact-details")
+      .formParam("value", option)
+      .formParam("csrfToken", f"#{csrfToken}")
+      .check(status.is(303))
 
   val getAddContactDetails: HttpRequestBuilder =
     http("[get ] Are you sure you want to add contact details for subcontractor")
@@ -162,12 +164,14 @@ object AmendIndividualSubcontractorRequests extends ServicesConfiguration with C
   val postSelectContactDetailsToAdd: HttpRequestBuilder =
     http("[post] Which contact details do you want to add for subcontractor")
       .post(cisContractorFrontendUrl + "/amend/select-contact-details")
-      .formParamMap(Map(
-        "value[0]"  -> "email",
-        "value[1]"  -> "phone",
-        "value[2]"  -> "mobile",
-        "csrfToken" -> f"#{csrfToken}"
-      ))
+      .formParamMap(
+        Map(
+          "value[0]"  -> "email",
+          "value[1]"  -> "phone",
+          "value[2]"  -> "mobile",
+          "csrfToken" -> f"#{csrfToken}"
+        )
+      )
       .check(status.is(303))
 
   val getEnterEmailAddress: HttpRequestBuilder =
