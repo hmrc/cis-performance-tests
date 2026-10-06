@@ -28,6 +28,11 @@ import uk.gov.hmrc.perftests.cis.requests.AddIndividualSubcontractorRequests._
 import uk.gov.hmrc.perftests.cis.requests.AddPartnershipSubcontractorRequests._
 import uk.gov.hmrc.perftests.cis.requests.AddCompanySubcontractorRequests._
 import uk.gov.hmrc.perftests.cis.requests.AddTrustSubcontractorRequests._
+import uk.gov.hmrc.perftests.cis.requests.AmendIndividualSubcontractorRequests._
+import uk.gov.hmrc.perftests.cis.requests.DeleteSubcontractorRequests._
+import uk.gov.hmrc.perftests.cis.requests.ManageClientDetailsRequests._
+import uk.gov.hmrc.perftests.cis.requests.ManageContractorDetailsRequests._
+import uk.gov.hmrc.perftests.cis.requests.ViewReturnsHistoryRequests._
 
 class CisSimulation extends Simulation with PerformanceTestRunner {
 
@@ -56,6 +61,40 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     getClientCisReturnDashboardPage,
     getRedirectManageCISReturnPage
 //    getManageYourCISReturnPage
+  )
+
+  setup("manage-client-details", "MClD").withRequests(
+    getClientDetails,
+    getWhatIsYourClientReference,
+    postWhatIsYourClientReference("TEST-REF"),
+    getClientReferenceUpdated,
+    getClientFilteredViewFileMonthlyCISReturnPage,
+    getRemoveClientOptionPage,
+    postRemoveClientOptionPage("true"),
+    getClientRemoved
+  )
+
+  setup("manage-contractor-details", "MCoD").withRequests(
+    getContractorDetailsRedirect,
+    getContractorDetailsManageRedirect,
+    getContractorDetailsInfoPage,
+    getChangeContractorUTR,
+    postChangeContractorUTR("1234567895"),
+    getContractorDetailsInfoPage,
+    getChangeContractorSchemeName,
+    postChangeContractorSchemeName("Test Scheme"),
+    getContractorDetailsInfoPage,
+    getRemoveContractorSchemeNameOption,
+    postRemoveContractorSchemeNameOption("true"),
+    getContractorDetailsInfoPage,
+    getChangeContractorEmailAddress,
+    postChangeContractorEmailAddress("test_email@domain.com"),
+    getContractorDetailsInfoPage,
+    getRemoveContractorEmailOption,
+    postRemoveContractorEmailOption("true"),
+    getContractorDetailsInfoPage,
+    postContractorDetailsInfoPage,
+    getContractorDetailsUpdated
   )
 
   setup("standard-monthly-return", "SMRP").withRequests(
@@ -170,6 +209,18 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     postSubmissionSendPage,
     postPollingPage,
     getSuccessfulSubmissionPage
+  )
+
+  setup("view-returns-history", "VRH").withRequests(
+    getClickManageCISReturnLink,
+    getManageYourCISReturnPage,
+    getIncompleteReturnPage,
+    getManageYourCISReturnPage,
+    getTaxYearToViewPage,
+    postTaxYearToViewPage("2024 to 2025"),
+    getMonthlyReturnHistorySingleYear("2024"),
+    getTaxYearToViewPage,
+    postTaxYearToViewPage("all")
   )
 
 //  This scenario covers scenarios 1, 2, 6, 8 & 9 in the cis-ui-tests as the same pages are loaded ending at the Manage your CIS return subcontractor page.
@@ -577,6 +628,90 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     getTrustCheckYourAnswersPage,
     postTrustCheckYourAnswersPage,
     getTrustSubcontractorAddedPage
+  )
+
+  setup("amend-individual-subcontractor", "AmIS").withRequests(
+    getClickSubcontractorsLink,
+    getManageYourCISReturnSubcontractorPage,
+    getRetrieveSubcontractorList,
+    getYourSubcontractorListPage,
+    getSubcontractorInformationRedirect("2"),
+    getSubcontractorInformationPage("2"),
+    postSubcontractorInformationPage("2"),
+    getYourSubcontractorListPage,
+    getSubcontractorInformationRedirect("2"),
+    getSubcontractorInformationPage("2"),
+    getCancelChanges,
+    getYourSubcontractorListPage,
+    getSubcontractorInformationRedirect("2"),
+    getSubcontractorInformationPage("2"),
+    getAmendNameOptions,
+    postAmendNameOptions(0, "subcontractorName"),
+    getAmendSubcontractorName,
+    postAmendSubcontractorName("John", "Middle", "Doe"),
+    getSubcontractorInformationPageNoSubbieRef,
+    postAmendNameOptions(1, "tradingName"),
+    postAmendTradingName("Individual Trading Ltd"),
+    getSubcontractorInformationPageNoSubbieRef,
+    getRemoveAddress,
+    postRemoveAddress("false"),
+    getSubcontractorInformationPageNoSubbieRef,
+    getAddressChangeRedirect,
+    getIndividualAddressLookupAmendMode,
+    getAddressLookupBegin,
+    getAddressLookupCountryPicker,
+    postAddressLookupCountryPicker("GB-United_Kingdom"),
+    getFindAddressWithPostcode,
+    postFindAddressWithPostcode("SW1 1SW", "55"),
+    getCannotFindAddress,
+    getManuallyEnterAddressPage,
+    postManuallyEnterAddressPage(
+      "125 Hill Street",
+      "Flat 96",
+      "Floor 7",
+      "Test City",
+      "SW1 1SW",
+      "GB"
+    ),
+    getReviewAddress,
+    postReviewAddress,
+    getReturnToIndividualAmendModeFrontendService,
+    getSubcontractorInformationPageNoSubbieRef,
+    getRemoveContactDetails,
+    postRemoveContactDetails("true"),
+    getSubcontractorInformationPageNoSubbieRef,
+    getAddContactDetails,
+    postAddContactDetails("true"),
+    getSelectContactDetailsToAdd,
+    postSelectContactDetailsToAdd,
+    getEnterEmailAddress,
+    postEnterEmailAddress("individual_email123@gov.uk"),
+    getEnterPhoneNumber,
+    postEnterPhoneNumber("1234567890"),
+    getEnterMobileNumber,
+    postEnterMobileNumber("09876543214"),
+    getSubcontractorInformationPageNoSubbieRef,
+    getEnterNINumber,
+    postEnterNINumber("PJ123456C"),
+    getSubcontractorInformationPageNoSubbieRef,
+    getEnterWorksRefNumber,
+    postEnterWorksRefNumber("INDIVIDUAL-REF-123"),
+    getSubcontractorInformationPageNoSubbieRef
+  )
+
+  setup("delete-subcontractor", "DSP").withRequests(
+    getClickSubcontractorsLink,
+    getManageYourCISReturnSubcontractorPage,
+    getRetrieveSubcontractorList,
+    getYourSubcontractorListPage,
+    getYourSubcontractorListPage2,
+    getDeleteStatus("7"),
+    getCannotDeletePage,
+    getYourSubcontractorListPage,
+    getDeleteStatus("2"),
+    getDeleteSubcontractorOption,
+    postDeleteSubcontractorOption("true"),
+    getSubcontractorDeleted
   )
 
   setup("verify-subcontractor", "VSP").withRequests(
