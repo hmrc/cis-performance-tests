@@ -28,6 +28,14 @@ import uk.gov.hmrc.perftests.cis.requests.AddIndividualSubcontractorRequests._
 import uk.gov.hmrc.perftests.cis.requests.AddPartnershipSubcontractorRequests._
 import uk.gov.hmrc.perftests.cis.requests.AddCompanySubcontractorRequests._
 import uk.gov.hmrc.perftests.cis.requests.AddTrustSubcontractorRequests._
+import uk.gov.hmrc.perftests.cis.requests.AmendCompanySubcontractorRequests._
+import uk.gov.hmrc.perftests.cis.requests.AmendIndividualSubcontractorRequests._
+import uk.gov.hmrc.perftests.cis.requests.AmendPartnershipSubcontractor._
+import uk.gov.hmrc.perftests.cis.requests.AmendTrustSubcontractorRequests._
+import uk.gov.hmrc.perftests.cis.requests.DeleteSubcontractorRequests._
+import uk.gov.hmrc.perftests.cis.requests.ManageClientDetailsRequests._
+import uk.gov.hmrc.perftests.cis.requests.ManageContractorDetailsRequests._
+import uk.gov.hmrc.perftests.cis.requests.ViewReturnsHistoryRequests._
 
 class CisSimulation extends Simulation with PerformanceTestRunner {
 
@@ -56,6 +64,40 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     getClientCisReturnDashboardPage,
     getRedirectManageCISReturnPage
 //    getManageYourCISReturnPage
+  )
+
+  setup("manage-client-details", "MClD").withRequests(
+    getClientDetails,
+    getWhatIsYourClientReference,
+    postWhatIsYourClientReference("TEST-REF"),
+    getClientReferenceUpdated,
+    getClientFilteredViewFileMonthlyCISReturnPage,
+    getRemoveClientOptionPage,
+    postRemoveClientOptionPage("true"),
+    getClientRemoved
+  )
+
+  setup("manage-contractor-details", "MCoD").withRequests(
+    getContractorDetailsRedirect,
+    getContractorDetailsManageRedirect,
+    getContractorDetailsInfoPage,
+    getChangeContractorUTR,
+    postChangeContractorUTR("1234567895"),
+    getContractorDetailsInfoPage,
+    getChangeContractorSchemeName,
+    postChangeContractorSchemeName("Test Scheme"),
+    getContractorDetailsInfoPage,
+    getRemoveContractorSchemeNameOption,
+    postRemoveContractorSchemeNameOption("true"),
+    getContractorDetailsInfoPage,
+    getChangeContractorEmailAddress,
+    postChangeContractorEmailAddress("test_email@domain.com"),
+    getContractorDetailsInfoPage,
+    getRemoveContractorEmailOption,
+    postRemoveContractorEmailOption("true"),
+    getContractorDetailsInfoPage,
+    postContractorDetailsInfoPage,
+    getContractorDetailsUpdated
   )
 
   setup("standard-monthly-return", "SMRP").withRequests(
@@ -172,6 +214,18 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     getSuccessfulSubmissionPage
   )
 
+  setup("view-returns-history", "VRH").withRequests(
+    getClickManageCISReturnLink,
+    getManageYourCISReturnPage,
+    getIncompleteReturnPage,
+    getManageYourCISReturnPage,
+    getTaxYearToViewPage,
+    postTaxYearToViewPage("2024 to 2025"),
+    getMonthlyReturnHistorySingleYear("2024"),
+    getTaxYearToViewPage,
+    postTaxYearToViewPage("all")
+  )
+
 //  This scenario covers scenarios 1, 2, 6, 8 & 9 in the cis-ui-tests as the same pages are loaded ending at the Manage your CIS return subcontractor page.
   // Mechanics and database interaction are irrelevant when dealing with a stub.
   setup("successful-prepopulation", "SPR ").withRequests(
@@ -209,10 +263,10 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     getYourSubcontractors("EZ10450"),
     getStartPrepopulation("EZ10450"),
     getUnsuccessfulAutomaticSubcontractorUpdatePage,
-    postUnsuccessfulAutomaticSubcontractorUpdatePage
-    // getAddContractorDetailsPage
-    // TODO commented out above as no information on the URL change etc available
-    //  continue journey to add subcontractor which is a terminal page at the moment
+    postUnsuccessfulAutomaticSubcontractorUpdatePage,
+    getManageContractorDetailsRedirect,
+    getAddContractorDetailsPage,
+    postAddContractorDetailsPage
   )
 
   setup("add-individual-subcontractor", "AISP").withRequests(
@@ -577,6 +631,288 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     getTrustCheckYourAnswersPage,
     postTrustCheckYourAnswersPage,
     getTrustSubcontractorAddedPage
+  )
+
+  setup("amend-individual-subcontractor", "AmIS").withRequests(
+    getClickSubcontractorsLink,
+    getManageYourCISReturnSubcontractorPage,
+    getRetrieveSubcontractorList,
+    getYourSubcontractorListPage,
+    getSubcontractorInformationRedirect("2"),
+    getSubcontractorInformationPage("2"),
+    postSubcontractorInformationPage("2"),
+    getYourSubcontractorListPage,
+    getSubcontractorInformationRedirect("2"),
+    getSubcontractorInformationPage("2"),
+    getCancelChanges,
+    getYourSubcontractorListPage,
+    getSubcontractorInformationRedirect("2"),
+    getSubcontractorInformationPage("2"),
+    getAmendNameOptions,
+    postAmendNameOptions(0, "subcontractorName"),
+    getAmendSubcontractorName,
+    postAmendSubcontractorName("John", "Middle", "Doe"),
+    getSubcontractorInformationPageNoSubbieRef,
+    postAmendNameOptions(1, "tradingName"),
+    postAmendTradingName("Individual Trading Ltd"),
+    getSubcontractorInformationPageNoSubbieRef,
+    getRemoveAddress,
+    postRemoveAddress("false"),
+    getSubcontractorInformationPageNoSubbieRef,
+    getAddressChangeRedirect,
+    getIndividualAddressLookupAmendMode,
+    getAddressLookupBegin,
+    getAddressLookupCountryPicker,
+    postAddressLookupCountryPicker("GB-United_Kingdom"),
+    getFindAddressWithPostcode,
+    postFindAddressWithPostcode("SW1 1SW", "55"),
+    getCannotFindAddress,
+    getManuallyEnterAddressPage,
+    postManuallyEnterAddressPage(
+      "125 Hill Street",
+      "Flat 96",
+      "Floor 7",
+      "Test City",
+      "SW1 1SW",
+      "GB"
+    ),
+    getReviewAddress,
+    postReviewAddress,
+    getReturnToIndividualAmendModeFrontendService,
+    getSubcontractorInformationPageNoSubbieRef,
+    getRemoveContactDetails,
+    postRemoveContactDetails("true"),
+    getSubcontractorInformationPageNoSubbieRef,
+    getAddContactDetails,
+    postAddContactDetails("true"),
+    getSelectContactDetailsToAdd,
+    postSelectContactDetailsToAdd,
+    getEnterEmailAddress,
+    postEnterEmailAddress("individual_email123@gov.uk"),
+    getEnterPhoneNumber,
+    postEnterPhoneNumber("1234567890"),
+    getEnterMobileNumber,
+    postEnterMobileNumber("09876543214"),
+    getSubcontractorInformationPageNoSubbieRef,
+    getEnterNINumber,
+    postEnterNINumber("PJ123456C"),
+    getSubcontractorInformationPageNoSubbieRef,
+    getEnterWorksRefNumber,
+    postEnterWorksRefNumber("INDIVIDUAL-REF-123"),
+    postIndividualSubcontractorInformationPage,
+    getIndividualSubcontractorUpdated
+  )
+
+  setup("amend-company-subcontractor", "AmCS").withRequests(
+    getClickSubcontractorsLink,
+    getManageYourCISReturnSubcontractorPage,
+    getRetrieveSubcontractorList,
+    getYourSubcontractorListPage,
+    getSubcontractorInformationRedirect("4"),
+    getCompanySubcontractorInformationPage("4"),
+    postCompanySubcontractorInformationPage,
+    getYourSubcontractorListPage,
+    getSubcontractorInformationRedirect("4"),
+    getCompanySubcontractorInformationPage("4"),
+    getCancelChanges,
+    getYourSubcontractorListPage,
+    getSubcontractorInformationRedirect("4"),
+    getCompanySubcontractorInformationPage("4"),
+    getAmendCompanyName,
+    postAmendCompanyName("New organisation Company Name"),
+    getCompanySubcontractorInformationPageNoSubbieRef,
+    getCompanyAddressChangeRedirect,
+    getCompanyAddressLookupAmendMode,
+    getAddressLookupBegin,
+    getAddressLookupCountryPicker,
+    postAddressLookupCountryPicker("GB-United_Kingdom"),
+    getFindAddressWithPostcode,
+    postFindAddressWithPostcode("SW1 1SW", "123"),
+    getCannotFindAddress,
+    getManuallyEnterAddressPage,
+    postManuallyEnterAddressPage(
+      "125 Hill Street",
+      "Flat 96",
+      "Floor 7",
+      "Test City",
+      "SW1 1SW",
+      "GB"
+    ),
+    getReviewAddress,
+    postReviewAddress,
+    getReturnToCompanyAmendModeFrontendService,
+    getCompanySubcontractorInformationPageNoSubbieRef,
+    getAmendCompanyEmailAddress,
+    postAmendCompanyEmailAddress("cis_company_email@domain.com"),
+    getCompanySubcontractorInformationPageNoSubbieRef,
+    getEnterCompanyUTR,
+    postEnterCompanyUTR("1111122222"),
+    getEnterCompanyRegNumber,
+    postEnterCompanyRegNumber("PE000000"),
+    getEnterCompanyWorksRefNumber,
+    postEnterCompanyWorksRefNumber("COMP-789"),
+    postCompanySubcontractorInformationPage,
+    getCompanySubcontractorUpdated
+  )
+
+  setup("amend-partnership-subcontractor", "AmPS").withRequests(
+    getClickSubcontractorsLink,
+    getManageYourCISReturnSubcontractorPage,
+    getRetrieveSubcontractorList,
+    getYourSubcontractorListPage,
+    getYourSubcontractorListPage2,
+    getSubcontractorInformationRedirect("6"),
+    getPartnershipSubcontractorInformationPage("6"),
+    getRemovePartnershipAddress,
+    postRemovePartnershipAddress("true"),
+    getPartnershipSubcontractorInformationPageNoSubbieRef,
+    getRemovePartnershipContactDetails,
+    postRemovePartnershipContactDetails("true"),
+    getPartnershipSubcontractorInformationPageNoSubbieRef,
+    getRemovePartnershipUTR,
+    postRemovePartnershipUTR("true"),
+    getPartnershipSubcontractorInformationPageNoSubbieRef,
+    getRemoveNominatedPartnerUTR,
+    postRemoveNominatedPartnerUTR("true"),
+    getPartnershipSubcontractorInformationPageNoSubbieRef,
+    getRemoveNominatedPartnerNino,
+    postRemoveNominatedPartnerNINO("true"),
+    getPartnershipSubcontractorInformationPageNoSubbieRef,
+    getRemoveNominatedPartnerCRN,
+    postRemoveNominatedPartnerCRN("true"),
+    getPartnershipSubcontractorInformationPageNoSubbieRef,
+    getRemovePartnershipWRN,
+    postRemovePartnershipWRN("true"),
+    getPartnershipSubcontractorInformationPageNoSubbieRef,
+    getAmendPartnershipName,
+    postAmendPartnershipName("New Org partnership Name"),
+    getPartnershipSubcontractorInformationPageNoSubbieRef,
+    getAddPartnershipAddress,
+    postAddPartnershipAddress("true"),
+    getPartnershipAddressChangeRedirect,
+    getPartnershipAddressLookupAmendMode,
+    getAddressLookupBegin,
+    getAddressLookupCountryPicker,
+    postAddressLookupCountryPicker("GB-United_Kingdom"),
+    getFindAddressWithPostcode,
+    postFindAddressWithPostcode("SW1 1SW", "123"),
+    getCannotFindAddress,
+    getManuallyEnterAddressPage,
+    postManuallyEnterAddressPage(
+      "125 Hill Street",
+      "Flat 96",
+      "Floor 7",
+      "Test City",
+      "SW1 1SW",
+      "GB"
+    ),
+    getReviewAddress,
+    postReviewAddress,
+    getReturnToPartnershipAmendModeFrontendService,
+    getPartnershipSubcontractorInformationPageNoSubbieRef,
+    getAddPartnershipContactDetails,
+    postAddPartnershipContactDetails("true"),
+    getSelectContactDetailsToAddForPartnership,
+    postSelectContactDetailsToAddForPartnership,
+    getEnterPartnershipEmailAddress,
+    postEnterPartnershipEmailAddress("testemail@test.com"),
+    getEnterPartnershipPhoneNumber,
+    postEnterPartnershipPhoneNumber("01910000000"),
+    getEnterPartnershipMobileNumber,
+    postEnterPartnershipMobileNumber("0733333333333"),
+    getPartnershipSubcontractorInformationPageNoSubbieRef,
+    getAddPartnershipUTR,
+    postAddPartnershipUTR("true"),
+    getEnterPartnershipUTR,
+    postEnterPartnershipUTR("1111122222"),
+    getPartnershipSubcontractorInformationPageNoSubbieRef,
+    getAmendNominatedPartnerName,
+    postAmendNominatedPartnerName("CIS Nominated Test Partner"),
+    getPartnershipSubcontractorInformationPageNoSubbieRef,
+    getAddNominatedPartnerUTR,
+    postAddNominatedPartnerUTR("true"),
+    getEnterNominatedPartnershipUTR,
+    postEnterNominatedPartnershipUTR("5555555555"),
+    getPartnershipSubcontractorInformationPageNoSubbieRef,
+    getAddNominatedPartnerNino,
+    postAddNominatedPartnerNINO("true"),
+    getEnterNominatedPartnerNINO,
+    postEnterNominatedPartnerNINO("ST456345D"),
+    getPartnershipSubcontractorInformationPageNoSubbieRef,
+    getAddNominatedPartnerCRN,
+    postAddNominatedPartnerCRN("true"),
+    getEnterNominatedPartnerCRN,
+    postEnterNominatedPartnerCRN("TP712345"),
+    getPartnershipSubcontractorInformationPageNoSubbieRef,
+    getAddPartnershipWRN,
+    postAddPartnershipWRN("true"),
+    getEnterPartnershipWorksRefNumber,
+    postEnterPartnershipWorksRefNumber("PART-REF-789"),
+    postPartnershipSubcontractorInformationPage,
+    getPartnershipSubcontractorUpdated
+  )
+
+  setup("amend-trust-subcontractor", "AmTS").withRequests(
+    getClickSubcontractorsLink,
+    getManageYourCISReturnSubcontractorPage,
+    getRetrieveSubcontractorList,
+    getYourSubcontractorListPage,
+    getYourSubcontractorListPage2,
+    getSubcontractorInformationRedirect("8"),
+    getTrustSubcontractorInformationPage("8"),
+    getAmendTrustName,
+    postAmendTrustName("Unverified CIS Trust"),
+    getTrustSubcontractorInformationPageNoSubbieRef,
+    getTrustAddressChangeRedirect,
+    getTrustAddressLookupAmendMode,
+    getAddressLookupBegin,
+    getAddressLookupCountryPicker,
+    postAddressLookupCountryPicker("GB-United_Kingdom"),
+    getFindAddressWithPostcode,
+    postFindAddressWithPostcode("SW1 1SW", "123"),
+    getCannotFindAddress,
+    getManuallyEnterAddressPage,
+    postManuallyEnterAddressPage(
+      "125 Hill Street",
+      "Flat 96",
+      "Floor 7",
+      "Test City",
+      "SW1 1SW",
+      "GB"
+    ),
+    getReviewAddress,
+    postReviewAddress,
+    getReturnToTrustAmendModeFrontendService,
+    getTrustSubcontractorInformationPageNoSubbieRef,
+    getSelectContactDetailsToAddForTrust,
+    postSelectContactDetailsToAddForTrust,
+    getTrustSubcontractorInformationPageNoSubbieRef,
+    getEnterTrustPhoneNumber,
+    postEnterTrustPhoneNumber("0987654321"),
+    getTrustSubcontractorInformationPageNoSubbieRef,
+    getEnterTrustUTR,
+    postEnterTrustUTR("7734321272"),
+    getTrustSubcontractorInformationPageNoSubbieRef,
+    getEnterTrustWorksRefNumber,
+    postEnterTrustWorksRefNumber("organisation-REF-123"),
+    getTrustSubcontractorInformationPageNoSubbieRef,
+    postTrustSubcontractorInformationPage,
+    getTrustSubcontractorUpdated
+  )
+
+  setup("delete-subcontractor", "DSP").withRequests(
+    getClickSubcontractorsLink,
+    getManageYourCISReturnSubcontractorPage,
+    getRetrieveSubcontractorList,
+    getYourSubcontractorListPage,
+    getYourSubcontractorListPage2,
+    getDeleteStatus("7"),
+    getCannotDeletePage,
+    getYourSubcontractorListPage,
+    getDeleteStatus("2"),
+    getDeleteSubcontractorOption,
+    postDeleteSubcontractorOption("true"),
+    getSubcontractorDeleted
   )
 
   setup("verify-subcontractor", "VSP").withRequests(
