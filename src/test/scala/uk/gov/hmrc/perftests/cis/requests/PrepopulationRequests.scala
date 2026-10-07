@@ -69,8 +69,20 @@ object PrepopulationRequests extends ServicesConfiguration with CisPerformanceTe
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
+  val getManageContractorDetailsRedirect: HttpRequestBuilder =
+    http("[get ] Manage contractor details redirect")
+      .get(cisManageContractorUrl + "/contractor-details/manage")
+      .check(status.is(303))
+
   val getAddContractorDetailsPage: HttpRequestBuilder =
     http("[get ] Add contractor details page")
-      .get(cisManageFrontendUrl + "/add-contractor-details")
+      .get(cisManageContractorUrl + "/contractor-details/introduction")
       .check(status.is(200))
+      .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
+
+  val postAddContractorDetailsPage: HttpRequestBuilder =
+    http("[post] Add contractor details page")
+      .post(cisManageContractorUrl + "/contractor-details/introduction")
+      .formParam("csrfToken", f"#{csrfToken}")
+      .check(status.is(303))
 }

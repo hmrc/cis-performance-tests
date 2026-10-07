@@ -31,6 +31,7 @@ import uk.gov.hmrc.perftests.cis.requests.AddTrustSubcontractorRequests._
 import uk.gov.hmrc.perftests.cis.requests.AmendCompanySubcontractorRequests._
 import uk.gov.hmrc.perftests.cis.requests.AmendIndividualSubcontractorRequests._
 import uk.gov.hmrc.perftests.cis.requests.AmendPartnershipSubcontractor._
+import uk.gov.hmrc.perftests.cis.requests.AmendTrustSubcontractorRequests._
 import uk.gov.hmrc.perftests.cis.requests.DeleteSubcontractorRequests._
 import uk.gov.hmrc.perftests.cis.requests.ManageClientDetailsRequests._
 import uk.gov.hmrc.perftests.cis.requests.ManageContractorDetailsRequests._
@@ -262,10 +263,10 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     getYourSubcontractors("EZ10450"),
     getStartPrepopulation("EZ10450"),
     getUnsuccessfulAutomaticSubcontractorUpdatePage,
-    postUnsuccessfulAutomaticSubcontractorUpdatePage
-    // getAddContractorDetailsPage
-    // TODO commented out above as no information on the URL change etc available
-    //  continue journey to add subcontractor which is a terminal page at the moment
+    postUnsuccessfulAutomaticSubcontractorUpdatePage,
+    getManageContractorDetailsRedirect,
+    getAddContractorDetailsPage,
+    postAddContractorDetailsPage
   )
 
   setup("add-individual-subcontractor", "AISP").withRequests(
@@ -849,6 +850,54 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     postEnterPartnershipWorksRefNumber("PART-REF-789"),
     postPartnershipSubcontractorInformationPage,
     getPartnershipSubcontractorUpdated
+  )
+
+  setup("amend-trust-subcontractor", "AmTS").withRequests(
+    getClickSubcontractorsLink,
+    getManageYourCISReturnSubcontractorPage,
+    getRetrieveSubcontractorList,
+    getYourSubcontractorListPage,
+    getYourSubcontractorListPage2,
+    getSubcontractorInformationRedirect("8"),
+    getTrustSubcontractorInformationPage("8"),
+    getAmendTrustName,
+    postAmendTrustName("Unverified CIS Trust"),
+    getTrustSubcontractorInformationPageNoSubbieRef,
+    getTrustAddressChangeRedirect,
+    getTrustAddressLookupAmendMode,
+    getAddressLookupBegin,
+    getAddressLookupCountryPicker,
+    postAddressLookupCountryPicker("GB-United_Kingdom"),
+    getFindAddressWithPostcode,
+    postFindAddressWithPostcode("SW1 1SW", "123"),
+    getCannotFindAddress,
+    getManuallyEnterAddressPage,
+    postManuallyEnterAddressPage(
+      "125 Hill Street",
+      "Flat 96",
+      "Floor 7",
+      "Test City",
+      "SW1 1SW",
+      "GB"
+    ),
+    getReviewAddress,
+    postReviewAddress,
+    getReturnToTrustAmendModeFrontendService,
+    getTrustSubcontractorInformationPageNoSubbieRef,
+    getSelectContactDetailsToAddForTrust,
+    postSelectContactDetailsToAddForTrust,
+    getTrustSubcontractorInformationPageNoSubbieRef,
+    getEnterTrustPhoneNumber,
+    postEnterTrustPhoneNumber("0987654321"),
+    getTrustSubcontractorInformationPageNoSubbieRef,
+    getEnterTrustUTR,
+    postEnterTrustUTR("7734321272"),
+    getTrustSubcontractorInformationPageNoSubbieRef,
+    getEnterTrustWorksRefNumber,
+    postEnterTrustWorksRefNumber("organisation-REF-123"),
+    getTrustSubcontractorInformationPageNoSubbieRef,
+    postTrustSubcontractorInformationPage,
+    getTrustSubcontractorUpdated
   )
 
   setup("delete-subcontractor", "DSP").withRequests(
