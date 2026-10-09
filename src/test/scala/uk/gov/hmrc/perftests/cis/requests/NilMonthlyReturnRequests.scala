@@ -182,6 +182,12 @@ object NilMonthlyReturnRequests extends ServicesConfiguration with CisPerformanc
       .get(cisFrontendUrl + "/monthly-return/submission-send")
       .check(status.is(303))
 
+  val getPollingPage: HttpRequestBuilder =
+    http("[get] Polling")
+      .get(cisFrontendUrl + "/monthly-return/submission-send/polling")
+      .disableFollowRedirect
+      .check(status.is(200))
+
   val postPollingPage: HttpRequestBuilder =
     http("[post] Polling")
       .get(cisFrontendUrl + "/monthly-return/submission-send/polling")
