@@ -17,11 +17,13 @@
 package uk.gov.hmrc.perftests.cis.requests
 
 import io.gatling.core.Predef._
+import io.gatling.core.structure.ChainBuilder
 import io.gatling.http.Predef._
 import io.gatling.http.request.builder.HttpRequestBuilder
 import uk.gov.hmrc.performance.conf.ServicesConfiguration
 
 import java.time.{LocalDate, YearMonth}
+import scala.concurrent.duration.DurationInt
 import scala.util.Random
 
 object NilMonthlyReturnRequests extends ServicesConfiguration with CisPerformanceTestBase {
@@ -191,7 +193,22 @@ object NilMonthlyReturnRequests extends ServicesConfiguration with CisPerformanc
   val postPollingPage: HttpRequestBuilder =
     http("[post] Polling")
       .get(cisFrontendUrl + "/monthly-return/submission-send/polling")
-      .check(status.is(303))
+      .disableFollowRedirect
+      .check(status.in(200, 303).saveAs("pollStatus"))
+
+  def pollUntilReady(pollingPage: HttpRequestBuilder): ChainBuilder =
+    exec(session => session.set("pollStatus", 0))
+      .asLongAs(
+        session => session("pollStatus").as[Int] != 303 && session("attempt").as[Int] < 30,
+        "attempt"
+      ) {
+        pause(5.second)
+          .exec(pollingPage)
+          .doIf(session => session("pollStatus").as[Int] != 303) {
+            pause(5.second)
+          }
+      }
+      .exec(session => if (session("pollStatus").as[Int] != 303) session.markAsFailed else session)
 
   val getSuccessfulSubmissionPage: HttpRequestBuilder =
     http("[get ] Successful Submission page")

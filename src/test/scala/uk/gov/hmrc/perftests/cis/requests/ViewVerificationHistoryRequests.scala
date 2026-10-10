@@ -49,7 +49,7 @@ object ViewVerificationHistoryRequests extends ServicesConfiguration with CisPer
 
   def getViewSubmissionReceipt(batchId: String): HttpRequestBuilder =
     http("[get ] Submission receipt")
-      .get(cisManageFrontendUrl + "/verify/submission-receipt")
+      .get(cisManageFrontendUrl + "/verify/history/submission-receipt")
       .queryParam("verificationBatchId", batchId)
       .check(status.is(200))
 }

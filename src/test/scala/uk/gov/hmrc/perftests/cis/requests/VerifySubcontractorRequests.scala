@@ -66,7 +66,7 @@ object VerifySubcontractorRequests extends ServicesConfiguration with CisPerform
     http("[post] Which subcontractors to ReVerify page")
       .post(cisContractorFrontendUrl + "/verify/select-subcontractors-to-reverify")
       .formParam("csrfToken", f"#{csrfToken}")
-      .formParam("value[]", "#{checkboxValues(1)}")
+      .formParam("value[]", "1")
       .check(status.is(303))
 
   val getCurrentSubcontractorsToVerify: HttpRequestBuilder =
@@ -134,10 +134,16 @@ object VerifySubcontractorRequests extends ServicesConfiguration with CisPerform
       .check(status.is(303))
 
   val getVerificationPollingPage: HttpRequestBuilder =
-    http("[get ] Get Polling verification page")
+    http("[get ] Polling verification page")
+      .get(cisContractorFrontendUrl + "/verify/polling")
+      .check(status.is(200))
+
+  val postVerificationPollingPage: HttpRequestBuilder =
+    http("[post] Polling verification page")
       .get(cisContractorFrontendUrl + "/verify/polling")
       .formParam("csrfToken", f"#{csrfToken}")
-      .check(status.is(303))
+      .disableFollowRedirect
+      .check(status.in(200, 303).saveAs("pollStatus"))
 
   val getVerificationRequestSubmittedPage: HttpRequestBuilder =
     http("[get ] Get Verification request submitted page")
