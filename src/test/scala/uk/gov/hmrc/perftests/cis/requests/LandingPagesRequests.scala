@@ -54,9 +54,9 @@ object LandingPagesRequests extends ServicesConfiguration with CisPerformanceTes
       .get(cisManageFrontendUrl + "/org/manage-construction-industry-scheme-account/target/subcontractors")
       .check(status.is(303))
 
-  val getManageYourCISReturnSubcontractorPage: HttpRequestBuilder =
+  def getManageYourCISReturnSubcontractorPage(cisID: String): HttpRequestBuilder =
     http("[get ] Manage your CIS return subcontractor page")
-      .get(cisManageFrontendUrl + "/manage-subcontractors/800")
+      .get(cisManageFrontendUrl + s"/manage-subcontractors/$cisID")
       .check(status.is(200))
 
   val getRetrieveClientList: HttpRequestBuilder =
@@ -71,13 +71,13 @@ object LandingPagesRequests extends ServicesConfiguration with CisPerformanceTes
 
   val getFileMonthlyCISReturnsUnfilteredListPage: HttpRequestBuilder =
     http("[get ] File monthly CIS returns page")
-      .get(cisManageFrontendUrl + "/agent/file-monthly-cis-returns")
+      .get(cisManageFrontendUrl + "/agent/your-clients")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
   def postFileMonthlyCISReturnsSearchPage(searchBy: String, searchFilter: String): HttpRequestBuilder =
     http("[post] Search for client page")
-      .post(cisManageFrontendUrl + "/agent/file-monthly-cis-returns")
+      .post(cisManageFrontendUrl + "/agent/your-clients")
       .formParam("searchBy", searchBy)
       .formParam("searchFilter", searchFilter)
       .formParam("csrfToken", f"#{csrfToken}")
@@ -85,7 +85,7 @@ object LandingPagesRequests extends ServicesConfiguration with CisPerformanceTes
 
   val getClientFilteredViewFileMonthlyCISReturnPage: HttpRequestBuilder =
     http("[get ] Client filtered view File monthly CIS returns page")
-      .get(cisManageFrontendUrl + "/agent/file-monthly-cis-returns")
+      .get(cisManageFrontendUrl + "/agent/your-clients")
       .check(status.is(200))
 
   val getClientCisReturnDashboardPage: HttpRequestBuilder =

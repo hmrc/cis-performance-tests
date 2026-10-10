@@ -32,10 +32,13 @@ import uk.gov.hmrc.perftests.cis.requests.AmendCompanySubcontractorRequests._
 import uk.gov.hmrc.perftests.cis.requests.AmendIndividualSubcontractorRequests._
 import uk.gov.hmrc.perftests.cis.requests.AmendPartnershipSubcontractor._
 import uk.gov.hmrc.perftests.cis.requests.AmendTrustSubcontractorRequests._
+import uk.gov.hmrc.perftests.cis.requests.AmendedReturnRequests._
 import uk.gov.hmrc.perftests.cis.requests.DeleteSubcontractorRequests._
 import uk.gov.hmrc.perftests.cis.requests.ManageClientDetailsRequests._
 import uk.gov.hmrc.perftests.cis.requests.ManageContractorDetailsRequests._
+import uk.gov.hmrc.perftests.cis.requests.UnmatchedAndInsufficientVerificationRequests._
 import uk.gov.hmrc.perftests.cis.requests.ViewReturnsHistoryRequests._
+import uk.gov.hmrc.perftests.cis.requests.ViewVerificationHistoryRequests._
 
 class CisSimulation extends Simulation with PerformanceTestRunner {
 
@@ -94,125 +97,129 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     postChangeContractorEmailAddress("test_email@domain.com"),
     getContractorDetailsInfoPage,
     getRemoveContractorEmailOption,
-    postRemoveContractorEmailOption("true"),
+    postRemoveContractorEmailOption("false"),
     getContractorDetailsInfoPage,
     postContractorDetailsInfoPage,
     getContractorDetailsUpdated
   )
 
-  setup("standard-monthly-return", "SMRP").withRequests(
-    getFileYourMonthlyCISReturn,
-    postFileYourMonthlyCISReturn,
-    getWhichTaxMonthAndYearAreYouFilingAReturnFor,
-    postWhichTaxMonthAndYearAreYouFilingAReturnFor,
-    getSelectSubcontractors,
-    getSelectAllSelectSubcontractors,
-    getDeselectAllSelectSubcontractors,
-    postSelectSubcontractors("31001", "31002"),
-    getYouHaveUnverifiedSubcontractors,
-    postYouHaveUnverifiedSubcontractors("false"),
-    getYouHaveAddedDetailsForTwoSubcontractors,
-    getHowMuchDidYouPayToFirstSubcontractorInTotal,
-    postHowMuchDidYouPayToFirstSubcontractorInTotal("1000"),
-    getHowMuchDidFirstSubcontractorPayInMaterialCosts,
-    postHowMuchDidFirstSubcontractorPayInMaterialCosts("200"),
-    getHowMuchTaxInTotalDidYouDeductFromFirstSubcontractor,
-    postHowMuchTaxInTotalDidYouDeductFromFirstSubcontractor("25"),
-    getCheckYourAnswersForFirstSubcontractor,
-    getChangeHowMuchDidYouPayToFirstSubcontractorInTotal,
-    postChangeHowMuchDidYouPayToFirstSubcontractorInTotal("2000"),
-    getCheckYourAnswersForFirstSubcontractor,
-    getChangeHowMuchDidFirstSubcontractorPayInMaterialCosts,
-    postChangeHowMuchDidFirstSubcontractorPayInMaterialCosts("500"),
-    getCheckYourAnswersForFirstSubcontractor,
-    getChangeHowMuchTaxInTotalDidYouDeductFromFirstSubcontractor,
-    postChangeHowMuchTaxInTotalDidYouDeductFromFirstSubcontractor("125"),
-    getCheckYourAnswersForFirstSubcontractor,
-    postCheckYourAnswersForFirstSubcontractor,
-    getYouHaveAddedDetailsForTwoSubcontractors,
-    getChangeFirstSubcontractorsDetails,
-    getChangeHowMuchDidYouPayToFirstSubcontractorInTotalDetails,
-    postChangeHowMuchDidYouPayToFirstSubcontractorInTotalDetails("5000"),
-    getChangeFirstSubcontractorsDetails,
-    getChangeHowMuchDidFirstSubcontractorPayInMaterialCostsDetails,
-    postChangeHowMuchDidFirstSubcontractorPayInMaterialCostsDetails("1000"),
-    getChangeFirstSubcontractorsDetails,
-    getChangeHowMuchTaxInTotalDidYouDeductFromFirstSubcontractorDetails,
-    postChangeHowMuchTaxInTotalDidYouDeductFromFirstSubcontractorDetails("250"),
-    getChangeFirstSubcontractorsDetails,
-    postChangeFirstSubcontractorsDetails,
-    getHowMuchDidYouPayToSecondSubcontractorInTotal,
-    postHowMuchDidYouPayToSecondSubcontractorInTotal("5000"),
-    getHowMuchDidSecondSubcontractorPayInMaterialCosts,
-    postHowMuchDidSecondSubcontractorPayInMaterialCosts("2000"),
-    getHowMuchTaxInTotalDidYouDeductFromSecondSubcontractor,
-    postHowMuchTaxInTotalDidYouDeductFromSecondSubcontractor("1000"),
-    getCheckYourAnswersForSecondSubcontractor,
-    postCheckYourAnswersForSecondSubcontractor,
-    getYouHaveAddedDetailsForTwoSubcontractors,
-    getAreYouSureYouWantToRemoveFirstSubcontractor,
-    postAreYouSureYouWantToRemoveFirstSubcontractor("true"),
-    getYouHaveAddedDetailsForASingleSubcontractor,
-    postYouHaveAddedDetailsForASingleSubcontractor("false"),
-    getSummaryOfPaymentsMade,
-    getDoYouConfirmTheInformationInThisReturnIsCorrect,
-    postDoYouConfirmTheInformationInThisReturnIsCorrect("true"),
-    getDeclarationOfEmploymentStatus,
-    postDeclarationOfEmploymentStatus("false"),
-    getDeclarationOfVerifiedStatus,
-    postDeclarationOfVerifiedStatus("false"),
-    getSubmitInactivityRequest,
-    postSubmitInactivityRequest("false"),
-    getDoYouWantConfirmationByEmailThatThisReturnHasBeenSuccessfullySubmitted,
-    postDoYouWantConfirmationByEmailThatThisReturnHasBeenSuccessfullySubmitted("false"),
-    getCheckYourAnswersBeforeSubmittingYourReturn,
-    getChangeDeclarationOfEmploymentStatus,
-    postChangeDeclarationOfEmploymentStatus("true"),
-    getCheckYourAnswersBeforeSubmittingYourReturn,
-    getChangeDeclarationOfVerifiedStatus,
-    postChangeDeclarationOfVerifiedStatus("true"),
-    getCheckYourAnswersBeforeSubmittingYourReturn,
-    getChangeSubmitInactivityRequest,
-    postChangeSubmitInactivityRequest("true"),
-    getInactivityRequest,
-    getCheckYourAnswersBeforeSubmittingYourReturn,
-    getChangeDoYouWantConfirmationByEmailThatThisReturnHasBeenSuccessfullySubmitted,
-    postChangeDoYouWantConfirmationByEmailThatThisReturnHasBeenSuccessfullySubmitted("true"),
-    getEnterYourEmailAddress,
-    postEnterYourEmailAddress("test123@test.com"),
-    getCheckYourAnswersBeforeSubmittingYourReturn,
-    postCheckYourAnswersBeforeSubmittingYourReturn,
-    postSubmissionSendPage,
-    postPollingPage,
-    getSuccessfulSubmissionPage
-  )
+  setup("standard-monthly-return", "SMRP")
+    .withRequests(
+      getFileYourMonthlyCISReturn,
+      postFileYourMonthlyCISReturn,
+      getWhichTaxMonthAndYearAreYouFilingAReturnFor,
+      postWhichTaxMonthAndYearAreYouFilingAReturnFor,
+      getSelectSubcontractors,
+      getSelectAllSelectSubcontractors,
+      getDeselectAllSelectSubcontractors,
+      postSelectSubcontractors("31001", "31002"),
+      getYouHaveUnverifiedSubcontractors,
+      postYouHaveUnverifiedSubcontractors("false"),
+      getYouHaveAddedDetailsForTwoSubcontractors,
+      getHowMuchDidYouPayToFirstSubcontractorInTotal,
+      postHowMuchDidYouPayToFirstSubcontractorInTotal("1000"),
+      getHowMuchDidFirstSubcontractorPayInMaterialCosts,
+      postHowMuchDidFirstSubcontractorPayInMaterialCosts("200"),
+      getHowMuchTaxInTotalDidYouDeductFromFirstSubcontractor,
+      postHowMuchTaxInTotalDidYouDeductFromFirstSubcontractor("25"),
+      getCheckYourAnswersForFirstSubcontractor,
+      getChangeHowMuchDidYouPayToFirstSubcontractorInTotal,
+      postChangeHowMuchDidYouPayToFirstSubcontractorInTotal("2000"),
+      getCheckYourAnswersForFirstSubcontractor,
+      getChangeHowMuchDidFirstSubcontractorPayInMaterialCosts,
+      postChangeHowMuchDidFirstSubcontractorPayInMaterialCosts("500"),
+      getCheckYourAnswersForFirstSubcontractor,
+      getChangeHowMuchTaxInTotalDidYouDeductFromFirstSubcontractor,
+      postChangeHowMuchTaxInTotalDidYouDeductFromFirstSubcontractor("125"),
+      getCheckYourAnswersForFirstSubcontractor,
+      postCheckYourAnswersForFirstSubcontractor,
+      getYouHaveAddedDetailsForTwoSubcontractors,
+      getChangeFirstSubcontractorsDetails,
+      getChangeHowMuchDidYouPayToFirstSubcontractorInTotalDetails,
+      postChangeHowMuchDidYouPayToFirstSubcontractorInTotalDetails("5000"),
+      getChangeFirstSubcontractorsDetails,
+      getChangeHowMuchDidFirstSubcontractorPayInMaterialCostsDetails,
+      postChangeHowMuchDidFirstSubcontractorPayInMaterialCostsDetails("1000"),
+      getChangeFirstSubcontractorsDetails,
+      getChangeHowMuchTaxInTotalDidYouDeductFromFirstSubcontractorDetails,
+      postChangeHowMuchTaxInTotalDidYouDeductFromFirstSubcontractorDetails("250"),
+      getChangeFirstSubcontractorsDetails,
+      postChangeFirstSubcontractorsDetails,
+      getHowMuchDidYouPayToSecondSubcontractorInTotal,
+      postHowMuchDidYouPayToSecondSubcontractorInTotal("5000"),
+      getHowMuchDidSecondSubcontractorPayInMaterialCosts,
+      postHowMuchDidSecondSubcontractorPayInMaterialCosts("2000"),
+      getHowMuchTaxInTotalDidYouDeductFromSecondSubcontractor,
+      postHowMuchTaxInTotalDidYouDeductFromSecondSubcontractor("1000"),
+      getCheckYourAnswersForSecondSubcontractor,
+      postCheckYourAnswersForSecondSubcontractor,
+      getYouHaveAddedDetailsForTwoSubcontractors,
+      getAreYouSureYouWantToRemoveFirstSubcontractor,
+      postAreYouSureYouWantToRemoveFirstSubcontractor("true"),
+      getYouHaveAddedDetailsForASingleSubcontractor,
+      postYouHaveAddedDetailsForASingleSubcontractor("false"),
+      getSummaryOfPaymentsMade,
+      getDoYouConfirmTheInformationInThisReturnIsCorrect,
+      postDoYouConfirmTheInformationInThisReturnIsCorrect("true"),
+      getDeclarationOfEmploymentStatus,
+      postDeclarationOfEmploymentStatus("false"),
+      getDeclarationOfVerifiedStatus,
+      postDeclarationOfVerifiedStatus("false"),
+      getSubmitInactivityRequest,
+      postSubmitInactivityRequest("false"),
+      getDoYouWantConfirmationByEmailThatThisReturnHasBeenSuccessfullySubmitted,
+      postDoYouWantConfirmationByEmailThatThisReturnHasBeenSuccessfullySubmitted("false"),
+      getCheckYourAnswersBeforeSubmittingYourReturn,
+      getChangeDeclarationOfEmploymentStatus,
+      postChangeDeclarationOfEmploymentStatus("true"),
+      getCheckYourAnswersBeforeSubmittingYourReturn,
+      getChangeDeclarationOfVerifiedStatus,
+      postChangeDeclarationOfVerifiedStatus("true"),
+      getCheckYourAnswersBeforeSubmittingYourReturn,
+      getChangeSubmitInactivityRequest,
+      postChangeSubmitInactivityRequest("true"),
+      getInactivityRequest,
+      getCheckYourAnswersBeforeSubmittingYourReturn,
+      getChangeDoYouWantConfirmationByEmailThatThisReturnHasBeenSuccessfullySubmitted,
+      postChangeDoYouWantConfirmationByEmailThatThisReturnHasBeenSuccessfullySubmitted("true"),
+      getEnterYourEmailAddress,
+      postEnterYourEmailAddress("test123@test.com"),
+      getCheckYourAnswersBeforeSubmittingYourReturn,
+      postCheckYourAnswersBeforeSubmittingYourReturn,
+      postSubmissionSendPage
+//      getPollingPage
+    )
+//    .withActions(pollUntilReady(postPollingPage).actionBuilders.reverse: _*)
+//    .withRequests(getSuccessfulSubmissionPage)
 
-  setup("nil-monthly-return", "NMRP").withRequests(
-    getFileYourNilReturnPage,
-    postFileYourNilReturnPage,
-    getConfirmNilReturnDatePage,
-    postConfirmNilReturnDatePage,
-    getDoYouWantToSubmitAnInactivityRequestPage,
-    postDoYouWantToSubmitAnInactivityRequestPage("false"),
-    getDoYouWantEmailConfirmation,
-    postDoYouWantEmailConfirmation("true"),
-    getConfirmEmailAddressPage,
-    postConfirmEmailAddressPage("tester.test@test.com"),
-    getDeclarationPage,
-    postDeclarationPage,
-    getMNRFCheckYourAnswersPage,
-    getChangeDoYouWantToSubmitAnInactivityRequestPage,
-    postChangeDoYouWantToSubmitAnInactivityRequestPage("true"),
-    getChangeInactivityWarningPage,
-    getMNRFCheckYourAnswersPage,
-    getChangeEnterEmailAddressPage,
-    postChangeEnterEmailAddressPage("Submissionsuccessful@test.com"),
-    getMNRFCheckYourAnswersPage,
-    postMNRFCheckYourAnswersPage,
-    postSubmissionSendPage,
-    postPollingPage,
-    getSuccessfulSubmissionPage
-  )
+  setup("nil-monthly-return", "NMRP")
+    .withRequests(
+      getFileYourNilReturnPage,
+      postFileYourNilReturnPage,
+      getConfirmNilReturnDatePage,
+      postConfirmNilReturnDatePage,
+      getDoYouWantToSubmitAnInactivityRequestPage,
+      postDoYouWantToSubmitAnInactivityRequestPage("false"),
+      getDoYouWantEmailConfirmation,
+      postDoYouWantEmailConfirmation("true"),
+      getConfirmEmailAddressPage,
+      postConfirmEmailAddressPage("tester.test@test.com"),
+      getDeclarationPage,
+      postDeclarationPage,
+      getMNRFCheckYourAnswersPage,
+      getChangeDoYouWantToSubmitAnInactivityRequestPage,
+      postChangeDoYouWantToSubmitAnInactivityRequestPage("true"),
+      getChangeInactivityWarningPage,
+      getMNRFCheckYourAnswersPage,
+      getChangeEnterEmailAddressPage,
+      postChangeEnterEmailAddressPage("Submissionsuccessful@test.com"),
+      getMNRFCheckYourAnswersPage,
+      postMNRFCheckYourAnswersPage,
+      postSubmissionSendPage
+//      getPollingPage
+    )
+//    .withActions(pollUntilReady(postPollingPage).actionBuilders.reverse: _*)
+//    .withRequests(getSuccessfulSubmissionPage)
 
   setup("view-returns-history", "VRH").withRequests(
     getClickManageCISReturnLink,
@@ -224,6 +231,81 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     getMonthlyReturnHistorySingleYear("2024"),
     getTaxYearToViewPage,
     postTaxYearToViewPage("all")
+  )
+
+  setup("amend-nil-to-standard", "ANTS")
+    .withRequests(
+      getManageYourCISReturnPage,
+      getWhichTaxYearToView,
+      postWhichTaxYearToView("all"),
+      getMonthlyReturnHistoryForAllTaxYears,
+      getConfirmAmendmentRedirect("2025", "1"),
+      getConfirmAmendmentPage,
+      postConfirmAmendmentPage,
+      getWhatDoYouWantToAmendNilReturn,
+      postWhatDoYouWantToAmendNilReturn("addPaymentOrSubcontractorDetails"),
+      getWhichSubcontractorDoYouWantToAdd,
+      postWhichSubcontractorDoYouWantToAdd,
+      getYouHaveAddedDetailsForTwoSubcontractors,
+      getHowMuchDidYouPayToFirstSubcontractorInTotal,
+      postHowMuchDidYouPayToFirstSubcontractorInTotal("1000"),
+      getHowMuchDidFirstSubcontractorPayInMaterialCosts,
+      postHowMuchDidFirstSubcontractorPayInMaterialCosts("200"),
+      getHowMuchTaxInTotalDidYouDeductFromFirstSubcontractor,
+      postHowMuchTaxInTotalDidYouDeductFromFirstSubcontractor("25"),
+      getCheckYourAnswersForFirstSubcontractor,
+      postCheckYourAnswersForFirstSubcontractor,
+      getYouHaveAddedDetailsForTwoSubcontractors,
+      getAreYouSureYouWantToRemoveFirstSubcontractor,
+      postAreYouSureYouWantToRemoveFirstSubcontractor("true"),
+      getYouHaveAddedDetailsForASingleSubcontractor,
+      getHowMuchDidYouPayToSecondSubcontractorInTotal,
+      postHowMuchDidYouPayToSecondSubcontractorInTotal("5000"),
+      getHowMuchDidSecondSubcontractorPayInMaterialCosts,
+      postHowMuchDidSecondSubcontractorPayInMaterialCosts("2000"),
+      getHowMuchTaxInTotalDidYouDeductFromSecondSubcontractor,
+      postHowMuchTaxInTotalDidYouDeductFromSecondSubcontractor("1000"),
+      getCheckYourAnswersForSecondSubcontractor,
+      postCheckYourAnswersForSecondSubcontractor,
+      getYouHaveAddedDetailsForASingleSubcontractor,
+      postYouHaveAddedDetailsForASingleSubcontractor("false"),
+      getSummaryOfPaymentsMade,
+      getDoYouConfirmTheInformationInThisReturnIsCorrect,
+      postDoYouConfirmTheInformationInThisReturnIsCorrect("true"),
+      getDeclarationOfEmploymentStatus,
+      postDeclarationOfEmploymentStatus("true"),
+      getDeclarationOfVerifiedStatus,
+      postDeclarationOfVerifiedStatus("true"),
+      getSubmitInactivityRequest,
+      postSubmitInactivityRequest("false"),
+      getDoYouWantConfirmationByEmailThatThisReturnHasBeenSuccessfullySubmitted,
+      postDoYouWantConfirmationByEmailThatThisReturnHasBeenSuccessfullySubmitted("false"),
+      getCheckYourAnswersBeforeSubmittingYourReturn,
+      postCheckYourAnswersBeforeSubmittingYourReturn,
+      postSubmissionSendPage
+    )
+
+  setup("amend-standard-to-nil", "ASTN").withRequests(
+    getManageYourCISReturnPage,
+    getWhichTaxYearToView,
+    postWhichTaxYearToView("all"),
+    getMonthlyReturnHistoryForAllTaxYears,
+    getConfirmAmendmentRedirect("2024", "6"),
+    getConfirmAmendmentPage,
+    postConfirmAmendmentPage,
+    getWhatDoYouWantToAmendStandardReturn,
+    postWhatDoYouWantToAmendStandardReturn("amendToNilReturn"),
+    getWantToAmendStandardToNil,
+    postWantToAmendStandardToNil("yes"),
+    getSubmitInactivityRequest,
+    postSubmitInactivityRequest("false"),
+    getDoYouWantConfirmationByEmailThatThisReturnHasBeenSuccessfullySubmitted,
+    postDoYouWantConfirmationByEmailThatThisReturnHasBeenSuccessfullySubmitted("false"),
+    getDeclarationPage,
+    postDeclarationPage,
+    getCheckYourAnswersBeforeSubmittingYourReturn,
+    postCheckYourAnswersBeforeSubmittingYourReturn,
+    postSubmissionSendPage
   )
 
 //  This scenario covers scenarios 1, 2, 6, 8 & 9 in the cis-ui-tests as the same pages are loaded ending at the Manage your CIS return subcontractor page.
@@ -243,7 +325,7 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     getStartPrepopulation("EZ10400"),
     getSuccessfulAutomaticSubcontractorUpdatePage,
     postSuccessfulAutomaticSubcontractorUpdatePage,
-    getManageYourCISReturnSubcontractorPage
+    getManageYourCISReturnSubcontractorPage("800")
 //    continue journey to add subcontractor, verify subcontractor or subcontractor list
   )
 
@@ -271,7 +353,7 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
 
   setup("add-individual-subcontractor", "AISP").withRequests(
     getClickSubcontractorsLink,
-    getManageYourCISReturnSubcontractorPage,
+    getManageYourCISReturnSubcontractorPage("800"),
     getAddSubcontractor,
     getWhatTypeOfSubcontractorAreYouAdding,
     postWhatTypeOfSubcontractorAreYouAdding("soletrader"),
@@ -377,7 +459,7 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
 
   setup("add-partnership-subcontractor", "APSP").withRequests(
     getClickSubcontractorsLink,
-    getManageYourCISReturnSubcontractorPage,
+    getManageYourCISReturnSubcontractorPage("800"),
     getAddSubcontractor,
     getWhatTypeOfSubcontractorAreYouAdding,
     postWhatTypeOfSubcontractorAreYouAdding("partnership"),
@@ -505,7 +587,7 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
 
   setup("add-company-subcontractor", "ACSP").withRequests(
     getClickSubcontractorsLink,
-    getManageYourCISReturnSubcontractorPage,
+    getManageYourCISReturnSubcontractorPage("800"),
     getAddSubcontractor,
     getWhatTypeOfSubcontractorAreYouAdding,
     postWhatTypeOfSubcontractorAreYouAdding("company"),
@@ -575,7 +657,7 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
 
   setup("add-trust-subcontractor", "ATSP").withRequests(
     getClickSubcontractorsLink,
-    getManageYourCISReturnSubcontractorPage,
+    getManageYourCISReturnSubcontractorPage("800"),
     getAddSubcontractor,
     getWhatTypeOfSubcontractorAreYouAdding,
     postWhatTypeOfSubcontractorAreYouAdding("trust"),
@@ -635,7 +717,7 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
 
   setup("amend-individual-subcontractor", "AmIS").withRequests(
     getClickSubcontractorsLink,
-    getManageYourCISReturnSubcontractorPage,
+    getManageYourCISReturnSubcontractorPage("800"),
     getRetrieveSubcontractorList,
     getYourSubcontractorListPage,
     getSubcontractorInformationRedirect("2"),
@@ -705,7 +787,7 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
 
   setup("amend-company-subcontractor", "AmCS").withRequests(
     getClickSubcontractorsLink,
-    getManageYourCISReturnSubcontractorPage,
+    getManageYourCISReturnSubcontractorPage("800"),
     getRetrieveSubcontractorList,
     getYourSubcontractorListPage,
     getSubcontractorInformationRedirect("4"),
@@ -757,7 +839,7 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
 
   setup("amend-partnership-subcontractor", "AmPS").withRequests(
     getClickSubcontractorsLink,
-    getManageYourCISReturnSubcontractorPage,
+    getManageYourCISReturnSubcontractorPage("800"),
     getRetrieveSubcontractorList,
     getYourSubcontractorListPage,
     getYourSubcontractorListPage2,
@@ -854,7 +936,7 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
 
   setup("amend-trust-subcontractor", "AmTS").withRequests(
     getClickSubcontractorsLink,
-    getManageYourCISReturnSubcontractorPage,
+    getManageYourCISReturnSubcontractorPage("800"),
     getRetrieveSubcontractorList,
     getYourSubcontractorListPage,
     getYourSubcontractorListPage2,
@@ -902,7 +984,7 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
 
   setup("delete-subcontractor", "DSP").withRequests(
     getClickSubcontractorsLink,
-    getManageYourCISReturnSubcontractorPage,
+    getManageYourCISReturnSubcontractorPage("800"),
     getRetrieveSubcontractorList,
     getYourSubcontractorListPage,
     getYourSubcontractorListPage2,
@@ -915,26 +997,117 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     getSubcontractorDeleted
   )
 
-  setup("verify-subcontractor", "VSP").withRequests(
+  setup("verify-subcontractor", "VSP")
+    .withRequests(
+      getVerifySubcontractor,
+      getVerifyWhichSubcontractorPage,
+      postVerifyWhichSubcontractorPage(),
+      getReverifyExistingSubcontractorPage,
+      postReverifyExistingSubcontractorPage(),
+      getReverifySelectSubcontractorPage,
+      postReverifySelectSubcontractorPage(),
+      getCurrentSubcontractorsToVerify,
+      getModifyVerificationBatch,
+      getCheckVerificationBatchReadiness,
+      getVerifyEmailConfirmationPage,
+      postVerifyEmailConfirmationPage("differentEmail"),
+      getVerifyEnterEmailConfirmationPage,
+      postVerifyEnterEmailConfirmationPage("test@test.com"),
+      getVerificationCheckYourAnswersPage,
+      postVerificationCheckYourAnswersPage,
+      getSubmittingVerificationRequestPage
+//      getVerificationPollingPage
+    )
+//    .withActions(pollUntilReady(postVerificationPollingPage).actionBuilders.reverse: _*)
+//    .withRequests(getVerificationRequestSubmittedPage)
+
+  setup("review-unmatched-subcontractors", "RUSP").withRequests(
+    getAuthPage,
+    postManageAuthPage("Organisation", "EZ00250"),
+    getSession,
+    getManageFrontend,
+    getSignIntoCISPage,
+    getSignIntoCISRouting,
+    getCisReturnDashboardPage,
+    getClickSubcontractorsLink,
+    getManageYourCISReturnSubcontractorPage("250"),
+    getVerifySubcontractor,
+    getUnmatchedSubcontractorExist,
+    getCheckResultsRedirect,
+    getVerificationResults,
+    getUnmatchedSubcontractorsRedirect,
+    getReviewUnmatchedSubcontractorsPage,
+    getUnmatchedSubcontractorInfoRedirect("19"),
+    getUnmatchedSubcontractorInfoReadOnly,
+    getReviewUnmatchedSubcontractorsPage,
+    getEditUnmatchedSubcontractorInfoRedirect("19"),
+    getSubcontractorInformationPage("19"),
+    getCancelChanges,
+    getUnmatchedSubcontractorsRedirect,
+    getReviewUnmatchedSubcontractorsPage,
+    getProceedUnmatchedOptionPage,
+    postProceedUnmatchedOptionPage("true"),
+    getReviewUnmatchedSubcontractorsPage,
+    getRemoveUnmatchedOptionPage,
+    postRemoveUnmatchedOptionPage("true"),
+    getReviewUnmatchedSubcontractorsPage,
+    getVerificationResults
+  )
+
+  setup("review-insufficient-subcontractors", "RISP").withRequests(
+    getAuthPage,
+    postManageAuthPage("Organisation", "EZ00275"),
+    getSession,
+    getManageFrontend,
+    getSignIntoCISPage,
+    getSignIntoCISRouting,
+    getCisReturnDashboardPage,
+    getClickSubcontractorsLink,
+    getManageYourCISReturnSubcontractorPage("275"),
     getVerifySubcontractor,
     getVerifyWhichSubcontractorPage,
-    postVerifyWhichSubcontractorPage(),
+    postVerifyWhichInsufficientSubcontractor,
+    getVerifyWhichSubcontractorPage2,
     getReverifyExistingSubcontractorPage,
     postReverifyExistingSubcontractorPage(),
     getReverifySelectSubcontractorPage,
     postReverifySelectSubcontractorPage(),
     getCurrentSubcontractorsToVerify,
-    getModifyVerificationBatch,
     getCheckVerificationBatchReadiness,
-    getVerifyEmailConfirmationPage,
-    postVerifyEmailConfirmationPage("differentEmail"),
-    getVerifyEnterEmailConfirmationPage,
-    postVerifyEnterEmailConfirmationPage("test@test.com"),
-    getVerificationCheckYourAnswersPage,
-    postVerificationCheckYourAnswersPage,
-    getSubmittingVerificationRequestPage,
-    getVerificationPollingPage,
-    getVerificationRequestSubmittedPage
+    getSubcontractorHaveMissingInformation,
+    getInsufficientSubcontractorInfoRedirect("10"),
+    getInsufficientSubcontractorInfoReadOnly,
+    getSubcontractorHaveMissingInformation,
+    getEditInsufficientSubcontractorInfoRedirect("10"),
+    getSubcontractorInformationPage("10"),
+    getCancelChanges,
+    getSubcontractorHaveMissingInformation,
+    getInsufficientOptionPage,
+    postProceedInsufficientOptionPage("true"),
+    getSubcontractorHaveMissingInformation,
+    getRemoveInsufficientOptionPage,
+    postRemoveInsufficientOptionPage("true"),
+    getSubcontractorHaveMissingInformation
+  )
+
+  setup("view-verification-history", "VVHP").withRequests(
+    getAuthPage,
+    postManageAuthPage("Organisation", "EZ00150"),
+    getSession,
+    getManageFrontend,
+    getSignIntoCISPage,
+    getSignIntoCISRouting,
+    getCisReturnDashboardPage,
+    getClickSubcontractorsLink,
+    getManageYourCISReturnSubcontractorPage("150"),
+    getSelectTaxYear,
+    postSelectTaxYear("all"),
+    getAllTaxYear,
+    getViewVerificationRequest("199"),
+    getManageYourCISReturnSubcontractorPage("150"),
+    getSelectTaxYear,
+    postSelectTaxYear("all"),
+    getViewSubmissionReceipt("399")
   )
   runSimulation()
 }
