@@ -288,8 +288,8 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
 //    .withActions(pollUntilReady(postPollingPage).actionBuilders.reverse: _*)
     .withRequests(
 //      getSuccessfulSubmissionPage,
-      returnToMonthlyReturnLandingPageRedirect,
-      getReturnToLandingPage,
+//      returnToMonthlyReturnLandingPageRedirect,
+      getManageYourCISReturnPage,
       getWhichTaxYearToView,
       postWhichTaxYearToView("all"),
       getMonthlyReturnHistoryForAllTaxYears,
