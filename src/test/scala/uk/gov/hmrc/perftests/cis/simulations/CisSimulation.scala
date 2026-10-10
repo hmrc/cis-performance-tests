@@ -97,7 +97,7 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     postChangeContractorEmailAddress("test_email@domain.com"),
     getContractorDetailsInfoPage,
     getRemoveContractorEmailOption,
-    postRemoveContractorEmailOption("true"),
+    postRemoveContractorEmailOption("false"),
     getContractorDetailsInfoPage,
     postContractorDetailsInfoPage,
     getContractorDetailsUpdated
@@ -233,7 +233,7 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
     postTaxYearToViewPage("all")
   )
 
-  setup("amend-submitted-returns", "AmSR")
+  setup("amend-nil-to-standard", "ANTS")
     .withRequests(
       getManageYourCISReturnPage,
       getWhichTaxYearToView,
@@ -280,39 +280,33 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
       postSubmitInactivityRequest("false"),
       getDoYouWantConfirmationByEmailThatThisReturnHasBeenSuccessfullySubmitted,
       postDoYouWantConfirmationByEmailThatThisReturnHasBeenSuccessfullySubmitted("false"),
-      getCheckYourAnswersBeforeSubmittingYourReturn
-//      postCheckYourAnswersBeforeSubmittingYourReturn,
-//      postSubmissionSendPage,
-//      getPollingPage
-    )
-//    .withActions(pollUntilReady(postPollingPage).actionBuilders.reverse: _*)
-    .withRequests(
-//      getSuccessfulSubmissionPage,
-//      returnToMonthlyReturnLandingPageRedirect,
-      getManageYourCISReturnPage,
-      getWhichTaxYearToView,
-      postWhichTaxYearToView("all"),
-      getMonthlyReturnHistoryForAllTaxYears,
-      getConfirmAmendmentRedirect("2024", "6"),
-      getConfirmAmendmentPage,
-      postConfirmAmendmentPage,
-      getWhatDoYouWantToAmendStandardReturn,
-      postWhatDoYouWantToAmendStandardReturn("amendToNilReturn"),
-      getWantToAmendStandardToNil,
-      postWantToAmendStandardToNil("yes"),
-      getSubmitInactivityRequest,
-      postSubmitInactivityRequest("false"),
-      getDoYouWantConfirmationByEmailThatThisReturnHasBeenSuccessfullySubmitted,
-      postDoYouWantConfirmationByEmailThatThisReturnHasBeenSuccessfullySubmitted("false"),
-      getDeclarationPage,
-      postDeclarationPage,
       getCheckYourAnswersBeforeSubmittingYourReturn,
       postCheckYourAnswersBeforeSubmittingYourReturn,
       postSubmissionSendPage
-//      getPollingPage
     )
-//    .withActions(pollUntilReady(postPollingPage).actionBuilders.reverse: _*)
-//    .withRequests(getSuccessfulSubmissionPage)
+
+  setup("amend-standard-to-nil", "ASTN").withRequests(
+    getManageYourCISReturnPage,
+    getWhichTaxYearToView,
+    postWhichTaxYearToView("all"),
+    getMonthlyReturnHistoryForAllTaxYears,
+    getConfirmAmendmentRedirect("2024", "6"),
+    getConfirmAmendmentPage,
+    postConfirmAmendmentPage,
+    getWhatDoYouWantToAmendStandardReturn,
+    postWhatDoYouWantToAmendStandardReturn("amendToNilReturn"),
+    getWantToAmendStandardToNil,
+    postWantToAmendStandardToNil("yes"),
+    getSubmitInactivityRequest,
+    postSubmitInactivityRequest("false"),
+    getDoYouWantConfirmationByEmailThatThisReturnHasBeenSuccessfullySubmitted,
+    postDoYouWantConfirmationByEmailThatThisReturnHasBeenSuccessfullySubmitted("false"),
+    getDeclarationPage,
+    postDeclarationPage,
+    getCheckYourAnswersBeforeSubmittingYourReturn,
+    postCheckYourAnswersBeforeSubmittingYourReturn,
+    postSubmissionSendPage
+  )
 
 //  This scenario covers scenarios 1, 2, 6, 8 & 9 in the cis-ui-tests as the same pages are loaded ending at the Manage your CIS return subcontractor page.
   // Mechanics and database interaction are irrelevant when dealing with a stub.
