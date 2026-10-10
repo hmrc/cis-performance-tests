@@ -199,7 +199,7 @@ object NilMonthlyReturnRequests extends ServicesConfiguration with CisPerformanc
   def pollUntilReady(pollingPage: HttpRequestBuilder): ChainBuilder =
     exec(session => session.set("pollStatus", 0))
       .asLongAs(
-        session => session("pollStatus").as[Int] != 303 && session("attempt").as[Int] < 30,
+        session => session("pollStatus").as[Int] != 303 && session("attempt").as[Int] < 13,
         "attempt"
       ) {
         pause(5.second)
