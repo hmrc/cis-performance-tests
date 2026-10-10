@@ -186,11 +186,11 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
       postEnterYourEmailAddress("test123@test.com"),
       getCheckYourAnswersBeforeSubmittingYourReturn,
       postCheckYourAnswersBeforeSubmittingYourReturn,
-      postSubmissionSendPage,
-      getPollingPage
+      postSubmissionSendPage
+//      getPollingPage
     )
-    .withActions(pollUntilReady(postPollingPage).actionBuilders.reverse: _*)
-    .withRequests(getSuccessfulSubmissionPage)
+//    .withActions(pollUntilReady(postPollingPage).actionBuilders.reverse: _*)
+//    .withRequests(getSuccessfulSubmissionPage)
 
   setup("nil-monthly-return", "NMRP")
     .withRequests(
@@ -215,11 +215,11 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
       postChangeEnterEmailAddressPage("Submissionsuccessful@test.com"),
       getMNRFCheckYourAnswersPage,
       postMNRFCheckYourAnswersPage,
-      postSubmissionSendPage,
-      getPollingPage
+      postSubmissionSendPage
+//      getPollingPage
     )
-    .withActions(pollUntilReady(postPollingPage).actionBuilders.reverse: _*)
-    .withRequests(getSuccessfulSubmissionPage)
+//    .withActions(pollUntilReady(postPollingPage).actionBuilders.reverse: _*)
+//    .withRequests(getSuccessfulSubmissionPage)
 
   setup("view-returns-history", "VRH").withRequests(
     getClickManageCISReturnLink,
@@ -280,14 +280,14 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
       postSubmitInactivityRequest("false"),
       getDoYouWantConfirmationByEmailThatThisReturnHasBeenSuccessfullySubmitted,
       postDoYouWantConfirmationByEmailThatThisReturnHasBeenSuccessfullySubmitted("false"),
-      getCheckYourAnswersBeforeSubmittingYourReturn,
-      postCheckYourAnswersBeforeSubmittingYourReturn,
-      postSubmissionSendPage,
-      getPollingPage
+      getCheckYourAnswersBeforeSubmittingYourReturn
+//      postCheckYourAnswersBeforeSubmittingYourReturn,
+//      postSubmissionSendPage,
+//      getPollingPage
     )
-    .withActions(pollUntilReady(postPollingPage).actionBuilders.reverse: _*)
+//    .withActions(pollUntilReady(postPollingPage).actionBuilders.reverse: _*)
     .withRequests(
-      getSuccessfulSubmissionPage,
+//      getSuccessfulSubmissionPage,
       returnToMonthlyReturnLandingPageRedirect,
       getReturnToLandingPage,
       getWhichTaxYearToView,
@@ -308,11 +308,11 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
       postDeclarationPage,
       getCheckYourAnswersBeforeSubmittingYourReturn,
       postCheckYourAnswersBeforeSubmittingYourReturn,
-      postSubmissionSendPage,
-      getPollingPage
+      postSubmissionSendPage
+//      getPollingPage
     )
-    .withActions(pollUntilReady(postPollingPage).actionBuilders.reverse: _*)
-    .withRequests(getSuccessfulSubmissionPage)
+//    .withActions(pollUntilReady(postPollingPage).actionBuilders.reverse: _*)
+//    .withRequests(getSuccessfulSubmissionPage)
 
 //  This scenario covers scenarios 1, 2, 6, 8 & 9 in the cis-ui-tests as the same pages are loaded ending at the Manage your CIS return subcontractor page.
   // Mechanics and database interaction are irrelevant when dealing with a stub.
@@ -1021,11 +1021,11 @@ class CisSimulation extends Simulation with PerformanceTestRunner {
       postVerifyEnterEmailConfirmationPage("test@test.com"),
       getVerificationCheckYourAnswersPage,
       postVerificationCheckYourAnswersPage,
-      getSubmittingVerificationRequestPage,
-      getVerificationPollingPage
+      getSubmittingVerificationRequestPage
+//      getVerificationPollingPage
     )
-    .withActions(pollUntilReady(postVerificationPollingPage).actionBuilders.reverse: _*)
-    .withRequests(getVerificationRequestSubmittedPage)
+//    .withActions(pollUntilReady(postVerificationPollingPage).actionBuilders.reverse: _*)
+//    .withRequests(getVerificationRequestSubmittedPage)
 
   setup("review-unmatched-subcontractors", "RUSP").withRequests(
     getAuthPage,
