@@ -25,24 +25,24 @@ object PrepopulationRequests extends ServicesConfiguration with CisPerformanceTe
 
   def getCheckSubcontractorRecordsPage(taxOfficeReference: String): HttpRequestBuilder =
     http(s"[get ] Check subcontractor records page")
-      .get(cisManageFrontendUrl + s"/check-subcontractor-records/754/$taxOfficeReference/1/subcontractors")
+      .get(cisManageFrontendUrl + s"/check-subcontractor-records/1/subcontractors")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
   def postCheckSubcontractorRecordsPage(taxOfficeReference: String): HttpRequestBuilder =
     http(s"[post] Check subcontractor records page")
-      .post(cisManageFrontendUrl + s"/check-subcontractor-records/754/$taxOfficeReference/1/subcontractors")
+      .post(cisManageFrontendUrl + s"/check-subcontractor-records/1/subcontractors")
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
   def getYourSubcontractors(taxOfficeReference: String): HttpRequestBuilder =
     http("[get ] Your subcontractors")
-      .get(cisManageFrontendUrl + s"/your-subcontractors/754/$taxOfficeReference/1/subcontractors")
+      .get(cisManageFrontendUrl + s"/your-subcontractors/1/subcontractors")
       .check(status.is(200))
 
   def getStartPrepopulation(taxOfficeReference: String): HttpRequestBuilder =
     http("[get ] Start prepopulation")
-      .get(cisManageFrontendUrl + s"/your-subcontractors/start/754/$taxOfficeReference/1/subcontractors/start")
+      .get(cisManageFrontendUrl + s"/your-subcontractors/start/1/subcontractors/start")
       .check(status.is(303))
 
   val getSuccessfulAutomaticSubcontractorUpdatePage: HttpRequestBuilder =
