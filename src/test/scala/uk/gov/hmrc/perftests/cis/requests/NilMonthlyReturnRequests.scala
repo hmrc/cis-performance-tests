@@ -22,7 +22,9 @@ import io.gatling.http.Predef._
 import io.gatling.http.request.builder.HttpRequestBuilder
 import uk.gov.hmrc.performance.conf.ServicesConfiguration
 
+import java.time.format.TextStyle
 import java.time.{LocalDate, YearMonth}
+import java.util.Locale
 import scala.concurrent.duration.DurationInt
 import scala.util.Random
 
@@ -30,25 +32,33 @@ object NilMonthlyReturnRequests extends ServicesConfiguration with CisPerformanc
 
   val getFileYourNilReturnPage: HttpRequestBuilder =
     http("[get ] File your nil return page")
-      .get(cisFrontendUrl + "/monthly-return/file-your-nil-return")
+      .get(cisFrontendUrl + "/monthly-return/file-your-nil-return/800")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
   val postFileYourNilReturnPage: HttpRequestBuilder =
     http("[post] File your nil return page")
-      .post(cisFrontendUrl + "/monthly-return/file-your-nil-return")
+      .post(cisFrontendUrl + "/monthly-return/file-your-nil-return/800")
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
+      .check(headerRegex("Location", "/date-confirm-payments/([^/?]+)").saveAs("flowId"))
 
   val getConfirmNilReturnDatePage: HttpRequestBuilder =
     http("[get ] Confirm nil return page")
-      .get(cisFrontendUrl + "/monthly-return/date-confirm-nil-payments")
+      .get(cisFrontendUrl + "/monthly-return/date-confirm-payments/#{flowId}")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
   private def randomValidMonthYear(): (String, String) = {
-    val earliest                          = YearMonth.of(2017, 1) // January 2017
-    val today                             = LocalDate.now()
+    val today        = LocalDate.now()
+    val taxYearStart = LocalDate.of(today.getYear, 11, 20)
+
+    val startingTaxYear =
+      if (today.isBefore(taxYearStart)) today.getYear
+      else today.getYear + 1
+
+    val earliest = YearMonth.of(startingTaxYear - 10 + 1, 1)
+
     val (currentTaxMonth, currentTaxYear) = {
       val year  = today.getYear
       val month = today.getMonthValue
@@ -66,7 +76,10 @@ object NilMonthlyReturnRequests extends ServicesConfiguration with CisPerformanc
     )
     val validMonths                       = allMonths.filterNot(excluded.contains)
     val randomYM                          = validMonths(Random.nextInt(validMonths.length))
-    val monthStr                          = f"${randomYM.getMonthValue}%02d"
+    val monthStyle                        =
+      if (Random.nextBoolean()) TextStyle.SHORT
+      else TextStyle.FULL
+    val monthStr                          = randomYM.getMonth.getDisplayName(monthStyle, Locale.UK)
     val yearStr                           = randomYM.getYear.toString
     (monthStr, yearStr)
   }
@@ -74,7 +87,7 @@ object NilMonthlyReturnRequests extends ServicesConfiguration with CisPerformanc
   def postConfirmNilReturnDatePage: HttpRequestBuilder = {
     val (month, year) = randomValidMonthYear()
     http("[post] Confirm nil return page")
-      .post(cisFrontendUrl + "/monthly-return/date-confirm-nil-payments")
+      .post(cisFrontendUrl + "/monthly-return/date-confirm-payments/#{flowId}")
       .formParam("value.month", month)
       .formParam("value.year", year)
       .formParam("csrfToken", f"#{csrfToken}")
@@ -83,116 +96,116 @@ object NilMonthlyReturnRequests extends ServicesConfiguration with CisPerformanc
 
   val getDoYouWantToSubmitAnInactivityRequestPage: HttpRequestBuilder =
     http("[get ] Do You Want To Submit An Inactivity Request page")
-      .get(cisFrontendUrl + "/monthly-return/submit-inactivity-request")
+      .get(cisFrontendUrl + "/monthly-return/submit-inactivity-request/#{flowId}")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
   def postDoYouWantToSubmitAnInactivityRequestPage(option: String): HttpRequestBuilder =
     http("[post] Do You Want To Submit An Inactivity Request page")
-      .post(cisFrontendUrl + "/monthly-return/submit-inactivity-request")
+      .post(cisFrontendUrl + "/monthly-return/submit-inactivity-request/#{flowId}")
       .formParam("value", option)
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
   val getDoYouWantEmailConfirmation: HttpRequestBuilder =
     http("[get ] Do you want email confirmation page")
-      .get(cisFrontendUrl + "/monthly-return/do-you-want-email-confirmation")
+      .get(cisFrontendUrl + "/monthly-return/do-you-want-email-confirmation/#{flowId}")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
   def postDoYouWantEmailConfirmation(option: String): HttpRequestBuilder =
     http("[post] Do you want email confirmation page")
-      .post(cisFrontendUrl + "/monthly-return/do-you-want-email-confirmation")
+      .post(cisFrontendUrl + "/monthly-return/do-you-want-email-confirmation/#{flowId}")
       .formParam("value", option)
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
   val getConfirmEmailAddressPage: HttpRequestBuilder =
     http("[get ] Confirmation Email Address page")
-      .get(cisFrontendUrl + "/monthly-return/enter-email-address")
+      .get(cisFrontendUrl + "/monthly-return/enter-email-address/#{flowId}")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
   def postConfirmEmailAddressPage(email: String): HttpRequestBuilder =
     http("[post] Confirmation Email Address page")
-      .post(cisFrontendUrl + "/monthly-return/enter-email-address")
+      .post(cisFrontendUrl + "/monthly-return/enter-email-address/#{flowId}")
       .formParam("value", email)
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
   val getDeclarationPage: HttpRequestBuilder =
     http("[get ] Declaration page")
-      .get(cisFrontendUrl + "/monthly-return/declaration-no-payments-made")
+      .get(cisFrontendUrl + "/monthly-return/declaration-no-payments-made/#{flowId}")
       .check(status.is(200))
 
   val postDeclarationPage: HttpRequestBuilder =
     http("[post] Declaration page")
-      .get(cisFrontendUrl + "/monthly-return/declaration-no-payments-made/continue")
+      .get(cisFrontendUrl + "/monthly-return/declaration-no-payments-made/continue/#{flowId}")
       .check(status.is(303))
 
   val getChangeInactivityWarningPage: HttpRequestBuilder =
     http("[get ] Inactivity Warning page")
-      .get(cisFrontendUrl + "/monthly-return/change-inactivity-request-warning")
+      .get(cisFrontendUrl + "/monthly-return/change-inactivity-request-warning/#{flowId}")
       .check(status.is(200))
 
   val postChangeInactivityWarningPage: HttpRequestBuilder =
     http("[post] Inactivity Warning page")
-      .post(cisFrontendUrl + "/monthly-return/change-inactivity-request-warning")
+      .post(cisFrontendUrl + "/monthly-return/change-inactivity-request-warning/#{flowId}")
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
   val getMNRFCheckYourAnswersPage: HttpRequestBuilder =
     http("[get ] Get Check your answers page")
-      .get(cisFrontendUrl + "/monthly-return/check-your-answers")
+      .get(cisFrontendUrl + "/monthly-return/check-your-answers/#{flowId}")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
   val postMNRFCheckYourAnswersPage: HttpRequestBuilder =
     http("[post] Post Check your answers")
-      .post(cisFrontendUrl + "/monthly-return/check-your-answers")
+      .post(cisFrontendUrl + "/monthly-return/check-your-answers/#{flowId}")
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
   val getChangeDoYouWantToSubmitAnInactivityRequestPage: HttpRequestBuilder =
     http("[get ] Change Do You Want To Submit An Inactivity Request page")
-      .get(cisFrontendUrl + "/monthly-return/change-submit-inactivity-request")
+      .get(cisFrontendUrl + "/monthly-return/change-submit-inactivity-request/#{flowId}")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
   def postChangeDoYouWantToSubmitAnInactivityRequestPage(option: String): HttpRequestBuilder =
     http("[post] Change Do You Want To Submit An Inactivity Request page")
-      .post(cisFrontendUrl + "/monthly-return/change-submit-inactivity-request")
+      .post(cisFrontendUrl + "/monthly-return/change-submit-inactivity-request/#{flowId}")
       .formParam("value", option)
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
   val getChangeEnterEmailAddressPage: HttpRequestBuilder =
     http("[get ] Change Confirmation Email Address page")
-      .get(cisFrontendUrl + "/monthly-return/change-enter-email-address")
+      .get(cisFrontendUrl + "/monthly-return/change-enter-email-address/#{flowId}")
       .check(status.is(200))
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
 
   def postChangeEnterEmailAddressPage(email: String): HttpRequestBuilder =
     http("[post] Change Confirmation Email Address page")
-      .post(cisFrontendUrl + "/monthly-return/change-enter-email-address")
+      .post(cisFrontendUrl + "/monthly-return/change-enter-email-address/#{flowId}")
       .formParam("value", email)
       .formParam("csrfToken", f"#{csrfToken}")
       .check(status.is(303))
 
   val postSubmissionSendPage: HttpRequestBuilder =
     http("[post] Submission Sending page")
-      .get(cisFrontendUrl + "/monthly-return/submission-send")
+      .get(cisFrontendUrl + "/monthly-return/submission-send/#{flowId}")
       .check(status.is(303))
 
   val getPollingPage: HttpRequestBuilder =
     http("[get] Polling")
-      .get(cisFrontendUrl + "/monthly-return/submission-send/polling")
+      .get(cisFrontendUrl + "/monthly-return/submission-send/polling/#{flowId}")
       .disableFollowRedirect
       .check(status.is(200))
 
   val postPollingPage: HttpRequestBuilder =
     http("[post] Polling")
-      .get(cisFrontendUrl + "/monthly-return/submission-send/polling")
+      .get(cisFrontendUrl + "/monthly-return/submission-send/polling/#{flowId}")
       .disableFollowRedirect
       .check(status.in(200, 303).saveAs("pollStatus"))
 
@@ -212,6 +225,6 @@ object NilMonthlyReturnRequests extends ServicesConfiguration with CisPerformanc
 
   val getSuccessfulSubmissionPage: HttpRequestBuilder =
     http("[get ] Successful Submission page")
-      .get(cisFrontendUrl + "/monthly-return/confirmation")
+      .get(cisFrontendUrl + "/monthly-return/confirmation/#{flowId}")
       .check(status.is(200))
 }
